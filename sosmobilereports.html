@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOS Mobile Report</title>
+<link rel="stylesheet" href="style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script defer src="scripts/report.js"></script>
+</head>
+<body class="report-page">
+
+<header>
+  <div class="logo"><h2>SOS Mobile Report</h2></div>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+  <nav id="menu">
+    <a href="index.html" class="home-link">Home</a>
+    <a href="sosmobilereports.html"><button class="home-button">Get Report</button></a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="watermark">SOS</div>
+
+  <form id="reportForm">
+    <section>
+      <label>Number Plate</label>
+      <input id="plate">
+      <label>Vehicle</label>
+      <input id="vehicle">
+      <label>Report Type</label>
+      <select id="type">
+        <option>Quick Check</option>
+        <option>Full Diagnostic</option>
+      </select>
+    </section>
+
+    <section>
+      <label>Observations</label>
+      <textarea id="obs"></textarea>
+    </section>
+
+    <section>
+      <label>Live Data / Notes</label>
+      <textarea id="live"></textarea>
+    </section>
+
+    <section>
+      <label>Recommendations</label>
+      <textarea id="rec"></textarea>
+    </section>
+
+    <section>
+      <label>Add Photos</label>
+      <input type="file" accept="image/*" multiple id="images">
+      <div id="previews"></div>
+    </section>
+
+    <section>
+      <label>Job Location</label>
+      <input type="text" id="location" placeholder="Latitude,Longitude or GPS Link">
+    </section>
+
+    <section>
+      <label>Timestamp</label>
+      <input type="text" id="timestamp" readonly>
+    </section>
+
+    <section>
+      <button type="button" id="generatePDF">Download PDF Report</button>
+    </section>
+  </form>
+
+  <footer>
+    This report reflects vehicle condition at the time of inspection only. Findings are based on checks performed and do not guarantee future outcomes.
+  </footer>
+</div>
+
+</body>
+</html>
