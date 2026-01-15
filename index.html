@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOS Mechanics</title>
+<title>SOS Mechanics Mobile</title>
 <link rel="stylesheet" href="style.css">
-<script defer src="scripts/menu.js"></script>
+<script defer src="menu.js"></script>
 </head>
-<body class="home-page">
+<body>
 
 <header>
   <div class="logo"><img src="assets/logo.png" alt="SOS Mechanics Logo"></div>
   <div class="hamburger" onclick="toggleMenu()">☰</div>
   <nav id="menu">
-    <a href="index.html">Home</a>
+    <a href="index.html" class="current">Home</a>
     <a href="#services">Services</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
@@ -22,44 +22,28 @@
 </header>
 
 <main>
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-image">
-      <img src="assets/5CACAEDF-D6D0-4BB4-A44F-7B70EADF3E98.png" alt="SOS Mechanics Header">
-    </div>
-    <div class="hero-text">
-      <h1>Emergency Car Repairs, Anywhere</h1>
-      <p>Fast, professional, mobile diagnostics and repairs. No towing, no fuss — just results.</p>
-      <a href="sosmobilereports.html" class="cta-button">Create a Report</a>
-    </div>
-  </section>
+  <!-- Neon Header Image -->
+  <div class="header-image">
+    <img src="assets/header.png" alt="SOS Mechanics Neon Header">
+  </div>
 
-  <!-- Services Section -->
-  <section id="services" class="cards-section">
-    <div class="card">
-      <h3>Mobile Diagnostics</h3>
-      <p>On-site checks, live data, full and quick reports.</p>
-    </div>
-    <div class="card">
-      <h3>Emergency Repairs</h3>
-      <p>Battery, brakes, cooling system — get back on the road fast.</p>
-    </div>
-    <div class="card">
-      <h3>Professional & Trusted</h3>
-      <p>Certified experience, transparent reporting, customer trust guaranteed.</p>
-    </div>
-  </section>
+  <div class="container">
+    <section id="services">
+      <h2>Emergency Repairs Only</h2>
+      <p>We focus exclusively on urgent roadside and mobile repairs — no towing service.</p>
+    </section>
 
-  <!-- About Section -->
-  <section id="about" class="info-section">
-    <h2>Why Choose SOS Mechanics?</h2>
-    <p>We combine professional diagnostics, mobile convenience, and transparent reporting to get you back on the road with confidence.</p>
-  </section>
+    <section id="about">
+      <h2>About SOS Mechanics</h2>
+      <p>Professional, fast, and fully mobile. We bring the garage to your location.</p>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Call us directly to request a mobile repair or diagnostic report.</p>
+    </section>
+  </div>
 </main>
-
-<footer>
-  <small>© 2026 SOS Mechanics. All rights reserved.</small>
-</footer>
 
 </body>
 </html>
