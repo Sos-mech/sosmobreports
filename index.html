@@ -5,44 +5,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SOS Mechanics</title>
 <link rel="stylesheet" href="style.css">
-<script defer src="scripts/home.js"></script>
+<script defer src="scripts/menu.js"></script>
 </head>
 <body class="home-page">
 
 <header>
-  <div class="logo"><h1>SOS Mechanics</h1></div>
+  <div class="logo"><img src="assets/logo.png" alt="SOS Mechanics Logo"></div>
   <div class="hamburger" onclick="toggleMenu()">☰</div>
   <nav id="menu">
-    <a href="#services" class="home-only">Services</a>
-    <a href="#about" class="home-only">About</a>
-    <a href="#contact" class="home-only">Contact</a>
+    <a href="index.html">Home</a>
+    <a href="#services">Services</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
     <a href="sosmobilereports.html"><button class="home-button">Get Report</button></a>
   </nav>
 </header>
 
 <main>
-  <section id="hero">
-    <h2>Emergency Mobile Car Repairs – We Come To You Fast</h2>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Emergency Car Repairs, Anywhere</h1>
+      <p>Fast, professional, mobile diagnostics and repairs. No towing, no fuss — just results.</p>
+      <a href="sosmobilereports.html" class="cta-button">Create a Report</a>
+    </div>
+    <div class="hero-image">
+      <img src="assets/hero-car.jpg" alt="Mobile Mechanic Service">
+    </div>
   </section>
 
-  <section id="services">
-    <h3>Our Emergency Services</h3>
-    <ul>
-      <li>Diagnostics & ECU Checks</li>
-      <li>Brake & Suspension Repairs</li>
-      <li>Engine & Cooling System Repairs</li>
-      <li>On-the-Spot Emergency Call-Outs</li>
-    </ul>
+  <!-- Services Section -->
+  <section id="services" class="cards-section">
+    <div class="card">
+      <h3>Mobile Diagnostics</h3>
+      <p>On-site checks, live data, full and quick reports.</p>
+    </div>
+    <div class="card">
+      <h3>Emergency Repairs</h3>
+      <p>Battery, brakes, cooling system — get back on the road fast.</p>
+    </div>
+    <div class="card">
+      <h3>Professional & Trusted</h3>
+      <p>Certified experience, transparent reporting, customer trust guaranteed.</p>
+    </div>
   </section>
 
-  <section id="about">
-    <h3>Why Choose SOS Mechanics?</h3>
-    <p>Professional, fully equipped mobile mechanics responding quickly to your emergency. No towing, just fast, reliable repairs at your location.</p>
+  <!-- About Section -->
+  <section id="about" class="info-section">
+    <h2>Why Choose SOS Mechanics?</h2>
+    <p>We combine professional diagnostics, mobile convenience, and transparent reporting to get you back on the road with confidence.</p>
   </section>
 </main>
 
 <footer>
-  &copy; 2026 SOS Mechanics
+  <small>© 2026 SOS Mechanics. All rights reserved.</small>
 </footer>
 
 </body>
