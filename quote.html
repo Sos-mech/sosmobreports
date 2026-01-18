@@ -11,32 +11,27 @@ body{
   color:#000;
   padding:20px;
 }
-
 h1{
   color:#39FF14;
   border-bottom:3px solid #39FF14;
   padding-bottom:8px;
 }
-
 .section{
   background:#eaeaea;
   border:1px solid #39FF14;
   padding:15px;
   margin-top:15px;
 }
-
 label{
   display:block;
   margin-top:12px;
   font-weight:bold;
 }
-
-select,input{
+input, select{
   width:100%;
   padding:8px;
   margin-top:5px;
 }
-
 #total{
   font-size:26px;
   font-weight:bold;
@@ -44,7 +39,6 @@ select,input{
   text-align:center;
   margin-top:20px;
 }
-
 button{
   background:#39FF14;
   border:none;
@@ -54,7 +48,6 @@ button{
   cursor:pointer;
   margin-top:15px;
 }
-
 .small-btn{
   width:auto;
   padding:4px 8px;
@@ -63,7 +56,6 @@ button{
 }
 </style>
 </head>
-
 <body>
 
 <h1>SOS Mechanics – Instant Quote</h1>
@@ -77,9 +69,11 @@ button{
 </div>
 
 <div class="section">
+  <label>Customer Name / Registration</label>
+  <input type="text" id="customerName" placeholder="Name or number plate">
 
-  <label>Customer / Registration</label>
-  <input type="text" placeholder="Name or number plate">
+  <label>Contact Number</label>
+  <input type="text" id="contact" placeholder="Phone number">
 
   <label>Vehicle Type</label>
   <select id="vehicleType" onchange="updateTotal()">
@@ -96,7 +90,7 @@ button{
   </select>
 
   <label>Job</label>
-  <select id="job" onchange="updateTotal()">
+  <select id="jobSelect" onchange="updateTotal()">
     <option value="" selected disabled>Select job</option>
     <option value="clutch">Clutch Replacement</option>
     <option value="starter">Starter Motor Replacement</option>
@@ -104,6 +98,13 @@ button{
     <option value="suspension">Suspension / Steering</option>
     <option value="diagnostics">Diagnostics / ECU</option>
     <option value="battery">Battery / Electrical</option>
+  </select>
+
+  <label>Parts Supplied By</label>
+  <select id="partsSource" onchange="updateTotal()">
+    <option value="" selected disabled>Select option</option>
+    <option value="customer">Customer Supplied</option>
+    <option value="sos">SOS Supplied</option>
   </select>
 
   <label>
@@ -115,7 +116,6 @@ button{
     <input type="checkbox" id="emergency" onchange="updateTotal()">
     Weekend / emergency (+25%)
   </label>
-
 </div>
 
 <div id="total">Total: £0 (+ parts)</div>
@@ -123,11 +123,11 @@ button{
 <button onclick="window.print()">Download / Save Quote</button>
 
 <script>
-// date & time
+// Date & time
 document.getElementById("dateTime").innerText =
   "Quote generated: " + new Date().toLocaleString();
 
-// auto location
+// Auto-location button
 document.getElementById("locBtn").onclick = () => {
   if(!navigator.geolocation){
     locationText.innerText = "Location: Not supported";
@@ -145,8 +145,8 @@ document.getElementById("locBtn").onclick = () => {
   );
 };
 
-// base pricing
-function getBase(job, engine){
+// Base pricing logic
+function getBasePrice(job, engine){
   if(job === "clutch") return engine <= 2 ? 300 : 450;
   if(job === "starter") return engine <= 2 ? 150 : 250;
   if(job === "brakes") return 120;
@@ -156,26 +156,27 @@ function getBase(job, engine){
   return 0;
 }
 
-// calculation
+// Update total
 function updateTotal(){
-  let vehicle = vehicleType.value;
-  let engine = parseFloat(engineSize.value);
-  let job = document.getElementById("job").value;
+  let vehicle = document.getElementById("vehicleType").value;
+  let engine = parseFloat(document.getElementById("engineSize").value);
+  let job = document.getElementById("jobSelect").value;
 
   if(!vehicle || !engine || !job){
-    total.innerText = "Total: £0 (+ parts)";
+    document.getElementById("total").innerText = "Total: £0 (+ parts)";
     return;
   }
 
-  let price = getBase(job, engine);
+  let total = getBasePrice(job, engine);
 
-  // van resource factor
-  if(vehicle === "van") price *= 1.15;
+  // Van multiplier
+  if(vehicle === "van") total *= 1.15;
 
-  if(conditions.checked) price *= 1.15;
-  if(emergency.checked) price *= 1.25;
+  if(document.getElementById("conditions").checked) total *= 1.15;
+  if(document.getElementById("emergency").checked) total *= 1.25;
 
-  total.innerText = "Total: £" + price.toFixed(2) + " (+ parts)";
+  document.getElementById("total").innerText =
+    "Total: £" + total.toFixed(2) + " (+ parts)";
 }
 </script>
 
