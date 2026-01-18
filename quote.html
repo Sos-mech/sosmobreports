@@ -6,19 +6,35 @@
 <title>SOS Mechanics Quote</title>
 
 <style>
-body { margin:0; padding:20px; font-family:Arial,sans-serif; background:#000; color:#E0E0E0;}
-h1 { color:#39FF14; font-size:28px; border-bottom:3px solid #39FF14; padding-bottom:8px;}
-.section { border:1px solid #39FF14; padding:15px; margin-top:15px; background:#111;}
+body { 
+    margin:0; 
+    padding:20px; 
+    font-family:Arial,sans-serif; 
+    background:#222; /* lighter dark grey */
+    color:#E0E0E0;
+}
+h1 { 
+    color:#39FF14; 
+    font-size:28px; 
+    border-bottom:3px solid #39FF14; 
+    padding-bottom:8px;
+}
+.section { 
+    border:1px solid #39FF14; 
+    padding:15px; 
+    margin-top:15px; 
+    background:#333; /* lighter section background */
+}
 label { display:block; margin-top:10px; }
-input, select { width:100%; padding:8px; margin-top:4px; background:#111; border:1px solid #39FF14; color:#fff; }
+input, select { width:100%; padding:8px; margin-top:4px; background:#333; border:1px solid #39FF14; color:#fff; }
 .checkbox { display:inline-block; margin-right:15px; }
 #total { font-size:26px; font-weight:bold; margin-top:20px; color:#39FF14; text-align:center; }
 button { width:100%; padding:12px; background:#39FF14; border:none; color:#000; font-size:18px; cursor:pointer; margin-top:15px; }
 table { width:100%; border-collapse:collapse; margin-top:10px;}
 th, td { border:1px solid #39FF14; padding:8px; text-align:left;}
-th { background-color:#222; color:#39FF14;}
-tr:nth-child(even){background:#111;}
-tr:nth-child(odd){background:#1A1A1A;}
+th { background-color:#444; color:#39FF14;}
+tr:nth-child(even){background:#2a2a2a;}
+tr:nth-child(odd){background:#333;}
 .small-note { font-size:12px; color:#AAA; }
 </style>
 </head>
@@ -49,7 +65,7 @@ tr:nth-child(odd){background:#1A1A1A;}
 
 <label>Job:
 <select id="jobSelect">
-<!-- Full Master List -->
+<option value="" selected disabled>Select a job</option>
 <option value="clutch_small">Clutch Replacement ≤2.0L</option>
 <option value="clutch_large">Clutch Replacement >2.0L</option>
 <option value="brake_pads">Brake Pads (per axle)</option>
@@ -156,14 +172,18 @@ const jobData = {
 
 // Total calculation
 function updateTotal(){
-    let jobKey=document.getElementById('jobSelect').value;
-    let cond=document.getElementById('conditionsFactor').checked;
-    let emerg=document.getElementById('emergency').checked;
-    let job=jobData[jobKey];
-    let total=job.labour; // always show labour as base
-    if(cond) total*=1.15;
-    if(emerg) total*=1.25;
-    document.getElementById('total').innerText='Total: £'+total.toFixed(2)+' (+ parts)';
+    let jobKey = document.getElementById('jobSelect').value;
+    if(!jobKey){ // no job selected
+        document.getElementById('total').innerText = 'Total: £0 (+ parts)';
+        return;
+    }
+    let cond = document.getElementById('conditionsFactor').checked;
+    let emerg = document.getElementById('emergency').checked;
+    let job = jobData[jobKey];
+    let total = job.labour; // always labour base
+    if(cond) total *= 1.15;
+    if(emerg) total *= 1.25;
+    document.getElementById('total').innerText = 'Total: £'+total.toFixed(2)+' (+ parts)';
 }
 document.getElementById('jobSelect').addEventListener('change',updateTotal);
 document.getElementById('conditionsFactor').addEventListener('change',updateTotal);
@@ -206,6 +226,7 @@ document.getElementById('downloadBtn').addEventListener('click',()=>{
     let cust=document.getElementById('customerName').value||'N/A';
     let plate=document.getElementById('numberPlate').value||'N/A';
     let jobKey=document.getElementById('jobSelect').value;
+    if(!jobKey) { alert('Please select a job first'); return; }
     let job=jobData[jobKey];
     let cond=document.getElementById('conditionsFactor').checked;
     let emerg=document.getElementById('emergency').checked;
