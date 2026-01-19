@@ -7,7 +7,7 @@
 <style>
   body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     font-family: system-ui, sans-serif;
     display: flex;
     align-items: center;
@@ -16,7 +16,6 @@
     background: url("assets/header-image.jpg") center / cover no-repeat;
     overflow: hidden;
   }
-
   body::before {
     content: "";
     position: absolute;
@@ -24,7 +23,6 @@
     background: rgba(0,0,0,0.65);
     z-index: 0;
   }
-
   .wrap {
     position: relative;
     z-index: 1;
@@ -32,118 +30,94 @@
     max-width: 360px;
     color: #fff;
   }
-
-  h1 {
-    color: #39ff14;
-    font-size: 2.2rem;
-    margin-bottom: 12px;
-    opacity: 0;
-    transform: translateY(-20px);
-    animation: fadeDown 0.8s forwards;
-  }
-
-  p#welcomeText {
-    font-size: 1.05rem;
-    margin-bottom: 12px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.8s 0.5s forwards;
-  }
-
-  p#prompt {
-    opacity: 0;
-    font-size: 1rem;
-    margin-top: 16px;
-    line-height: 1.4;
-    color: #39ff14;
-  }
-
-  p#countdown {
-    color: #39ff14;
-    font-weight: 700;
-    margin-top: 12px;
-    opacity: 0;
-  }
-
-  a.button {
-    display: inline-block;
-    background: #39ff14;
-    color: #111;
-    font-weight: 700;
-    padding: 14px 28px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-size: 1.05rem;
-    margin-top: 20px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: transform 0.5s ease, opacity 0.5s ease;
-  }
-
-  /* Attention flash effect */
-  @keyframes flash {
-    0%, 100% { background-color: #39ff14; }
-    50% { background-color: #ffffff; }
-  }
-
-  @keyframes fadeDown { to { opacity:1; transform:translateY(0); } }
-  @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
-
-  @media(max-width:480px){
-    h1 { font-size:2rem; }
-    p { font-size:0.95rem; }
-    a.button { font-size:1rem; padding:12px 24px; }
-  }
+  h1 { color:#39ff14; font-size:2.2rem; margin-bottom:12px; opacity:0; transform:translateY(-20px); animation:fadeDown 0.8s forwards; }
+  p#welcomeText { font-size:1.05rem; margin-bottom:12px; opacity:0; transform:translateY(20px); animation:fadeUp 0.8s 0.5s forwards; }
+  p#countdown { color:#39ff14; font-weight:700; margin-top:12px; opacity:0; }
+  p#info { margin-top:12px; color:#39ff14; font-size:0.95rem; display:none; }
+  form { display:none; margin-top:16px; text-align:left; }
+  form input, form textarea { width:100%; padding:10px; margin-bottom:12px; border-radius:6px; border:none; font-size:1rem; }
+  a.button { display:inline-block; background:#39ff14; color:#111; font-weight:700; padding:14px 28px; border-radius:10px; text-decoration:none; font-size:1.05rem; margin-top:20px; opacity:0; transform:translateY(20px); transition: transform 0.5s ease, opacity 0.5s ease; }
+  @keyframes flash { 0%,100%{background-color:#39ff14;} 50%{background-color:#fff;} }
+  @keyframes fadeDown { to{opacity:1;transform:translateY(0);} }
+  @keyframes fadeUp { to{opacity:1;transform:translateY(0);} }
 </style>
 </head>
-
 <body>
 <div class="wrap">
   <h1>👋 Welcome</h1>
-  <p id="welcomeText">You scanned the SOS Mechanics QR code.<br>Chat directly with a mechanic now.</p>
+  <p id="welcomeText">You scanned the SOS Mechanics QR code.<br>We aim to call you within 15 mins to confirm your call-out.</p>
 
   <p id="countdown">Next step in 10s</p>
-  <p id="prompt">
-    Please prepare the following details to make our response faster:<br>
-    Name, Vehicle Registration, Location, Issue.
-  </p>
 
-  <a id="waLink" class="button" target="_blank">
-    Chat with a Mechanic
-  </a>
+  <form id="detailsForm">
+    <input type="text" id="name" placeholder="Your Name" required>
+    <input type="text" id="vehicle" placeholder="Vehicle Registration" required>
+    <input type="text" id="location" placeholder="Location" required>
+    <textarea id="issue" placeholder="Describe your issue" required></textarea>
+    <button type="button" id="submitBtn">Send to WhatsApp</button>
+  </form>
+
+  <p id="info">Click the button below to chat with a mechanic now.</p>
+
+  <a id="waLink" class="button" target="_blank">Chat with a Mechanic</a>
 </div>
 
 <script>
-  // --- Use your short/burly link here ---
-  const shortLink = "https://bit.ly/3LSGcQ4"; // <-- replace with your actual link
-  const waLink = document.getElementById("waLink");
-  waLink.href = shortLink;
+const form = document.getElementById("detailsForm");
+const submitBtn = document.getElementById("submitBtn");
+const waLink = document.getElementById("waLink");
+const info = document.getElementById("info");
 
-  // --- Countdown and prompt ---
-  const countdownEl = document.getElementById("countdown");
-  const promptEl = document.getElementById("prompt");
-  promptEl.style.opacity = 0; // hidden initially
-  waLink.style.opacity = 0; // hide button initially
-  let seconds = 10;
+// --- Countdown before showing form ---
+let seconds = 10;
+const countdownEl = document.getElementById("countdown");
+countdownEl.style.opacity = 1;
+const interval = setInterval(() => {
+  seconds--;
+  if(seconds > 0){
+    countdownEl.textContent = `Next step in ${seconds}s`;
+  } else {
+    clearInterval(interval);
+    countdownEl.style.display = "none";
+    form.style.display = "block"; // show input form
+  }
+}, 1000);
 
-  countdownEl.style.opacity = 1;
-  const interval = setInterval(() => {
-    seconds--;
-    if(seconds > 0){
-      countdownEl.textContent = `Next step in ${seconds}s`;
-    } else {
-      clearInterval(interval);
-      countdownEl.style.display = "none"; // hide countdown
-      promptEl.style.opacity = 1; // show prompt smoothly
+// --- On form submit ---
+submitBtn.addEventListener("click", ()=>{
+  const name = document.getElementById("name").value.trim();
+  const vehicle = document.getElementById("vehicle").value.trim();
+  const location = document.getElementById("location").value.trim();
+  const issue = document.getElementById("issue").value.trim();
 
-      // Show button with slide up
-      waLink.style.opacity = 1;
-      waLink.style.transform = "translateY(0)";
+  if(!name || !vehicle || !location || !issue){
+    alert("Please fill all details before proceeding.");
+    return;
+  }
 
-      // Flash effect to grab attention
-      waLink.style.animation = "flash 1s ease 0s 3";
-    }
-  }, 1000);
+  // Pre-fill WhatsApp link using burly link + message
+  const source = "QR";
+  const shortLink = "https://bit.ly/3LSGcQ4"; // your link
+  const message = encodeURIComponent(
+`Hi, I scanned your SOS Mechanics ${source} code.
+
+Name: ${name}
+Vehicle: ${vehicle}
+Location: ${location}
+Issue: ${issue}`
+  );
+
+  waLink.href = `${shortLink}?text=${message}`;
+
+  // Show info + animate button
+  info.style.display = "block";
+  waLink.style.opacity = 1;
+  waLink.style.transform = "translateY(0)";
+  waLink.style.animation = "flash 1s ease 0s 3";
+
+  // Optionally hide the form
+  form.style.display = "none";
+});
 </script>
 </body>
 </html>
