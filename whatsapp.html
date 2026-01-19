@@ -59,6 +59,13 @@ button{background:var(--accent);color:#111;font-weight:700;border:none;cursor:po
 <div id="countdown">Preparing your service form...</div>
 
 <form id="detailsForm" style="display:none;opacity:0;transform:translateY(30px);transition:all 0.7s ease;">
+  <!-- Urgency first -->
+  <select id="urgency" required>
+    <option value="" disabled selected>Select Urgency: Urgent or Prebook</option>
+    <option value="Urgent – ASAP call-out">Urgent – ASAP call-out</option>
+    <option value="Prebook – schedule later">Prebook – schedule later</option>
+  </select>
+
   <input type="text" id="name" placeholder="Your Name" required>
   <input type="text" id="vehicle" placeholder="Vehicle Registration" required>
   <input type="text" id="location" placeholder="Location" required>
@@ -76,23 +83,17 @@ button{background:var(--accent);color:#111;font-weight:700;border:none;cursor:po
   <div id="priceEstimate" style="margin-bottom:12px;color:var(--accent);font-weight:700;">Estimated Call-out: £50-£100</div>
   <div id="upgradePrompt">Consider upgrading for maximum coverage!</div>
 
-  <select id="urgency" required>
-    <option value="" disabled selected>Is this urgent or prebook?</option>
-    <option value="Urgent – ASAP call-out">Urgent – ASAP call-out</option>
-    <option value="Prebook – schedule later">Prebook – schedule later</option>
-  </select>
-
-  <div id="scheduleFields">
-    <input type="date" id="scheduleDate">
-    <input type="time" id="scheduleTime">
+  <div id="scheduleFields" style="display:none;">
+    <input type="date" id="scheduleDate" placeholder="Date">
+    <input type="time" id="scheduleTime" placeholder="Time">
   </div>
 
-  <button id="waLink" style="display:none;">Chat with a Mechanic</button>
+  <button id="waLink">Chat with a Mechanic</button>
 </form>
 </div>
 
 <script>
-// ⏱ Countdown Welcome
+// Countdown Welcome
 const countdown = document.getElementById("countdown");
 const form = document.getElementById("detailsForm");
 let counter = 5;
@@ -111,6 +112,7 @@ const overlay = document.getElementById("overlay");
 const scheduleFields = document.getElementById("scheduleFields");
 const btnUrgent = document.getElementById("btnUrgent");
 const btnPrebook = document.getElementById("btnPrebook");
+const urgencySelect = document.getElementById("urgency");
 
 btnUrgent.addEventListener("click", ()=>{
   scheduleFields.style.display="none";
@@ -118,6 +120,7 @@ btnUrgent.addEventListener("click", ()=>{
   setTimeout(()=>overlay.style.display="none",700);
   form.style.display="block";
   setTimeout(()=>form.style.opacity=1,50);
+  urgencySelect.value="Urgent – ASAP call-out";
 });
 
 btnPrebook.addEventListener("click", ()=>{
@@ -126,13 +129,22 @@ btnPrebook.addEventListener("click", ()=>{
   setTimeout(()=>overlay.style.display="none",700);
   form.style.display="block";
   setTimeout(()=>form.style.opacity=1,50);
+  urgencySelect.value="Prebook – schedule later";
+});
+
+// Show/hide schedule fields based on urgency
+urgencySelect.addEventListener("change", ()=>{
+  if(urgencySelect.value.includes("Prebook")){
+    scheduleFields.style.display="block";
+  } else {
+    scheduleFields.style.display="none";
+  }
 });
 
 // Service selection
 const serviceSelect = document.getElementById("service");
 const priceDiv = document.getElementById("priceEstimate");
 const upgradePrompt = document.getElementById("upgradePrompt");
-const urgencySelect = document.getElementById("urgency");
 const waLink = document.getElementById("waLink");
 
 serviceSelect.addEventListener("change", ()=>{
@@ -142,13 +154,9 @@ serviceSelect.addEventListener("change", ()=>{
   priceDiv.textContent = `Estimated Call-out: ${price}`;
   if(upgrade){upgradePrompt.style.display="block";upgradePrompt.textContent=`Consider upgrading to ${upgrade} for maximum coverage!`;}
   else{upgradePrompt.style.display="none";}
-  waLink.style.display="block";
-  setTimeout(()=>waLink.classList.add("show"),50);
-});
-
-urgencySelect.addEventListener("change", ()=>{
-  if(urgencySelect.value.includes("Prebook")){scheduleFields.style.display="block";}
-  else{scheduleFields.style.display="none";}
+  waLink.style.opacity=1;
+  waLink.style.transform="translateY(0)";
+  waLink.classList.add("show");
 });
 
 // WhatsApp Button
@@ -184,11 +192,10 @@ Source: QR`;
   window.open(`${shortLink}?text=${encodeURIComponent(message)}`,"_blank");
 });
 
-// ✅ Status Bar: Time/Date + Ticker
+// Status Bar
 const timeEl = document.getElementById("timeDate");
 const tickerEl = document.getElementById("ticker");
 
-// Time & Date
 function updateTime(){
   const now = new Date();
   const day = now.toLocaleDateString('en-GB', { weekday: 'short' });
@@ -199,7 +206,7 @@ function updateTime(){
 setInterval(updateTime,1000);
 updateTime();
 
-// Ticker Messages
+// Ticker
 let tickerMessages = [
   { text:"Battery Check from £50 🔋", link:"https://amzn.to/xxxx" },
   { text:"Brake / Pad Inspection £60-£75 🛠️", link:"https://bit.ly/xxxx" },
