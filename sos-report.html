@@ -11,6 +11,7 @@
   --text: #111;
   --muted: #666;
 }
+
 body {
   font-family: system-ui, sans-serif;
   background: #fff;
@@ -18,63 +19,109 @@ body {
   margin:0;
   padding-top:64px;
 }
+
+/* Header */
 header {
-  position:fixed;
+  position: fixed;
   top:0;
   left:0;
   width:100%;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:16px 32px;
+  padding:16px 16px; /* flush mobile padding */
   border-bottom:1px solid #eee;
   background:#fff;
   z-index:1000;
 }
-header .logo img {height:40px;}
-.hamburger {display:none; font-size:1.5rem; cursor:pointer;}
-nav#menu {display:flex; gap:24px;}
-nav#menu a {text-decoration:none; color:var(--text); font-weight:600;}
-nav#menu a.current {color:var(--accent); text-shadow:0 0 8px var(--accent);}
 
+header .logo img {
+  height:40px;
+  max-width:60%;
+}
+
+.hamburger {
+  display:none;
+  font-size:1.5rem;
+  cursor:pointer;
+}
+
+nav#menu {
+  display:flex;
+  gap:16px;
+}
+
+nav#menu a {
+  text-decoration:none;
+  color:var(--text);
+  font-weight:600;
+}
+
+nav#menu a.current {
+  color:var(--accent);
+  text-shadow:0 0 8px var(--accent);
+}
+
+/* Container and form fields */
 .container {
   max-width:720px;
   margin:auto;
   padding:32px;
 }
-label{font-weight:600; display:block; margin-bottom:6px;}
-input, select, textarea{width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box;}
-textarea{min-height:90px;}
-button{background:var(--accent); border:none; padding:12px; font-weight:700; border-radius:8px; cursor:pointer;}
-img.preview{width:100%; margin-top:10px; border-radius:6px;}
-footer{font-size:0.75rem; color:var(--muted); margin-top:48px;}
-h3{margin-top:24px;}
 
-/* Mobile Responsive */
+label {font-weight:600; display:block; margin-bottom:6px;}
+input, select, textarea {width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box;}
+textarea {min-height:90px;}
+button {background:var(--accent); border:none; padding:12px; font-weight:700; border-radius:8px; cursor:pointer;}
+img.preview {width:100%; margin-top:10px; border-radius:6px;}
+footer {font-size:0.75rem; color:var(--muted); margin-top:48px;}
+h3 {margin-top:24px;}
+
+/* Mobile adjustments */
 @media(max-width:768px){
-  .hamburger{display:block;}
-  nav#menu{display:none; flex-direction:column; width:100%; position:absolute; top:64px; left:0; background:#fff; border-top:1px solid #eee;}
-  nav#menu.active{display:flex;}
-  nav#menu a{padding:12px 32px; border-bottom:1px solid #eee;}
-
-  /* Full width mobile spec */
-  .container{
+  .hamburger {display:block;}
+  
+  nav#menu {
+    display:none;
+    flex-direction:column;
     width:100%;
-    padding:16px;
+    position:absolute;
+    top:64px;
+    left:0;
+    background:#fff;
+    border-top:1px solid #eee;
+    padding:0;
     margin:0;
   }
-  input, select, textarea, button{
+
+  nav#menu a {
+    padding:14px 16px; /* full width tap area */
+    border-bottom:1px solid #eee;
+    display:block;
+  }
+
+  nav#menu.active {display:flex;}
+
+  /* Full width mobile with assistance form spacing */
+  .container {
     width:100%;
+    padding:20px;
+    margin:0;
+  }
+
+  section {margin-bottom:24px;}
+  label {margin-bottom:6px; display:block; font-weight:600;}
+  input, select, textarea, button {
+    width:100%;
+    box-sizing:border-box;
+    padding:12px;
     margin-bottom:12px;
+    font-size:0.95rem;
   }
-  img.preview{
-    width:100%;
-    max-width:100%;
-    margin-top:8px;
-  }
-  section{
-    margin-bottom:16px;
-  }
+
+  h3 {margin-top:20px; margin-bottom:12px; font-size:1.1rem;}
+  img.preview {width:100%; max-width:100%; margin-top:10px; border-radius:6px;}
+  button {padding:14px; font-size:1rem; border-radius:8px;}
 }
 </style>
 </head>
