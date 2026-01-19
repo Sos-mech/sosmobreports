@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOS Mechanics – Self-Qualifying Booking</title>
+<style>
+:root{
+  --neon:#39ff14;
+  --light:#f2f2f2;
+  --dark:#111;
+  --border:#dcdcdc;
+}
+*{box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;}
+body{margin:0;background:#fff;color:var(--dark);}
+.hero{text-align:center;padding:36px 20px;background:var(--light);}
+.hero h1{font-size:28px;margin:0 0 12px;}
+.hero p{font-size:16px;margin:0;}
+.counter{font-size:18px;font-weight:700;margin:20px 0;color:var(--neon);}
+.section{padding:20px;}
+form{max-width:720px;margin:auto;}
+.field{margin-bottom:18px;}
+label{display:block;font-weight:600;margin-bottom:6px;}
+input{width:100%;padding:14px;font-size:16px;border-radius:8px;border:1px solid var(--border);}
+button{cursor:pointer;border:none;border-radius:10px;padding:14px 18px;font-weight:700;}
+button.submit{width:100%;background:var(--neon);color:#000;font-size:18px;margin-top:12px;}
+.loc-btn{width:52px;border-radius:8px;border:none;background:#eaeaea;font-size:22px;}
+.questions{margin:20px 0;}
+.question-item{background:#f2f2f2;padding:12px;border-radius:10px;margin-bottom:10px;cursor:pointer;transition:0.2s;}
+.question-item.urgent{background:#39ff14;color:#000;font-weight:700;}
+.question-item:hover{background:var(--neon);}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>SOS Mechanics – Check Your Car</h1>
+  <p>Answer a few questions to see what your vehicle needs.</p>
+  <div class="counter">🚗 Vehicles Helped This Month: <span id="liveCounter">0</span></div>
+</div>
+
+<div class="section">
+<form id="jobForm" autocomplete="on">
+  <div class="field">
+    <label>Name</label>
+    <input id="name" name="name" autocomplete="name" required>
+  </div>
+  <div class="field">
+    <label>Vehicle Number Plate</label>
+    <input id="plate" placeholder="AB12 CDE" required>
+  </div>
+  <div class="field">
+    <label>Location</label>
+    <div style="display:flex;gap:8px;">
+      <input id="location" name="address" autocomplete="street-address" required placeholder="Enter address or use GPS">
+      <button type="button" class="loc-btn" onclick="getLocation()">📍</button>
+    </div>
+  </div>
+  
+  <!-- Self-Qualification Questions -->
+  <div class="questions">
+    <div class="question-item urgent" onclick="addService('Battery / Jump Start', true)">Car won’t start / battery issues? (Same-Day)</div>
+    <div class="question-item urgent" onclick="addService('Brake Replacement', true)">Brakes making noise? (Same-Day)</div>
+    <div class="question-item" onclick="addService('Oil Service')">Oil change overdue? (Maintenance)</div>
+    <div class="question-item" onclick="addService('Engine Diagnostics')">Warning lights on dashboard? (Maintenance)</div>
+    <div class="question-item" onclick="addService('Clutch / Transmission Repair')">Clutch or transmission issues? (Maintenance)</div>
+  </div>
+  
+  <div class="field">
+    <label>Selected Services</label>
+    <input id="issue" placeholder="Tap the questions above to select services" readonly required>
+  </div>
+  
+  <button type="submit" class="submit" id="bookBtn">Book via WhatsApp</button>
+</form>
+</div>
+
+<script>
+// Live Counter
+function updateCounter() {
+  const counter = document.getElementById("liveCounter");
+  counter.textContent = Math.floor(Math.random() * 250) + 1;
+}
+updateCounter();
+setInterval(updateCounter, 10000);
+
+// GPS
+function getLocation() {
+  if(!navigator.geolocation){ alert("Geolocation not supported."); return; }
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const lat = pos.coords.latitude.toFixed(6);
+    const lon = pos.coords.longitude.toFixed(6);
+    document.getElementById("location").value = `GPS: ${lat}, ${lon}`;
+  },()=>alert("Location access denied or unavailable."));
+}
+
+// Self-Qualification Service Selection
+let selectedServices = [];
+function addService(service, urgent=false){
+  if(!selectedServices.includes(service)){
+    selectedServices.push(service);
+    document.getElementById("issue").value = selectedServices.join(", ");
+  }
+  if(urgent){
+    document.getElementById("bookBtn").scrollIntoView({behavior:"smooth"});
+  }
+}
+
+// WhatsApp Submit
+document.getElementById("jobForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  if(selectedServices.length===0){ alert("Please select at least one service."); return; }
+  
+  const nameVal = document.getElementById("name").value.trim();
+  const plateVal = document.getElementById("plate").value.trim().toUpperCase();
+  const locationVal = document.getElementById("location").value.trim();
+  const issueVal = document.getElementById("issue").value.trim();
+  const timeVal = new Date().toLocaleString();
+  
+  const waNumber = ["44","7","9","1","2","3","4","5","6","7","8"].join(""); // Hide number
+
+  const message = 
+`🚗 SOS MECHANICS – SERVICE REQUEST
+Name: ${nameVal}
+Reg: ${plateVal}
+Location: ${locationVal}
+Service Needed: ${issueVal}
+Time: ${timeVal}`;
+  
+  window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, "_blank");
+});
+</script>
+
+</body>
+</html>
