@@ -3,236 +3,282 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOS Mechanics QR Landing</title>
+<title>SOS Mechanics – Mobile Mechanic Report & Call-Out</title>
+
 <style>
 :root {
-  --accent: #39ff14;
-  --text: #111;
-  --bg: #fff;
+  --green: #39ff14;
+  --purple: #9b59b6;
+  --bg: #0e0e0e;
+  --card: #161616;
+  --text: #ffffff;
+  --muted: #aaaaaa;
 }
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
   color: var(--text);
   overflow-x: hidden;
 }
+
+/* ===== FIXED HEADER + TICKER ===== */
 header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #eee;
-  background: var(--bg);
+  background: #000;
   z-index: 1000;
 }
-header img {height: 40px;}
-.ticker {width:100%;overflow:hidden;background:#222;color:var(--accent);padding:8px 0;font-weight:600;white-space:nowrap;position:fixed;top:64px;}
-.ticker span {display:inline-block;padding:0 50px;animation:scroll 20s linear infinite;}
-@keyframes scroll{0%{transform:translateX(100%);}100%{transform:translateX(-100%);}}
+
+.header-inner {
+  padding: 14px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.ticker {
+  background: #111;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ticker span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: ticker 18s linear infinite;
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+/* ===== MAIN CONTAINER ===== */
 .container {
-  max-width:720px;
-  width:100%;
-  margin:120px auto 32px auto;
-  padding:0 16px;
-  box-sizing:border-box;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 170px 16px 40px;
 }
-form input, form select, form textarea, form button {
-  width:100%;
-  box-sizing:border-box;
-  padding:12px;
-  margin-bottom:12px;
-  border-radius:8px;
-  font-size:1rem;
+
+/* ===== INTRO OVERLAY ===== */
+#intro {
+  text-align: center;
+  margin-bottom: 24px;
 }
-form input, form select, form textarea {
-  border:1px solid #ccc;
+
+#intro h1 {
+  margin-bottom: 8px;
 }
-form button {
-  background: var(--accent);
-  border:none;
-  font-weight:700;
-  cursor:pointer;
-  opacity:0;
-  transform:translateY(20px);
-  transition: all 0.5s ease;
+
+#countdown {
+  color: var(--muted);
+  font-size: 0.9rem;
 }
-.scheduleFields {display:flex;gap:10px;}
-.scheduleFields input {flex:1;}
-@media(max-width:480px){.scheduleFields{flex-direction:column;}}
-#waLink.show {
-  display:block;
-  transform:translateY(0);
-  opacity:1;
-  animation:pulseGlow 1.5s infinite;
+
+/* ===== CHOICE BUTTONS ===== */
+.choice-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
 }
-@keyframes pulseGlow {
-  0% { box-shadow:0 0 5px var(--accent); }
-  50% { box-shadow:0 0 15px var(--accent); }
-  100% { box-shadow:0 0 5px var(--accent); }
+
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
 }
-#overlay {
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:#111;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  color:var(--accent);z-index:2000;text-align:center;
+
+/* Emergency – green neon */
+#urgentBtn {
+  background: var(--green);
+  color: #000;
+  animation: pulseGreen 1.5s infinite;
 }
-#overlay button {
-  width:220px;margin:8px 0;padding:12px;font-weight:700;cursor:pointer;
+
+@keyframes pulseGreen {
+  0% { box-shadow: 0 0 6px var(--green); }
+  50% { box-shadow: 0 0 18px var(--green); }
+  100% { box-shadow: 0 0 6px var(--green); }
 }
-#waModal {
-  display:none;
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(0,0,0,0.95);
-  z-index:3000;align-items:center;justify-content:center;flex-direction:column;padding:20px;color:#fff;
+
+/* Prebook – purple neon */
+#prebookBtn {
+  background: var(--purple);
+  color: #fff;
+  animation: pulsePurple 1.5s infinite;
 }
-#waModal pre {
-  background:#111;padding:12px;border:1px solid var(--accent);border-radius:6px;white-space:pre-wrap;width:100%;max-width:600px;
+
+@keyframes pulsePurple {
+  0% { box-shadow: 0 0 6px var(--purple); }
+  50% { box-shadow: 0 0 18px var(--purple); }
+  100% { box-shadow: 0 0 6px var(--purple); }
 }
-#waModal button{width:auto;padding:10px 20px;margin:0 5px;}
+
+/* ===== FORM ===== */
+form {
+  display: none;
+  background: var(--card);
+  padding: 16px;
+  border-radius: 14px;
+  margin-top: 16px;
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+}
+
+.helper {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+/* ===== CHAT BUTTON ===== */
+#chatBtn {
+  display: none;
+  margin-top: 16px;
+  background: var(--green);
+  color: #000;
+  animation: flash 1.2s infinite;
+}
+
+@keyframes flash {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
 </style>
 </head>
+
 <body>
 
 <header>
-<img src="assets/header.png" alt="SOS Mechanics">
+  <div class="header-inner">SOS Mechanics</div>
+  <div class="ticker">
+    <span>Live mobile mechanic • On-job reports • Same-day call-outs • Kent & surrounding areas •</span>
+  </div>
 </header>
 
-<div class="ticker"><span id="tickerText">Welcome to SOS Mechanics • Fast On-Job Reports • Call-Outs Available • </span></div>
-
-<div id="overlay">
-  <h1>Welcome to SOS Mechanics</h1>
-  <p>Scan confirmed, please select urgency:</p>
-  <button id="btnUrgent">Urgent – ASAP Call-Out</button>
-  <button id="btnPrebook">Prebook – Schedule Later</button>
-</div>
-
 <div class="container">
-<form id="detailsForm" style="display:none;opacity:0;transition:all 0.7s ease;">
-  <input type="text" id="name" placeholder="Your Name" required>
-  <input type="text" id="vehicle" placeholder="Vehicle Registration" required>
-  <input type="text" id="location" placeholder="Location" required>
-  <textarea id="issue" placeholder="Describe your issue" required></textarea>
 
-  <div id="serviceSection">
-    <select id="service" required>
-      <option value="" disabled selected>Select Service Required</option>
-      <option value="Battery Check / Jump Start">Battery Check / Jump Start</option>
-      <option value="Brake / Pad Inspection">Brake / Pad Inspection</option>
-      <option value="Oil / Fluid Top-Up">Oil / Fluid Top-Up</option>
-      <option value="Engine Diagnostics">Engine Diagnostics</option>
-      <option value="Full Vehicle Check">Full Vehicle Check</option>
+  <!-- INTRO -->
+  <div id="intro">
+    <h1>Welcome to SOS Mechanics</h1>
+    <div id="countdown">Preparing secure service intake… 10</div>
+  </div>
+
+  <!-- CHOICE -->
+  <div class="choice-buttons">
+    <button id="urgentBtn">🚨 Emergency / Urgent</button>
+    <button id="prebookBtn">📅 Book a Service</button>
+  </div>
+
+  <!-- FORM -->
+  <form id="serviceForm">
+    <input type="text" id="name" placeholder="Full name" required>
+    <input type="tel" id="phone" placeholder="Phone number" required>
+    <input type="text" id="reg" placeholder="Vehicle registration" required>
+
+    <select id="service">
+      <option value="">Select service required</option>
+      <option>Diagnostics</option>
+      <option>Breakdown recovery</option>
+      <option>Oil / fluid check</option>
+      <option>Inspection report</option>
     </select>
-    <div id="priceEstimate" style="color:var(--accent);font-weight:700;">Estimated Call-out: £50-£150</div>
-    <div id="upgradePrompt">Consider upgrading for maximum coverage!</div>
-  </div>
 
-  <div class="scheduleFields" id="scheduleFields" style="display:none;">
-    <input type="date" id="scheduleDate" placeholder="Date">
-    <input type="time" id="scheduleTime" placeholder="Time" min="08:00" max="20:00">
-  </div>
+    <div id="prebookFields" style="display:none;">
+      <div class="helper">Preferred booking date & time</div>
+      <input type="datetime-local" id="datetime">
+    </div>
 
-  <button type="button" id="waLink">Chat with a Mechanic</button>
-</form>
-</div>
+    <div class="helper">
+      We aim to call you within 15 minutes to confirm the call-out.
+    </div>
+  </form>
 
-<div id="waModal">
-  <h2>Confirm Your Message</h2>
-  <pre id="waPreview"></pre>
-  <div>
-    <button id="sendWa">Send to WhatsApp</button>
-    <button id="editWa">Edit</button>
-  </div>
+  <button id="chatBtn">💬 Chat to a Mechanic</button>
+
 </div>
 
 <script>
-// Ticker
-const ticker=document.getElementById("tickerText");
-ticker.style.animation="scroll 20s linear infinite";
+let countdown = 10;
+const cdEl = document.getElementById("countdown");
+const form = document.getElementById("serviceForm");
+const chatBtn = document.getElementById("chatBtn");
+const prebookFields = document.getElementById("prebookFields");
+let mode = "";
+const source = "QR";
 
-// Elements
-const overlay=document.getElementById("overlay");
-const btnUrgent=document.getElementById("btnUrgent");
-const btnPrebook=document.getElementById("btnPrebook");
-const form=document.getElementById("detailsForm");
-const serviceSection=document.getElementById("serviceSection");
-const scheduleFields=document.getElementById("scheduleFields");
-const waLink=document.getElementById("waLink");
+const timer = setInterval(() => {
+  countdown--;
+  cdEl.textContent = "Preparing secure service intake… " + countdown;
+  if (countdown <= 0) {
+    clearInterval(timer);
+    cdEl.textContent = "Please choose how you’d like to continue";
+  }
+}, 1000);
 
-// Show form
-function showForm(isUrgent=false){
-  overlay.style.opacity=0;
-  setTimeout(()=>overlay.style.display="none",700);
-  form.style.display="block";
-  setTimeout(()=>{
-    form.style.opacity=1;
-    form.scrollIntoView({behavior:"smooth", block:"start"});
+document.getElementById("urgentBtn").onclick = () => {
+  mode = "Urgent";
+  form.style.display = "block";
+  prebookFields.style.display = "none";
+  focusForm();
+};
+
+document.getElementById("prebookBtn").onclick = () => {
+  mode = "Prebook";
+  form.style.display = "block";
+  prebookFields.style.display = "block";
+  focusForm();
+};
+
+function focusForm() {
+  setTimeout(() => {
     document.getElementById("name").focus();
-  },50);
-
-  if(isUrgent){
-    serviceSection.style.display="none";
-    scheduleFields.style.display="none";
-  } else {
-    serviceSection.style.display="block";
-    scheduleFields.style.display="flex";
-  }
-
-  const fields=[document.getElementById("name"),document.getElementById("vehicle"),
-                document.getElementById("location"),document.getElementById("issue")];
-  if(!isUrgent) fields.push(document.getElementById("service"),document.getElementById("scheduleDate"),document.getElementById("scheduleTime"));
-  fields.forEach(f=>f.addEventListener("input",checkFields));
-  function checkFields(){
-    const allFilled=fields.every(f=>f.value.trim()!=="");
-    if(allFilled){waLink.classList.add("show");} else {waLink.classList.remove("show");}
-  }
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  }, 300);
 }
 
-// Overlay button
-btnUrgent.addEventListener("click",()=>showForm(true));
-btnPrebook.addEventListener("click",()=>showForm(false));
-
-// WhatsApp popup
-waLink.addEventListener("click",()=>{
-  const name=document.getElementById("name").value.trim();
-  const vehicle=document.getElementById("vehicle").value.trim();
-  const location=document.getElementById("location").value.trim();
-  const issue=document.getElementById("issue").value.trim();
-  const service=document.getElementById("service")?.value;
-  const urgency = btnUrgent.style.display==="none" ? "Prebook" : "Urgent";
-  const date=document.getElementById("scheduleDate")?.value;
-  const time=document.getElementById("scheduleTime")?.value;
-
-  let message=`Hi, I scanned your SOS Mechanics QR code.
-
-Name: ${name}
-Vehicle: ${vehicle}
-Location: ${location}
-Issue: ${issue}
-Urgency: ${urgency}
-Source: QR`;
-
-  if(urgency.includes("Prebook")){
-    message+=`\nScheduled Date: ${date}\nScheduled Time: ${time}`;
-    message+=`\nService: ${service}`;
+form.addEventListener("input", () => {
+  if (form.checkValidity()) {
+    chatBtn.style.display = "block";
   }
-
-  document.getElementById("waPreview").textContent=message;
-  document.getElementById("waModal").style.display="flex";
 });
 
-// WhatsApp modal buttons
-document.getElementById("sendWa").addEventListener("click",()=>{
-  const shortLink="https://bit.ly/3LSGcQ4";
-  const msg=document.getElementById("waPreview").textContent;
-  window.open(`${shortLink}?text=${encodeURIComponent(msg)}`,"_blank");
-  document.getElementById("waModal").style.display="none";
-});
-document.getElementById("editWa").addEventListener("click",()=>document.getElementById("waModal").style.display="none");
+chatBtn.onclick = () => {
+  const msg =
+`SOS Mechanics enquiry
+Type: ${mode}
+Name: ${name.value}
+Phone: ${phone.value}
+Reg: ${reg.value}
+Service: ${service.value || "N/A"}
+Date/Time: ${datetime?.value || "ASAP"}
+Source: ${source}`;
+
+  const url = "https://bit.ly/3LSGcQ4" + "?text=" + encodeURIComponent(msg);
+  window.open(url, "_blank");
+};
 </script>
 
 </body>
