@@ -5,69 +5,68 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SOS Mechanics - Emergency</title>
 <style>
-  body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-    background: #111;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  }
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #111;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
 
-  #emergency-modal {
-    width: 100%;
-    max-width: 420px;
-    padding: 32px 24px;
-    background: #1a1a1a;
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    text-align: center;
-    margin: 0 16px;
-  }
+#emergency-modal {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px 24px;
+  background: #1a1a1a;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  margin: 0 16px;
+}
 
-  h2 {
-    font-size: 1.8em;
-    font-weight: 500;
-    margin: 0 0 12px;
-  }
+h2 {
+  font-size: 1.8em;
+  font-weight: 500;
+  margin: 0 0 12px;
+}
 
-  input, textarea {
-    width: 100%;
-    padding: 16px;
-    border-radius: 12px;
-    border: none;
-    font-size: 1.05em;
-    outline: none;
-    box-sizing: border-box;
-  }
+input, textarea {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  font-size: 1.05em;
+  outline: none;
+  box-sizing: border-box;
+}
 
-  textarea { resize: none; height: 80px; }
+textarea { resize: none; height: 80px; }
 
-  button {
-    width: 100%;
-    padding: 16px;
-    font-size: 1.15em;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    transition: 0.2s;
-  }
+button {
+  width: 100%;
+  padding: 16px;
+  font-size: 1.15em;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
 
-  button.primary { background: #ff3b30; color: #fff; font-weight: 500; }
-  button.primary:hover { background: #ff6254; }
-  button.secondary { background: #333; color: #ccc; margin-top: 8px; }
-  button.secondary:hover { background: #555; }
+button.primary { background: #ff3b30; color: #fff; font-weight: 500; }
+button.primary:hover { background: #ff6254; }
+button.secondary { background: #333; color: #ccc; margin-top: 8px; }
+button.secondary:hover { background: #555; }
 
-  #qr {
-    width: 180px;
-    height: 180px;
-    margin: 12px auto 0;
-  }
-
+#qr {
+  width: 180px;
+  height: 180px;
+  margin: 12px auto 0;
+}
 </style>
 </head>
 <body>
@@ -82,7 +81,7 @@
   <input type="hidden" id="longitude">
   <button type="button" onclick="useMyLocation()">Use My Location</button>
 
-  <textarea id="issue" placeholder="What’s wrong? (e.g., Car won’t start)"></textarea>
+  <textarea id="issue" placeholder="What’s wrong? (e.g., Car won’t start)" required></textarea>
   <input type="tel" id="phone" placeholder="Mobile Number" required>
 
   <button class="primary" onclick="generateEmergencyQR()">Generate QR & WhatsApp</button>
@@ -109,14 +108,12 @@ function useMyLocation() {
       document.getElementById('latitude').value = lat;
       document.getElementById('longitude').value = lng;
 
-      // Optional: try reverse geocoding for readable address
+      // Only fill readable address if empty
       if (!document.getElementById('locationText').value) {
-        document.getElementById('locationText').value = `Lat:${lat}, Lng:${lng}`;
+        document.getElementById('locationText').value = `Lat: ${lat}, Lng: ${lng}`;
       }
     },
-    err => {
-      alert('Unable to get location. Please enter manually.');
-    },
+    err => alert('Unable to get location. Please enter manually.'),
     { enableHighAccuracy: true, timeout: 10000 }
   );
 }
@@ -124,20 +121,29 @@ function useMyLocation() {
 function generateEmergencyQR() {
   const reg = document.getElementById('vehicleReg').value.trim().toUpperCase();
   const loc = document.getElementById('locationText').value.trim();
-  const lat = document.getElementById('latitude').value;
-  const lng = document.getElementById('longitude').value;
+  const lat = document.getElementById('latitude').value.trim();
+  const lng = document.getElementById('longitude').value.trim();
   const issue = document.getElementById('issue').value.trim();
   const phone = document.getElementById('phone').value.trim();
 
-  if (!reg || !loc || !issue || !phone || !lat || !lng) {
-    alert('Please fill all required fields or use GPS.');
+  if (!reg || !issue || !phone || (!loc && (!lat || !lng))) {
+    alert('Please fill required fields and/or use GPS.');
     return;
   }
 
-  const timestamp = Date.now();
-  const jobId = `SOS-EMG-${reg.replace(/\s+/g,'')}-${timestamp}`;
+  const displayLoc = loc || `Lat: ${lat}, Lng: ${lng}`;
+  const timestamp = new Date().toLocaleString();
 
-  const waBitlyLink = `https://bit.ly/3YPTkIO?text=🚨 Emergency Breakdown%0AReg: ${reg}%0ALocation: ${loc}%0ACoordinates: ${lat}, ${lng}%0AIssue: ${issue}%0APhone: ${phone}%0ATime: ${new Date(timestamp).toLocaleString()}`;
+  const message = `🚨 Emergency Breakdown
+Reg: ${reg}
+Location: ${displayLoc}
+Coordinates: ${lat}, ${lng}
+Issue: ${issue}
+Phone: ${phone}
+Time: ${timestamp}`;
+
+  // Bitly link for WhatsApp
+  const waBitlyLink = `https://bit.ly/3YPTkIO?text=${encodeURIComponent(message)}`;
 
   QRCode.toDataURL(waBitlyLink)
     .then(url => {
@@ -147,7 +153,7 @@ function generateEmergencyQR() {
       qrImg.style.display = 'block';
       document.getElementById('downloadQR').style.display = 'block';
 
-      // Open WhatsApp automatically
+      // Open WhatsApp cleanly
       window.open(waBitlyLink, '_blank');
     })
     .catch(err => console.error(err));
