@@ -1,7 +1,7 @@
 {
   "name": "SOS Mechanic Dashboard",
   "short_name": "MechanicPWA",
-  "description": "Mobile-first PWA dashboard for on-demand mechanics. Offline-capable, QR scan, map view, job tracking.",
+  "description": "Mobile-first PWA for on-demand mechanics. Offline-ready, QR scan, job tracking.",
   "start_url": "/sosmobreports/mechanic/index.html",
   "display": "standalone",
   "background_color": "#f5f5f5",
@@ -9,17 +9,9 @@
   "orientation": "portrait",
   "scope": "/sosmobreports/mechanic/",
   "icons": [
-    {
-      "src": "assets/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    {"src":"assets/icon-192.png","sizes":"192x192","type":"image/png"},
+    {"src":"assets/icon-512.png","sizes":"512x512","type":"image/png"}
   ],
-  "categories": ["utilities", "productivity"],
+  "categories":["utilities","productivity"],
   "prefer_related_applications": false
 }
