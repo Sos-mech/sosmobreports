@@ -3,215 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOS Mechanics Dashboard</title>
+<title>SOS Mechanics Scanner Dashboard</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
-body{background:#f5f5f5;}
-header{position:fixed;top:0;left:0;right:0;background:#222;color:#fff;padding:15px 20px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.2);z-index:1000;}
-header h1{margin:0;font-size:1.5em;font-weight:600;}
-.container{max-width:600px;margin:90px auto 40px;padding:20px;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-label{display:block;font-weight:bold;margin-bottom:5px;}
-input,textarea,select{width:100%;padding:12px;margin-bottom:20px;border-radius:6px;border:1px solid #ccc;font-size:1em;}
-textarea{resize:vertical;}
-.btn{display:block;width:100%;padding:15px;margin:10px 0;font-size:1.1em;border:none;border-radius:8px;cursor:pointer;font-weight:bold;}
+body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:0;}
+header{background:#222;color:#fff;padding:15px;text-align:center;position:fixed;top:0;width:100%;z-index:1000;}
+.container{max-width:800px;margin:80px auto;padding:20px;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+label{display:block;margin-bottom:5px;font-weight:bold;}
+select,input{width:100%;padding:12px;margin-bottom:15px;border-radius:6px;border:1px solid #ccc;font-size:1em;}
+.btn{display:block;width:100%;padding:15px;margin:10px 0;border:none;border-radius:8px;font-weight:bold;font-size:1.1em;cursor:pointer;}
 .btn-primary{background:#4CAF50;color:white;}
 .btn-primary:hover{background:#45a049;}
-.btn-secondary{background:#aaa;color:white;}
-.btn-secondary:hover{background:#888;}
+iframe{width:100%;height:500px;border:1px solid #ccc;border-radius:6px;margin-top:20px;}
 .hidden{display:none;}
-#overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);color:#fff;display:flex;justify-content:center;align-items:center;text-align:center;font-size:1.5em;z-index:2000;flex-direction:column;}
-video{width:100%;border-radius:8px;margin-bottom:20px;}
-canvas{display:block;margin:auto;}
-.checklist label{font-weight:normal;display:block;margin-bottom:5px;}
+.highlight{background:#ffff99;}
 </style>
 </head>
 <body>
 
 <header>
-<h1>SOS Mechanics Dashboard</h1>
+<h1>SOS Mechanics Scanner Dashboard</h1>
 </header>
 
-<div class="container" id="mechanic-screen">
+<div class="container">
 
-<h2>Unlock Customer Job</h2>
-<p>Scan the customer QR or upload it, then enter the PIN to unlock.</p>
+<h2>Open Report / Page</h2>
 
-<button class="btn btn-primary" onclick="startCameraScan()">Scan QR via Camera</button>
-<button class="btn btn-secondary" onclick="uploadQR()">Upload QR Image</button>
-
-<video id="camera" class="hidden"></video>
-
-<div id="pinInputContainer" class="hidden">
-<label>Enter Customer PIN</label>
-<input type="text" id="enteredPin" maxlength="4" placeholder="Enter PIN">
-<button class="btn btn-primary" onclick="verifyPin()">Unlock Job</button>
-</div>
-
-<div id="mechanicForm" class="hidden">
-
-<label>Job Template</label>
-<select id="templateSelect">
-  <option value="">-- Select Template --</option>
-  <option value="Oil Change">Oil Change</option>
-  <option value="Brake Pads Replacement">Brake Pads Replacement</option>
-  <option value="Coolant / Hoses Inspection">Coolant / Hoses Inspection</option>
+<label>Select HTML Page:</label>
+<select id="pageSelect">
+  <option value="">-- Loading pages --</option>
 </select>
 
-<h3>Customer Info (Read-Only)</h3>
-<label>Name</label><input type="text" id="custName" disabled>
-<label>Phone</label><input type="text" id="custPhone" disabled>
-<label>Vehicle Make / Model / Year</label><input type="text" id="custVehicle" disabled>
-<label>Registration</label><input type="text" id="custReg" disabled>
-<label>Mileage</label><input type="text" id="custMileage" disabled>
-<label>Reported Symptom</label><textarea id="custSymptom" rows="3" disabled></textarea>
+<button class="btn btn-primary" onclick="loadPage()">Open Page</button>
 
-<h3>Mechanic Inputs</h3>
-<label>Diagnosis / Notes</label><textarea id="mechNotes" rows="4"></textarea>
+<h2>Scan Customer QR</h2>
+<input type="file" id="qrUpload" accept="image/*">
+<canvas id="qrCanvas" class="hidden"></canvas>
 
-<label>Mechanic Signature</label>
-<canvas id="sigCanvas" style="border:1px solid #ccc;width:100%;height:80px;"></canvas>
-<button class="btn btn-secondary" onclick="clearSignature()">Clear Signature</button>
-
-<h3>Checklist</h3>
-<div class="checklist">
-<label><input type="checkbox" id="checkOil"> Oil Level Checked</label>
-<label><input type="checkbox" id="checkBrakes"> Brake Pads Inspected</label>
-<label><input type="checkbox" id="checkHoses"> Hoses Inspected</label>
-<label><input type="checkbox" id="checkLights"> Lights / Indicators Checked</label>
-</div>
-
-<button class="btn btn-primary" onclick="generateFinalPDF()">Generate Final PDF</button>
-
-<h3>Recent Jobs</h3>
-<select id="recentJobs" onchange="loadRecentJob(this.value)">
-<option value="">-- Select Recent Job --</option>
-</select>
+<iframe id="reportFrame" class="hidden"></iframe>
 
 </div>
 
-<div id="overlay" class="hidden">
-<p id="overlayMessage">Please wait...</p>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-
 <script>
-// ---------- Shortcuts ----------
-const getValue=id=>document.getElementById(id).value;
-const getChecked=id=>document.getElementById(id).checked;
 
-// ---------- Templates ----------
-const templates = {
-  "Oil Change": { mechNotes: "Check oil level, replace oil, replace filter, check leaks.", checklist: { oil:true, brakes:false, hoses:false, lights:false }},
-  "Brake Pads Replacement": { mechNotes: "Inspect brake pads and discs, replace worn pads, check brake fluid.", checklist: { oil:false, brakes:true, hoses:false, lights:false }},
-  "Coolant / Hoses Inspection": { mechNotes: "Inspect hoses for splits or leaks, check coolant level and radiator.", checklist: { oil:false, brakes:false, hoses:true, lights:false }}
-};
+let lastFiles = [];
 
-// ---------- Signature ----------
-let sigCanvas,sigCtx,drawing=false;
-window.onload = ()=>{
-  sigCanvas=document.getElementById('sigCanvas');
-  sigCtx=sigCanvas.getContext('2d');
-  sigCtx.strokeStyle="#000"; sigCtx.lineWidth=2;
-  sigCanvas.addEventListener('mousedown',startDraw);
-  sigCanvas.addEventListener('mouseup',endDraw);
-  sigCanvas.addEventListener('mousemove',draw);
-  sigCanvas.addEventListener('touchstart',startDrawTouch);
-  sigCanvas.addEventListener('touchend',endDraw);
-  sigCanvas.addEventListener('touchmove',drawTouch);
-  document.getElementById('templateSelect').onchange=applyTemplate;
-};
+// ---------- Fetch JSON and update dropdown ----------
+function updateDropdown(){
+  fetch('files.json')
+    .then(res => res.json())
+    .then(files => {
+      const select = document.getElementById('pageSelect');
+      const prevOptions = Array.from(select.options).map(o => o.value);
+      select.innerHTML = '<option value="">-- Select a Page --</option>'; // reset
 
-function startDraw(e){drawing=true; sigCtx.beginPath(); sigCtx.moveTo(e.offsetX,e.offsetY);}
-function startDrawTouch(e){drawing=true; e.preventDefault(); const t=e.touches[0]; const rect=sigCanvas.getBoundingClientRect(); sigCtx.beginPath(); sigCtx.moveTo(t.clientX-rect.left, t.clientY-rect.top);}
-function draw(e){if(!drawing) return; sigCtx.lineTo(e.offsetX,e.offsetY); sigCtx.stroke();}
-function drawTouch(e){if(!drawing) return; e.preventDefault(); const t=e.touches[0]; const rect=sigCanvas.getBoundingClientRect(); sigCtx.lineTo(t.clientX-rect.left,t.clientY-rect.top); sigCtx.stroke();}
-function endDraw(){drawing=false;}
-function clearSignature(){sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);}
+      files.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f;
+        opt.textContent = f;
+        if(!lastFiles.includes(f)){
+          // Highlight new files
+          opt.classList.add('highlight');
+        }
+        select.appendChild(opt);
+      });
 
-// ---------- Templates ----------
-function applyTemplate(){
-  const tName=document.getElementById('templateSelect').value;
-  if(!tName) return;
-  const t=templates[tName];
-  document.getElementById('mechNotes').value=t.mechNotes;
-  document.getElementById('checkOil').checked=t.checklist.oil;
-  document.getElementById('checkBrakes').checked=t.checklist.brakes;
-  document.getElementById('checkHoses').checked=t.checklist.hoses;
-  document.getElementById('checkLights').checked=t.checklist.lights;
+      lastFiles = files; // remember last state
+    })
+    .catch(err => console.error('Error fetching files.json', err));
 }
 
-// ---------- PDF Generation ----------
-async function generateFinalPDF(){
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  let y=20;
+// Initial load
+updateDropdown();
+// Update every 30 seconds
+setInterval(updateDropdown, 30000);
 
-  // ---------- QR ----------
-  const qrData = JSON.stringify({
-    name:getValue('custName'), reg:getValue('custReg'), vehicle:getValue('custVehicle'),
-    mileage:getValue('custMileage'), symptom:getValue('custSymptom'), pin:getValue('enteredPin')
-  });
-  const qrCanvas=document.createElement('canvas');
-  await QRCode.toCanvas(qrCanvas, qrData, {width:120});
-  const imgData=qrCanvas.toDataURL("image/png");
-
-  doc.setFontSize(14);
-  doc.text("Scan this QR to load customer details into SOS Mechanics Dashboard", 20, y);
-  doc.addImage(imgData,'PNG',20,25,60,60);
-  y=100;
-
-  // ---------- Customer Info ----------
-  const custFields=['custName','custPhone','custVehicle','custReg','custMileage','custSymptom'];
-  const custLabels=['Name','Phone','Vehicle','Registration','Mileage','Reported Symptom'];
-  doc.setFontSize(12);
-  custFields.forEach((id,i)=>{
-    const val=getValue(id);
-    doc.text(`${custLabels[i]}:`,20,y);
-    doc.text(doc.splitTextToSize(val,160),20,y+6);
-    y+=14;
-  });
-
-  // ---------- Mechanic Inputs ----------
-  doc.text("Mechanic Notes:",20,y); y+=6;
-  doc.text(doc.splitTextToSize(getValue('mechNotes'),160),20,y); y+=30;
-
-  // ---------- Checklist ----------
-  const checklistItems=[['Oil Level Checked','checkOil'],['Brake Pads Inspected','checkBrakes'],['Hoses Inspected','checkHoses'],['Lights / Indicators Checked','checkLights']];
-  checklistItems.forEach(([label,id])=>{
-    doc.text(`${label}: ${getChecked(id)?'Yes':'No'}`,20,y);
-    y+=8;
-  });
-
-  // ---------- Signature ----------
-  const sigData=sigCanvas.toDataURL('image/png');
-  doc.text("Mechanic Signature:",20,y+6);
-  doc.addImage(sigData,'PNG',20,y+10,100,40);
-
-  // ---------- Footer ----------
-  const ts=new Date(); const tsStr=ts.toISOString().slice(0,19).replace('T',' ');
-  doc.text(`Generated: ${tsStr}`,20,280);
-
-  // ---------- Overlay + Auto-download ----------
-  const filename=`JOB_${getValue('custReg')}_${tsStr.replace(/[: ]/g,'')}.pdf`;
-  showOverlayAndDownload(doc,filename);
+// ---------- Load Selected Page ----------
+function loadPage(){
+  const val=document.getElementById('pageSelect').value;
+  if(!val){alert("Select a page first"); return;}
+  const iframe=document.getElementById('reportFrame');
+  iframe.src=val;
+  iframe.classList.remove('hidden');
 }
 
-// ---------- Overlay / Auto-download ----------
-function showOverlayAndDownload(doc,filename){
-  const overlay=document.getElementById('overlay');
-  const msg=document.getElementById('overlayMessage');
-  overlay.classList.remove('hidden'); msg.innerText="Preparing report… please wait up to 15 seconds";
-  setTimeout(()=>{ doc.save(filename); msg.innerText="Job downloaded! Returning to main screen..."; setTimeout(()=>overlay.classList.add('hidden'),5000); },10000);
-}
+// ---------- QR Scan ----------
+document.getElementById('qrUpload').addEventListener('change', function(e){
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(){
+    const img=new Image();
+    img.onload=function(){
+      const canvas=document.getElementById('qrCanvas');
+      canvas.width=img.width; canvas.height=img.height;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0);
+      const imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+      const code=jsQR(imageData.data, canvas.width, canvas.height);
+      if(code){
+        alert("QR Decoded: "+code.data);
+      } else {
+        alert("No QR code detected");
+      }
+    }
+    img.src=reader.result;
+  }
+  reader.readAsDataURL(file);
+});
 
-// ---------- Dummy placeholders ----------
-function startCameraScan(){alert('Camera scan not implemented in this demo');}
-function uploadQR(){alert('Upload QR not implemented in this demo');}
-function verifyPin(){document.getElementById('mechanicForm').classList.remove('hidden'); document.getElementById('pinInputContainer').classList.add('hidden');}
-function loadRecentJob(v){alert('Load recent job: '+v);}
 </script>
 </body>
 </html>
