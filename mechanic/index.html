@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mechanic PWA Dashboard</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<script src="https://unpkg.com/leaflet@1.9.5/dist/leaflet.js"></script>
+<script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <!-- Split-screen layout -->
+  <div id="main">
+    <div id="taskPane"></div>
+    <div id="mapPane"><div id="map"></div></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="navbar">
+    <button onclick="showJobs()">Jobs</button>
+    <button onclick="showMap()">Map</button>
+    <button onclick="showCompleted()">Completed</button>
+  </div>
+</div>
+
+<script src="jobs.js"></script>
+<script src="qr.js"></script>
+<script src="sw.js"></script>
+</body>
+</html>
