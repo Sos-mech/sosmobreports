@@ -77,7 +77,9 @@
 
   <input type="text" id="vehicleReg" placeholder="Vehicle Registration (AB12 CDE)" required>
   
-  <input type="text" id="locationText" placeholder="Your Location (e.g., Tesco Extra, Snodland)" readonly>
+  <input type="text" id="locationText" placeholder="Your Location" required>
+  <input type="hidden" id="latitude">
+  <input type="hidden" id="longitude">
   <button type="button" onclick="useMyLocation()">Use My Location</button>
 
   <textarea id="issue" placeholder="What’s wrong? (e.g., Car won’t start)"></textarea>
@@ -104,9 +106,13 @@ function useMyLocation() {
     pos => {
       const lat = pos.coords.latitude.toFixed(6);
       const lng = pos.coords.longitude.toFixed(6);
-      const locInput = document.getElementById('locationText');
-      locInput.value = `Lat:${lat}, Lng:${lng}`;
-      locInput.dataset.gps = 'true'; // marker for GPS
+      document.getElementById('latitude').value = lat;
+      document.getElementById('longitude').value = lng;
+
+      // Optional: try reverse geocoding for readable address
+      if (!document.getElementById('locationText').value) {
+        document.getElementById('locationText').value = `Lat:${lat}, Lng:${lng}`;
+      }
     },
     err => {
       alert('Unable to get location. Please enter manually.');
@@ -117,20 +123,21 @@ function useMyLocation() {
 
 function generateEmergencyQR() {
   const reg = document.getElementById('vehicleReg').value.trim().toUpperCase();
-  const locInput = document.getElementById('locationText');
-  const loc = locInput.value.trim();
+  const loc = document.getElementById('locationText').value.trim();
+  const lat = document.getElementById('latitude').value;
+  const lng = document.getElementById('longitude').value;
   const issue = document.getElementById('issue').value.trim();
   const phone = document.getElementById('phone').value.trim();
 
-  if (!reg || !loc || !issue || !phone) {
-    alert('Please fill all required fields.');
+  if (!reg || !loc || !issue || !phone || !lat || !lng) {
+    alert('Please fill all required fields or use GPS.');
     return;
   }
 
   const timestamp = Date.now();
   const jobId = `SOS-EMG-${reg.replace(/\s+/g,'')}-${timestamp}`;
 
-  const waBitlyLink = `https://bit.ly/3YPTkIO?text=🚨 Emergency Breakdown%0AReg: ${reg}%0ALocation: ${loc}%0AIssue: ${issue}%0APhone: ${phone}%0ATime: ${new Date(timestamp).toLocaleString()}`;
+  const waBitlyLink = `https://bit.ly/3YPTkIO?text=🚨 Emergency Breakdown%0AReg: ${reg}%0ALocation: ${loc}%0ACoordinates: ${lat}, ${lng}%0AIssue: ${issue}%0APhone: ${phone}%0ATime: ${new Date(timestamp).toLocaleString()}`;
 
   QRCode.toDataURL(waBitlyLink)
     .then(url => {
@@ -160,6 +167,8 @@ function downloadQR() {
 function resetForm() {
   document.getElementById('vehicleReg').value = '';
   document.getElementById('locationText').value = '';
+  document.getElementById('latitude').value = '';
+  document.getElementById('longitude').value = '';
   document.getElementById('issue').value = '';
   document.getElementById('phone').value = '';
   document.getElementById('qr').style.display = 'none';
