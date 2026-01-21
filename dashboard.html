@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>All-in-One Mechanic Dashboard</title>
+<title>Mechanic Dashboard - Offline First</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.5/dist/leaflet.css"/>
 <style>
 body{font-family:Arial,sans-serif;margin:0;padding:0;background:#f5f5f5;}
@@ -20,62 +20,43 @@ button.step{background:#4CAF50;margin-top:5px;}
 .yellow{background:#FFC107;color:black;}
 .red{background:#F44336;}
 #ticker{background:#333;color:white;padding:10px;border-radius:6px;margin-top:10px;overflow:hidden;}
-.dropdown{margin-top:15px;}
 #map,#custMap{height:200px;margin-top:10px;border-radius:6px;border:1px solid #ccc;}
 #stepButtons button{width:100%;}
 </style>
 </head>
 <body>
 <div class="container">
-<h2>All-in-One Mechanic Dashboard</h2>
+<h2>All-in-One Mechanic Dashboard (Offline-First)</h2>
 <div id="ticker">Waiting for new jobs...</div>
 
-<!-- QR Scan / Test Job -->
-<div id="qrContainer">
-  <input type="file" id="qrInput" accept="image/*">
-  <button id="scanQR">Scan QR / Load Test Job</button>
-</div>
+<!-- QR Scan / Fallback -->
+<h3>Scan QR (Camera preferred)</h3>
+<video id="video" autoplay style="width:100%;border:1px solid #ccc;border-radius:6px;"></video>
+<div id="qrResult"></div>
+<h4>Or upload QR image</h4>
+<input type="file" id="fileInput" accept="image/*">
 
-<!-- PIN Verification -->
+<!-- PIN -->
 <div id="pinPrompt" style="display:none;">
   <label>Enter Customer PIN:</label>
   <input type="number" id="pinInput" placeholder="4-digit PIN">
   <button id="confirmPIN">Confirm PIN</button>
 </div>
 
-<!-- Timer -->
+<!-- Timer & AI Steps -->
 <div id="timer">Timer: 00:00</div>
-
-<!-- AI Step Buttons -->
 <h3>AI Suggested Steps</h3>
 <div id="stepButtons"></div>
 
-<!-- Customer location -->
+<!-- Map -->
 <h3>Customer Location</h3>
 <input type="text" id="addressInput" placeholder="Enter address manually">
 <div id="map"></div>
 
-<!-- Page dropdown -->
-<div class="dropdown">
-  <label>Open Report / Tool:</label>
-  <select id="pageSelect">
-    <option value="">Select Page</option>
-    <option value="sos-report.html">SOS Report</option>
-    <option value="sosmobilereport.html">SOS Mobile Report</option>
-    <option value="diagnose-my-car.html">Diagnose My Car</option>
-    <option value="quote.html">Quote</option>
-    <option value="instant-vehicle-help.html">Instant Vehicle Help</option>
-    <option value="customer.html">Customer Page</option>
-    <option value="welcome.html">Welcome</option>
-    <option value="whatsapp.html">WhatsApp</option>
-  </select>
-  <button id="openPage">Open Page</button>
-</div>
-
 <!-- Completed Jobs -->
 <div id="jobsList"><h3>Completed Jobs</h3></div>
 
-<!-- Complete Job Button -->
+<!-- Complete Job -->
 <button id="completeJobBtn">Complete Job & Generate PDF</button>
 
 <hr>
@@ -100,11 +81,11 @@ button.step{background:#4CAF50;margin-top:5px;}
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
 <script>
-// State
-let qrData=null, jobStartTime=null, timerInterval=null;
-
-// IndexedDB for completed jobs
+// ---------- State ----------
+let qrData=null, jobStartTime=null;
 let db;
+
+// ---------- IndexedDB ----------
 const request=indexedDB.open("mechanicDB",1);
 request.onupgradeneeded=e=>{
   db=e.target.result;
@@ -112,35 +93,36 @@ request.onupgradeneeded=e=>{
 };
 request.onsuccess=e=>{ db=e.target.result; loadCompletedJobs(); };
 
-// Ticker
+// ---------- Ticker ----------
 function updateTicker(msg){ document.getElementById('ticker').textContent = msg; }
 
-// Timer
-function startTimer(){
-  jobStartTime=new Date();
-  timerInterval=setInterval(()=>{
-    let diff=Math.floor((new Date()-jobStartTime)/1000);
-    let mins=Math.floor(diff/60).toString().padStart(2,'0');
-    let secs=(diff%60).toString().padStart(2,'0');
-    let timerEl=document.getElementById('timer');
-    timerEl.textContent=`Timer: ${mins}:${secs}`;
-    if(diff>1800){ timerEl.style.color='red'; updateTicker(`Overdue! AI suggests: ${predictSteps()}`);}
-    else if(diff>1500){ timerEl.style.color='orange'; updateTicker(`Running long. AI predicts: ${predictSteps()}`);}
+// ---------- Timer & Alerts ----------
+function updateTimerAndTicker() {
+    if(!jobStartTime) return;
+    let elapsed = Math.floor((new Date() - jobStartTime)/1000);
+    let mins = Math.floor(elapsed/60).toString().padStart(2,'0');
+    let secs = (elapsed%60).toString().padStart(2,'0');
+    let timerEl = document.getElementById('timer');
+    timerEl.textContent = `Timer: ${mins}:${secs}`;
+
+    if(elapsed > 1800){ timerEl.style.color='red'; updateTicker(`Overdue! AI suggests: ${predictSteps().join(', ')}`);}
+    else if(elapsed > 1500){ timerEl.style.color='orange'; updateTicker(`Running long. AI predicts: ${predictSteps().join(', ')}`);}
     else timerEl.style.color='green';
-  },1000);
+
+    requestAnimationFrame(updateTimerAndTicker);
 }
 
-// Map for mechanic job
+function startJobTimer(){ jobStartTime = new Date(); updateTimerAndTicker(); }
+
+// ---------- Maps ----------
 let map=L.map('map').setView([51.378,0.523],14);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM'}).addTo(map);
 let marker=L.marker([51.378,0.523],{draggable:true}).addTo(map);
-
-// Map for QR generator
 let custMap=L.map('custMap').setView([51.378,0.523],14);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM'}).addTo(custMap);
 let custMarker=L.marker([51.378,0.523],{draggable:true}).addTo(custMap);
 
-// AI steps
+// ---------- AI Steps ----------
 function predictSteps(){ if(!qrData) return []; return aiSuggestSteps(qrData.vehicleModel || qrData.vehicleReg);}
 function aiSuggestSteps(vehicle){
   vehicle=vehicle.toLowerCase();
@@ -149,20 +131,17 @@ function aiSuggestSteps(vehicle){
   if(vehicle.includes('audi')) return ['Oil level','Battery','Lights'];
   return ['Run full diagnostics','Check all fluids','Scan error codes'];
 }
-
-// Generate AI buttons
 function generateStepButtons(){
   let stepContainer=document.getElementById('stepButtons');
   stepContainer.innerHTML='';
   predictSteps().forEach(s=>{
-    let btn=document.createElement('button');
-    btn.textContent=s; btn.className='step';
+    let btn=document.createElement('button'); btn.textContent=s; btn.className='step';
     btn.addEventListener('click',()=>{ updateTicker(`Step "${s}" completed.`); btn.disabled=true; });
     stepContainer.appendChild(btn);
   });
 }
 
-// Load Completed Jobs
+// ---------- Completed Jobs ----------
 function loadCompletedJobs(){
   let transaction=db.transaction(["jobs"],"readonly");
   let store=transaction.objectStore("jobs");
@@ -183,74 +162,71 @@ function loadCompletedJobs(){
   };
 }
 
-// QR Scan / Load test job
-const testJobs=[
-  {customerName:"Alice",vehicleReg:"AAA111",vehicleModel:"BMW 118i",pin:"1111",location:{latitude:51.38,longitude:0.52,address:"12 Main St"}},
-  {customerName:"Bob",vehicleReg:"BBB222",vehicleModel:"Ford Fiesta",pin:"2222",location:{latitude:51.379,longitude:0.521,address:"34 High St"}},
-  {customerName:"Charlie",vehicleReg:"CCC333",vehicleModel:"Audi A3",pin:"3333",location:{latitude:51.381,longitude:0.522,address:"56 Park Ave"}}
-];
+// ---------- QR Scanner ----------
+const video=document.getElementById('video');
+navigator.mediaDevices.getUserMedia({ video: { facingMode:'environment' } })
+.then(stream=>{ video.srcObject=stream; video.setAttribute("playsinline", true); video.play(); requestAnimationFrame(tick); })
+.catch(err=>{ console.log("Camera not available, fallback to upload",err); });
+function tick(){
+  if(video.readyState===video.HAVE_ENOUGH_DATA){
+    const canvas=document.createElement('canvas');
+    canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+    const ctx=canvas.getContext('2d'); ctx.drawImage(video,0,0);
+    const code=jsQR(ctx.getImageData(0,0,canvas.width,canvas.height).data,canvas.width,canvas.height);
+    if(code){
+      try{ qrData=JSON.parse(atob(code.data));
+        document.getElementById('qrResult').textContent=`QR Scanned: ${qrData.customerName} | ${qrData.vehicleReg}`;
+        video.pause(); video.srcObject.getTracks().forEach(t=>t.stop());
+        document.getElementById('pinPrompt').style.display='block';
+        map.setView([qrData.location.latitude,qrData.location.longitude],14);
+        marker.setLatLng([qrData.location.latitude,qrData.location.longitude]);
+        document.getElementById('addressInput').value = qrData.location.address || '';
+      }catch(e){ document.getElementById('qrResult').textContent="Invalid QR"; }
+    }else requestAnimationFrame(tick);
+  }else requestAnimationFrame(tick);
+}
 
-document.getElementById('scanQR').addEventListener('click',()=>{
-  let fileInput=document.getElementById('qrInput');
-  if(fileInput.files.length>0){
-    let file=fileInput.files[0];
-    let reader=new FileReader();
-    reader.onload=function(){
-      let img=new Image(); img.onload=function(){
-        let canvas=document.createElement('canvas'); canvas.width=img.width; canvas.height=img.height;
-        let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0);
-        let imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
-        let code=jsQR(imageData.data, canvas.width, canvas.height);
-        if(code){
-          try{
-            let decodedStr=atob(code.data); qrData=JSON.parse(decodedStr);
-            document.getElementById('pinPrompt').style.display='block';
-            updateTicker("QR scanned. Enter customer PIN.");
-            if(qrData.location){
-              map.setView([qrData.location.latitude, qrData.location.longitude],14);
-              marker.setLatLng([qrData.location.latitude, qrData.location.longitude]);
-              document.getElementById('addressInput').value = qrData.location.address || '';
-            }
-          }catch(e){ alert("Invalid QR data."); }
-        }else alert("No QR code detected.");
-      }; img.src=reader.result;
-    }; reader.readAsDataURL(file);
-  }else{
-    let selection=prompt("Enter test job 1-3: 1=Alice,2=Bob,3=Charlie"); let idx=parseInt(selection)-1;
-    if(idx>=0 && idx<3){ qrData=testJobs[idx];
-      document.getElementById('pinPrompt').style.display='block';
-      updateTicker(`Loaded test job: ${qrData.customerName}. Enter PIN.`);
-      map.setView([qrData.location.latitude,qrData.location.longitude],14);
-      marker.setLatLng([qrData.location.latitude,qrData.location.longitude]);
-      document.getElementById('addressInput').value=qrData.location.address;
-    }
-  }
+// ---------- Upload fallback ----------
+document.getElementById('fileInput').addEventListener('change', function(){
+  const file=this.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(){
+    const img=new Image();
+    img.onload=function(){
+      const canvas=document.createElement('canvas'); canvas.width=img.width; canvas.height=img.height;
+      const ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0);
+      const code=jsQR(ctx.getImageData(0,0,canvas.width,canvas.height).data,canvas.width,canvas.height);
+      if(code){ try{ qrData=JSON.parse(atob(code.data));
+        document.getElementById('qrResult').textContent=`QR Scanned (Upload): ${qrData.customerName} | ${qrData.vehicleReg}`;
+        document.getElementById('pinPrompt').style.display='block';
+        map.setView([qrData.location.latitude,qrData.location.longitude],14);
+        marker.setLatLng([qrData.location.latitude,qrData.location.longitude]);
+        document.getElementById('addressInput').value = qrData.location.address || '';
+      }catch(e){ document.getElementById('qrResult').textContent="Invalid QR"; }
+      }else document.getElementById('qrResult').textContent="No QR detected";
+    }; img.src=reader.result;
+  }; reader.readAsDataURL(file);
 });
 
-// PIN verification
+// ---------- PIN verification ----------
 document.getElementById('confirmPIN').addEventListener('click',()=>{
   let enteredPin=document.getElementById('pinInput').value;
   if(!qrData) return alert("Scan QR first");
   if(enteredPin!=qrData.pin) return alert("Incorrect PIN");
-  startTimer(); document.getElementById('pinPrompt').style.display='none';
+  startJobTimer(); document.getElementById('pinPrompt').style.display='none';
   updateTicker(`PIN confirmed. Active job: ${qrData.customerName}. AI steps loaded.`);
   generateStepButtons();
 });
 
-// Open page dropdown
-document.getElementById('openPage').addEventListener('click',()=>{
-  let page=document.getElementById('pageSelect').value; if(page) window.open(page,'_blank');
-});
-
-// Complete Job & Generate PDF
-document.getElementById('completeJobBtn').addEventListener('click',async()=>{
+// ---------- Complete Job & PDF ----------
+document.getElementById('completeJobBtn').addEventListener('click',()=>{
   if(!qrData||!jobStartTime) return alert("No active job.");
   let endTime=new Date(); let elapsed=Math.floor((endTime-jobStartTime)/1000);
   let steps=predictSteps(); let score=100; if(elapsed>1800) score=50; else if(elapsed>1500) score=80;
   let transaction=db.transaction(["jobs"],"readwrite"); let store=transaction.objectStore("jobs");
-  store.add({customer:qrData.customerName,vehicle:qrData.vehicleReg,start:jobStartTime.toLocaleTimeString(),end:endTime.toLocaleTimeString(),elapsed,score,steps});
+  store.add({customer:qrData.customerName, vehicle:qrData.vehicleReg, start:jobStartTime.toLocaleTimeString(), end:endTime.toLocaleTimeString(), elapsed, score, steps});
   loadCompletedJobs();
-  // PDF
+
   const { jsPDF }=window.jspdf; let doc=new jsPDF();
   doc.setFontSize(16); doc.text(`Job Report - ${qrData.vehicleReg}`,10,20);
   doc.setFontSize(12); doc.text(`Customer: ${qrData.customerName}`,10,30);
@@ -261,23 +237,33 @@ document.getElementById('completeJobBtn').addEventListener('click',async()=>{
   doc.text(`AI Steps Completed: ${steps.join(', ')}`,10,80);
   let filename=`${qrData.vehicleReg}_${Date.now()}.pdf`; doc.save(filename);
 
-  clearInterval(timerInterval); jobStartTime=null; qrData=null;
+  qrData=null; jobStartTime=null;
   document.getElementById('timer').textContent='Timer: 00:00';
   document.getElementById('pinInput').value=''; document.getElementById('stepButtons').innerHTML='';
-  updateTicker("Job report downloaded. Returning to main dashboard in 15s...");
-  setTimeout(()=>{ updateTicker("Waiting for new job..."); map.setView([51.378,0.523],14); marker.setLatLng([51.378,0.523]); },15000);
+  updateTicker("Job report downloaded. Waiting for next job...");
 });
 
-// Customer QR Generator
+// ---------- Customer QR Generator ----------
 document.getElementById('genQR').addEventListener('click',()=>{
-  let data={customerName:document.getElementById('custName').value,vehicleReg:document.getElementById('vehReg').value,vehicleModel:document.getElementById('vehModel').value,pin:document.getElementById('custPIN').value,location:{latitude:custMarker.getLatLng().lat,longitude:custMarker.getLatLng().lng,address:document.getElementById('custAddress').value}};
+  let data={
+    customerName:document.getElementById('custName').value,
+    vehicleReg:document.getElementById('vehReg').value,
+    vehicleModel:document.getElementById('vehModel').value,
+    pin:document.getElementById('custPIN').value,
+    location:{latitude:custMarker.getLatLng().lat,longitude:custMarker.getLatLng().lng,address:document.getElementById('custAddress').value}
+  };
   let encoded=btoa(JSON.stringify(data));
   QRCode.toCanvas(document.getElementById('qrCanvas'),encoded,{width:200},function(err){if(err)console.error(err);});
+  updateTicker(`🚨 New job available: ${data.vehicleReg}`);
 });
 document.getElementById('downloadQR').addEventListener('click',()=>{
   let canvas=document.getElementById('qrCanvas'); let link=document.createElement('a');
   link.download=`${document.getElementById('vehReg').value}_QR.png`; link.href=canvas.toDataURL(); link.click();
 });
+
+// ---------- Offline Detection ----------
+window.addEventListener('online',()=>updateTicker("Online: syncing jobs..."));
+window.addEventListener('offline',()=>updateTicker("Offline: all data stored locally"));
 </script>
 </body>
 </html>
