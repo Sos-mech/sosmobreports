@@ -42,6 +42,7 @@
     border: none;
     font-size: 1.05em;
     outline: none;
+    box-sizing: border-box;
   }
 
   textarea { resize: none; height: 80px; }
@@ -73,9 +74,12 @@
 
 <div id="emergency-modal">
   <h2>🚨 Emergency Breakdown</h2>
+
   <input type="text" id="vehicleReg" placeholder="Vehicle Registration (AB12 CDE)" required>
-  <input type="text" id="locationText" placeholder="Your Location (e.g., Tesco Extra, Snodland)">
-  <button type="button" onclick="useMyLocation()">Use my location</button>
+  
+  <input type="text" id="locationText" placeholder="Your Location (e.g., Tesco Extra, Snodland)" readonly>
+  <button type="button" onclick="useMyLocation()">Use My Location</button>
+
   <textarea id="issue" placeholder="What’s wrong? (e.g., Car won’t start)"></textarea>
   <input type="tel" id="phone" placeholder="Mobile Number" required>
 
@@ -95,18 +99,26 @@ function useMyLocation() {
     alert('Geolocation not supported.');
     return;
   }
-  navigator.geolocation.getCurrentPosition(pos => {
-    const lat = pos.coords.latitude.toFixed(6);
-    const lng = pos.coords.longitude.toFixed(6);
-    document.getElementById('locationText').value = `Lat:${lat}, Lng:${lng}`;
-  }, err => {
-    alert('Unable to get location.');
-  });
+
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const lat = pos.coords.latitude.toFixed(6);
+      const lng = pos.coords.longitude.toFixed(6);
+      const locInput = document.getElementById('locationText');
+      locInput.value = `Lat:${lat}, Lng:${lng}`;
+      locInput.dataset.gps = 'true'; // marker for GPS
+    },
+    err => {
+      alert('Unable to get location. Please enter manually.');
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
 }
 
 function generateEmergencyQR() {
   const reg = document.getElementById('vehicleReg').value.trim().toUpperCase();
-  const loc = document.getElementById('locationText').value.trim();
+  const locInput = document.getElementById('locationText');
+  const loc = locInput.value.trim();
   const issue = document.getElementById('issue').value.trim();
   const phone = document.getElementById('phone').value.trim();
 
@@ -118,36 +130,28 @@ function generateEmergencyQR() {
   const timestamp = Date.now();
   const jobId = `SOS-EMG-${reg.replace(/\s+/g,'')}-${timestamp}`;
 
-  const job = {
-    job_id: jobId,
-    type: 'emergency',
-    vehicle: { reg },
-    customer: { phone },
-    location: loc,
-    issue,
-    timestamps: { created: timestamp }
-  };
-
-  // Create QR with Bitly link or WhatsApp link
   const waBitlyLink = `https://bit.ly/3YPTkIO?text=🚨 Emergency Breakdown%0AReg: ${reg}%0ALocation: ${loc}%0AIssue: ${issue}%0APhone: ${phone}%0ATime: ${new Date(timestamp).toLocaleString()}`;
-  
-  QRCode.toDataURL(waBitlyLink).then(url => {
-    qrDataUrl = url;
-    const qrImg = document.getElementById('qr');
-    qrImg.src = url;
-    qrImg.style.display = 'block';
-    document.getElementById('downloadQR').style.display = 'block';
-    
-    // Optionally open WhatsApp automatically
-    window.open(waBitlyLink, '_blank');
-  });
+
+  QRCode.toDataURL(waBitlyLink)
+    .then(url => {
+      qrDataUrl = url;
+      const qrImg = document.getElementById('qr');
+      qrImg.src = url;
+      qrImg.style.display = 'block';
+      document.getElementById('downloadQR').style.display = 'block';
+
+      // Open WhatsApp automatically
+      window.open(waBitlyLink, '_blank');
+    })
+    .catch(err => console.error(err));
 }
 
 function downloadQR() {
   if (!qrDataUrl) return;
   const a = document.createElement('a');
   a.href = qrDataUrl;
-  a.download = `SOS-EMG-${document.getElementById('vehicleReg').value.replace(/\s+/g,'')}.png`;
+  const reg = document.getElementById('vehicleReg').value.replace(/\s+/g,'');
+  a.download = `SOS-EMG-${reg}.png`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
