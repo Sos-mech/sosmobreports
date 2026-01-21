@@ -82,7 +82,7 @@ button.secondary:hover { background: #555; }
   <button type="button" onclick="useMyLocation()">Use My Location</button>
 
   <textarea id="issue" placeholder="What’s wrong? (e.g., Car won’t start)" required></textarea>
-  <input type="tel" id="phone" placeholder="Mobile Number" required>
+  <input type="tel" id="phone" placeholder="Mobile Number (e.g., 07405937104)" required>
 
   <button class="primary" onclick="generateEmergencyQR()">Generate QR & WhatsApp</button>
   <button class="secondary" onclick="resetForm()">Cancel</button>
@@ -108,7 +108,6 @@ function useMyLocation() {
       document.getElementById('latitude').value = lat;
       document.getElementById('longitude').value = lng;
 
-      // Only fill readable address if empty
       if (!document.getElementById('locationText').value) {
         document.getElementById('locationText').value = `Lat: ${lat}, Lng: ${lng}`;
       }
@@ -142,10 +141,12 @@ Issue: ${issue}
 Phone: ${phone}
 Time: ${timestamp}`;
 
-  // Bitly link for WhatsApp
-  const waBitlyLink = `https://bit.ly/3YPTkIO?text=${encodeURIComponent(message)}`;
+  // Direct WhatsApp link using mechanic's number
+  const mechanicPhone = '447405937104'; // UK format without +0
+  const waLink = `https://wa.me/${mechanicPhone}?text=${encodeURIComponent(message)}`;
 
-  QRCode.toDataURL(waBitlyLink)
+  // Generate QR for the same link
+  QRCode.toDataURL(waLink)
     .then(url => {
       qrDataUrl = url;
       const qrImg = document.getElementById('qr');
@@ -153,8 +154,8 @@ Time: ${timestamp}`;
       qrImg.style.display = 'block';
       document.getElementById('downloadQR').style.display = 'block';
 
-      // Open WhatsApp cleanly
-      window.open(waBitlyLink, '_blank');
+      // Open WhatsApp with live message
+      window.open(waLink, '_blank');
     })
     .catch(err => console.error(err));
 }
