@@ -27,7 +27,7 @@ textarea { resize:vertical;}
 .hidden { display:none; }
 
 #qr-menu { text-align:center; margin:20px 0; padding:15px; background:#f0f0f0; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,0.1);}
-#qrcode { margin-top:20px;}
+#qrcode { margin-top:20px; text-align:center;}
 </style>
 </head>
 <body>
@@ -85,11 +85,16 @@ textarea { resize:vertical;}
   <button class="btn btn-secondary" onclick="editForm()">Edit Details</button>
   <button class="btn btn-danger" onclick="resetForm()">Reset Form</button>
 
+  <div id="downloadSection" class="hidden">
+    <p>QR scanned successfully! Download your pre-diagnosis report:</p>
+    <button class="btn btn-primary" id="downloadPDFBtn">Download PDF</button>
+  </div>
+
   <div id="qrcode"></div>
 </div>
 
+<script type="module" src="https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 let previousReports = JSON.parse(localStorage.getItem('reports')||'[]');
 
@@ -136,18 +141,31 @@ function populateFromReg(){
   if(!reg) return alert('Enter registration');
   fillForm({customerName:'John Doe', phone:'+44 7000 000000', vehicle:'BMW 1 Series F20 2015', registration:reg, mileage:'109,403 mi', symptom:'Engine issue', notes:''});
   showScreen('form-screen');
+  document.getElementById('downloadSection').classList.remove('hidden');
+  document.getElementById('downloadPDFBtn').onclick = () => generatePDF({
+    customerName:'John Doe', phone:'+44 7000 000000', vehicle:'BMW 1 Series F20 2015', registration:reg, mileage:'109,403 mi', symptom:'Engine issue', notes:''
+  });
 }
 
 function manualFallback(){ document.getElementById('manualEntry').classList.remove('hidden'); document.getElementById('qrEntry').classList.add('hidden'); }
 
-function uploadQR(){
+async function uploadQR(){
   const fileInput = document.createElement('input');
   fileInput.type='file'; fileInput.accept='image/*';
-  fileInput.onchange = e=>{
+  fileInput.onchange = async e=>{
     const file = e.target.files[0]; if(!file) return;
-    alert("QR uploaded! JS QR decode would run here to autofill the form.");
-    showScreen('form-screen');
-    document.getElementById('qrEntry').classList.add('hidden');
+    try{
+      const result = await QrScanner.scanImage(file);
+      const data = JSON.parse(result); // QR must contain JSON
+      fillForm(data);
+      showScreen('form-screen');
+      const downloadSection = document.getElementById('downloadSection');
+      downloadSection.classList.remove('hidden');
+      document.getElementById('downloadPDFBtn').onclick = () => generatePDF(data);
+    }catch(err){
+      alert("QR decode failed. Please enter registration manually.");
+      manualFallback();
+    }
   };
   fileInput.click();
 }
@@ -163,7 +181,7 @@ function fillForm(data){
 }
 
 function editForm(){ showScreen('form-screen'); }
-function resetForm(){ fillForm({}); }
+function resetForm(){ fillForm({}); document.getElementById('downloadSection').classList.add('hidden'); }
 
 function submitReport(){
   const report = {
@@ -179,7 +197,10 @@ function submitReport(){
   previousReports.push(report);
   localStorage.setItem('reports', JSON.stringify(previousReports));
   populateDropdown();
+  generatePDF(report);
+}
 
+function generatePDF(report){
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   let y=30;
@@ -187,16 +208,25 @@ function submitReport(){
   doc.setFontSize(18);
   doc.text("SOS Mechanics - Pre-Diagnosis", 105, 20, null, null, "center");
 
-  function addField(label,value){ doc.setFont(undefined,'bold'); doc.text(label+":",15,y); doc.setFont(undefined,'normal'); doc.text(String(value||"-"),60,y); y+=10; }
-  addField("Customer Name",report.customerName);
-  addField("Phone",report.phone);
-  addField("Vehicle",report.vehicle);
-  addField("Registration",report.registration);
-  addField("Mileage",report.mileage);
-  addField("Reported Symptom",report.symptom);
-  addField("Notes / Observations",report.notes);
+  function addField(label, value){
+    doc.setFont(undefined,'bold');
+    doc.text(label, 15, y);
+    y += 8;
+    doc.setFont(undefined,'normal');
+    doc.text(String(value||"-"), 15, y);
+    y += 15;
+  }
 
-  y+=15; doc.text("Mechanic Signature: _______________________",15,y);
+  addField("Customer Name", report.customerName);
+  addField("Phone", report.phone);
+  addField("Vehicle Make / Model / Year", report.vehicle);
+  addField("Registration", report.registration);
+  addField("Mileage", report.mileage);
+  addField("Reported Symptom", report.symptom);
+  addField("Notes / Observations", report.notes);
+
+  y += 15; 
+  doc.text("Mechanic Signature: _______________________", 15, y);
 
   const footerTimestamp = now.toLocaleString();
   doc.setFontSize(10);
@@ -205,10 +235,6 @@ function submitReport(){
   const fileSafeTime = now.toISOString().replace(/[:]/g,'-');
   const pdfName = `${report.registration || 'vehicle'}_${fileSafeTime}_PreDiagnosis.pdf`;
   doc.save(pdfName);
-
-  document.getElementById('qrcode').innerHTML="";
-  new QRCode(document.getElementById("qrcode"),{text:pdfName,width:128,height:128});
-  alert("PDF generated & QR ready for customer scan!");
 }
 </script>
 </body>
