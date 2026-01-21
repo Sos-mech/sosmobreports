@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOS Mechanics Customer Job Entry</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:0;}
+header{background:#222;color:#fff;padding:15px;text-align:center;position:fixed;top:0;width:100%;z-index:1000;}
+.container{max-width:600px;margin:80px auto 40px;padding:20px;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+label{display:block;margin-bottom:5px;font-weight:bold;}
+input,textarea{width:100%;padding:12px;margin-bottom:15px;border-radius:6px;border:1px solid #ccc;font-size:1em;}
+textarea{resize:vertical;}
+.btn{display:block;width:100%;padding:15px;margin:10px 0;border:none;border-radius:8px;font-weight:bold;font-size:1.1em;cursor:pointer;}
+.btn-primary{background:#4CAF50;color:white;}
+.btn-primary:hover{background:#45a049;}
+.hidden{display:none;}
+#overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);color:#fff;display:flex;justify-content:center;align-items:center;text-align:center;font-size:1.5em;z-index:2000;flex-direction:column;}
+canvas{display:block;margin:auto;}
+</style>
+</head>
+<body>
+
+<header>
+<h1>SOS Mechanics - Job Request</h1>
+</header>
+
+<div class="container">
+<h2>Enter Your Vehicle Details</h2>
+
+<label>Name</label>
+<input type="text" id="custName" placeholder="Full Name">
+
+<label>Phone</label>
+<input type="text" id="custPhone" placeholder="Phone Number">
+
+<label>Vehicle Make / Model / Year</label>
+<input type="text" id="custVehicle" placeholder="e.g., BMW 118i Sport 2015">
+
+<label>Registration Number</label>
+<input type="text" id="custReg" placeholder="e.g., KX68ABC">
+
+<label>Mileage</label>
+<input type="text" id="custMileage" placeholder="e.g., 45,000">
+
+<label>Reported Issue / Symptom</label>
+<textarea id="custSymptom" rows="3"></textarea>
+
+<h3>Set Your PIN</h3>
+<label>2–4 Digit PIN (used by mechanic to unlock job)</label>
+<input type="text" id="custPin" maxlength="4" placeholder="Enter PIN">
+
+<button class="btn btn-primary" onclick="generateQR()">Generate QR & Download</button>
+
+<canvas id="qrCanvas" class="hidden"></canvas>
+</div>
+
+<div id="overlay" class="hidden">
+<p id="overlayMessage">Please wait...</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script>
+function generateQR(){
+  const name=document.getElementById('custName').value.trim();
+  const phone=document.getElementById('custPhone').value.trim();
+  const vehicle=document.getElementById('custVehicle').value.trim();
+  const reg=document.getElementById('custReg').value.trim();
+  const mileage=document.getElementById('custMileage').value.trim();
+  const symptom=document.getElementById('custSymptom').value.trim();
+  const pin=document.getElementById('custPin').value.trim();
+
+  if(!name || !phone || !vehicle || !reg || !mileage || !symptom || !pin){
+    alert("Please fill all fields and set your PIN");
+    return;
+  }
+
+  const qrData=JSON.stringify({name,phone,vehicle,reg,mileage,symptom,pin});
+  const qrCanvas=document.getElementById('qrCanvas');
+
+  showOverlay("Generating QR… please wait up to 10 seconds");
+
+  setTimeout(()=>{
+    QRCode.toCanvas(qrCanvas, qrData, {width:200}, function(err){
+      if(err){alert("Error generating QR"); console.error(err); hideOverlay(); return;}
+      // Download QR image automatically
+      const link=document.createElement('a');
+      const ts=new Date(); 
+      const tsStr=ts.toISOString().slice(0,19).replace(/[: ]/g,'');
+      link.download=`JOB_${reg}_${tsStr}.png`;
+      link.href=qrCanvas.toDataURL();
+      link.click();
+      showOverlay("QR downloaded! Please show this to your mechanic",5000);
+    });
+  },2000);
+}
+
+function showOverlay(msg, hideAfter=0){
+  const overlay=document.getElementById('overlay');
+  const msgEl=document.getElementById('overlayMessage');
+  overlay.classList.remove('hidden');
+  msgEl.innerText=msg;
+  if(hideAfter>0) setTimeout(()=>overlay.classList.add('hidden'),hideAfter);
+}
+
+function hideOverlay(){document.getElementById('overlay').classList.add('hidden');}
+</script>
+</body>
+</html>
