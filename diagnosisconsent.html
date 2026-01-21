@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Pre-Diagnosis</title>
+<style>
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#fff;}
+header { position: fixed; top:0; left:0; right:0; background:#222; color:#fff; padding:15px; text-align:center; z-index:1000;}
+header h1 { margin:0; font-size:1.5em;}
+.ticker { margin-top:60px; background:#f9f9f9; border-top:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px; overflow:hidden; white-space:nowrap;}
+.ticker span { display:inline-block; padding-right:50px; animation:scroll 15s linear infinite;}
+@keyframes scroll { 0% { transform:translateX(100%);} 100% { transform:translateX(-100%);} }
+.container { max-width:600px; margin:20px auto; padding:20px; text-align:center; }
+input, textarea, select { width:100%; padding:10px; margin:10px 0 20px 0; border-radius:6px; border:1px solid #ccc; font-size:1em;}
+label { font-weight:bold; display:block; text-align:left; margin-bottom:5px;}
+.btn { display:block; width:100%; padding:15px; margin:10px 0; font-size:1.2em; border:none; border-radius:8px; cursor:pointer;}
+.btn-primary { background:#4CAF50; color:white; font-weight:bold;}
+.btn-primary:hover { background:#45a049;}
+.btn-secondary { background:#ccc; color:#333;}
+.btn-secondary:hover { background:#aaa;}
+.btn-danger { background:#f44336; color:white;}
+.btn-danger:hover { background:#d32f2f;}
+.hidden { display:none;}
+#qrcode { margin-top:20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SOS Mechanics - Pre-Diagnosis</h1>
+</header>
+
+<div class="ticker"><span>High-Value Service: Brake Check • Oil Change • Battery Health • Emergency Assistance •</span></div>
+
+<div class="container" id="start-screen">
+  <label for="reportSelect">Previous Reports</label>
+  <select id="reportSelect">
+    <option value="">-- Select Previous Report --</option>
+  </select>
+  
+  <button class="btn btn-primary" onclick="showInput('manual')">Enter Number Plate</button>
+  <button class="btn btn-secondary" onclick="showInput('qr')">Scan QR Code</button>
+</div>
+
+<div class="container hidden" id="input-screen">
+  <div id="manualEntry" class="hidden">
+    <label for="reg">Number Plate</label>
+    <input type="text" id="regInput" placeholder="Enter registration">
+    <button class="btn btn-primary" onclick="populateFromReg()">Autofill</button>
+  </div>
+  <div id="qrEntry" class="hidden">
+    <p>QR Scan will autofill details (demo mode).</p>
+    <button class="btn btn-primary" onclick="populateFromQR()">Scan QR</button>
+  </div>
+</div>
+
+<div class="container hidden" id="form-screen">
+  <label for="customerName">Customer Name</label>
+  <input type="text" id="customerName" placeholder="Your name">
+  <label for="phone">Phone</label>
+  <input type="text" id="phone" placeholder="Phone number">
+  <label for="vehicle">Vehicle Make / Model / Year</label>
+  <input type="text" id="vehicle">
+  <label for="reg">Vehicle Registration</label>
+  <input type="text" id="reg">
+  <label for="mileage">Mileage</label>
+  <input type="text" id="mileage">
+  <label for="symptom">Reported Symptom</label>
+  <textarea id="symptom" rows="3"></textarea>
+  <label for="notes">Additional Notes</label>
+  <textarea id="notes" rows="3"></textarea>
+  
+  <button class="btn btn-primary" onclick="submitReport()">Confirm & Generate PDF</button>
+  <button class="btn btn-secondary" onclick="editForm()">Edit Details</button>
+  <button class="btn btn-danger" onclick="resetForm()">Reset Form</button>
+
+  <div id="qrcode"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+let previousReports = JSON.parse(localStorage.getItem('reports')||'[]');
+
+function populateDropdown() {
+  const select = document.getElementById('reportSelect');
+  select.innerHTML = '<option value="">-- Select Previous Report --</option>';
+  previousReports.forEach((r,i)=>{
+    select.innerHTML += `<option value="${i}">${r.timestamp} - ${r.registration}</option>`;
+  });
+}
+
+populateDropdown();
+
+document.getElementById('reportSelect').addEventListener('change', function() {
+  const idx = this.value;
+  if(idx!==''){
+    const r = previousReports[idx];
+    fillForm(r);
+    showScreen('form-screen');
+  }
+});
+
+function showInput(type){
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('input-screen').classList.remove('hidden');
+  if(type==='manual'){ document.getElementById('manualEntry').classList.remove('hidden'); }
+  if(type==='qr'){ document.getElementById('qrEntry').classList.remove('hidden'); }
+}
+
+function populateFromReg(){
+  const reg = document.getElementById('regInput').value.trim();
+  if(!reg) return alert('Enter registration');
+  // Demo autofill
+  fillForm({customerName:'John Doe', phone:'+44 7000 000000', vehicle:'BMW 1 Series F20 2015', registration:reg, mileage:'109,403 mi', symptom:'Engine issue', notes:''});
+  showScreen('form-screen');
+}
+
+function populateFromQR(){
+  // Demo QR autofill
+  fillForm({customerName:'Jane Doe', phone:'+44 7000 111111', vehicle:'Mini Cooper 2018', registration:'XY12 ABC', mileage:'45,000 mi', symptom:'Brake noise', notes:''});
+  showScreen('form-screen');
+}
+
+function fillForm(data){
+  document.getElementById('customerName').value=data.customerName||'';
+  document.getElementById('phone').value=data.phone||'';
+  document.getElementById('vehicle').value=data.vehicle||'';
+  document.getElementById('reg').value=data.registration||'';
+  document.getElementById('mileage').value=data.mileage||'';
+  document.getElementById('symptom').value=data.symptom||'';
+  document.getElementById('notes').value=data.notes||'';
+}
+
+function showScreen(id){
+  ['start-screen','input-screen','form-screen'].forEach(s=>document.getElementById(s).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function editForm(){ showScreen('form-screen'); }
+function resetForm(){ fillForm({}); }
+
+function submitReport(){
+  const report = {
+    customerName:document.getElementById('customerName').value,
+    phone:document.getElementById('phone').value,
+    vehicle:document.getElementById('vehicle').value,
+    registration:document.getElementById('reg').value,
+    mileage:document.getElementById('mileage').value,
+    symptom:document.getElementById('symptom').value,
+    notes:document.getElementById('notes').value,
+    timestamp:new Date().toLocaleString()
+  };
+
+  // Save locally
+  previousReports.push(report);
+  localStorage.setItem('reports', JSON.stringify(previousReports));
+  populateDropdown();
+
+  // PDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  let y=30;
+  const now = new Date();
+  const timestamp = now.toLocaleString();
+  doc.setFontSize(18);
+  doc.text("SOS Mechanics - Pre-Diagnosis",105,20,null,null,"center");
+  doc.setFontSize(12);
+  doc.text(`Timestamp: ${timestamp}`,15,28);
+  doc.setLineWidth(0.5);
+  doc.line(15,32,195,32);
+  function addField(label,value){ doc.setFont(undefined,'bold'); doc.text(label+":",15,y); doc.setFont(undefined,'normal'); doc.text(String(value||"-"),60,y); y+=10; }
+  addField("Customer Name",report.customerName);
+  addField("Phone",report.phone);
+  addField("Vehicle",report.vehicle);
+  addField("Registration",report.registration);
+  addField("Mileage",report.mileage);
+  addField("Reported Symptom",report.symptom);
+  addField("Notes / Observations",report.notes);
+  y+=15; doc.text("Mechanic Signature: _______________________",15,y);
+
+  const fileSafeTime = now.toISOString().replace(/[:]/g,'-');
+  const pdfName = `${report.registration||'vehicle'}_${fileSafeTime}_PreDiagnosis.pdf`;
+  const pdfBlob = doc.output("blob");
+  const pdfBlobUrl = URL.createObjectURL(pdfBlob);
+  doc.save(pdfName);
+
+  // QR
+  document.getElementById('qrcode').innerHTML="";
+  new QRCode(document.getElementById("qrcode"),{text:pdfBlobUrl,width:128,height:128});
+  alert("PDF generated & QR ready for customer scan!");
+}
+</script>
+</body>
+</html>
