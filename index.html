@@ -8,68 +8,71 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0b0b0b;
-  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  background: #f6f7f8;
+  color: #111;
 }
 
 header {
-  background: #000;
-  padding: 15px;
+  background: #ffffff;
+  padding: 16px;
   display: flex;
   align-items: center;
   gap: 12px;
-  border-bottom: 2px solid #00ff66;
+  border-bottom: 2px solid #00e676;
 }
 
 header img {
-  height: 40px;
+  height: 42px;
 }
 
 header h1 {
   font-size: 1.1em;
   margin: 0;
-  color: #00ff66;
+  font-weight: 600;
 }
 
 .panel {
   padding: 20px;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 15px;
-  max-width: 600px;
+  gap: 16px;
+  max-width: 560px;
   margin: auto;
 }
 
 .tile {
-  padding: 20px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #00ff66, #00cc55);
+  padding: 22px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #00ff7f, #00e676);
   color: #000;
-  font-size: 1.1em;
-  font-weight: bold;
+  font-size: 1.05em;
+  font-weight: 600;
   text-align: center;
   text-decoration: none;
-  box-shadow: 0 0 20px rgba(0,255,102,0.4);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
 .tile.secondary {
-  background: #1b1b1b;
-  color: #00ff66;
+  background: #ffffff;
+  color: #00b85c;
+  border: 2px solid #00e676;
   box-shadow: none;
-  border: 1px solid #00ff66;
 }
 
-.tile.small {
-  font-size: 0.95em;
-  padding: 15px;
+.tile span {
+  display: block;
+  font-size: 0.85em;
+  font-weight: 400;
+  margin-top: 6px;
+  opacity: 0.85;
 }
 
 .footer {
   text-align: center;
-  font-size: 0.8em;
+  font-size: 0.75em;
   color: #777;
-  padding: 20px;
+  padding: 24px 10px;
 }
 </style>
 </head>
@@ -78,37 +81,35 @@ header h1 {
 
 <header>
   <img src="assets/logo.png" alt="SOS Mechanics">
-  <h1>SOS Mechanics – Control Panel</h1>
+  <h1>SOS Mechanics · Mobile Control Panel</h1>
 </header>
 
 <main class="panel">
 
-  <!-- PRIMARY ACTIONS -->
   <a href="consent.html" class="tile">
-    1️⃣ Customer Consent & Authorisation
+    Customer Consent
+    <span>Authorisation & liability agreement</span>
   </a>
 
   <a href="sos-report.html" class="tile">
-    2️⃣ Create SOSREPORT (Diagnostics / Repairs)
+    Create SOSREPORT
+    <span>Diagnostics · Findings · Repairs</span>
   </a>
 
-  <!-- SECONDARY ACTIONS -->
-  <a href="photos.html" class="tile secondary small">
-    📸 Capture Vehicle Evidence
+  <a href="photos.html" class="tile secondary">
+    Capture Vehicle Photos
+    <span>Evidence & condition records</span>
   </a>
 
-  <a href="history.html" class="tile secondary small">
-    📂 Previous Reports / Records
-  </a>
-
-  <a href="contact.html" class="tile secondary small">
-    📞 Contact / Emergency Call
+  <a href="history.html" class="tile secondary">
+    Previous Reports
+    <span>Search past jobs & PDFs</span>
   </a>
 
 </main>
 
 <div class="footer">
-  Mobile Mechanic Control Panel • Built for On-Site Use
+  Professional mobile mechanic workflow · On-site use
 </div>
 
 </body>
