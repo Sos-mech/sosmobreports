@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vehicle Diagnostic & Repair Authorisation</title>
+<title>SOSREPORT – Vehicle Diagnostic & Repair Authorisation</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
@@ -87,42 +87,36 @@ footer {
 
 <body>
 
-<header>Customer-Initiated Vehicle Diagnostic & Repair Agreement</header>
+<header>SOSREPORT – Customer-Initiated Vehicle Diagnostic & Repair Agreement</header>
 
 <div class="container">
 
 <div class="section">
 <h2>Customer Initiation</h2>
-<p>This diagnostic or repair process begins <strong>only because the customer has requested it</strong>.  
-No inspection, testing, recommendation, or repair is performed without customer initiation and approval.</p>
+<p>This process begins only because the customer has requested diagnostic or repair work.  
+No recommendations or actions occur without customer initiation and approval.</p>
 </div>
 
 <div class="section">
-<h2>Vehicle & Authority Declaration</h2>
+<h2>Vehicle & Authority</h2>
 <label>Vehicle Registration</label>
 <input id="reg" required>
 
 <label>VIN</label>
 <input id="vin" required>
 
-<p class="note">Customer confirms legal authority to authorise work. Vehicles subject to finance, third-party ownership, or dispute require prior written permission.</p>
+<p class="note">Customer confirms legal authority. Vehicles under finance or third-party ownership require prior permission.</p>
 </div>
 
 <div class="section">
 <h2>Accuracy & Liability</h2>
-<p>The customer confirms all information provided is true and complete.  
-<strong>All liability is excluded</strong> for faults, costs, delays, or damage resulting from incorrect, misleading, or withheld information.</p>
-</div>
-
-<div class="section">
-<h2>Diagnostics Scope</h2>
-<p>Diagnostics include visual, mechanical, electrical, and electronic testing within the agreed scope.  
-Diagnostics do not guarantee fault elimination or absence of future issues.</p>
+<p>All information supplied must be accurate.  
+All liability is excluded for faults, delays, or costs caused by misinformation or withheld facts.</p>
 </div>
 
 <div class="section">
 <h2>Safety & Conduct</h2>
-<p>Any physical interference, threat, or aggressive behaviour will result in immediate cessation of work.  
+<p>Any physical interference, threat, or aggressive behaviour results in immediate cessation of work.  
 Police may be contacted without further notice.</p>
 </div>
 
@@ -130,7 +124,6 @@ Police may be contacted without further notice.</p>
 <h2>Customer Authorisation</h2>
 <label>Customer Full Name (typed)</label>
 <input id="name" required>
-
 <p class="note">Typing your name and pressing AGREE constitutes legal authorisation.</p>
 </div>
 
@@ -141,7 +134,7 @@ AGREE & AUTHORISE WORK
 </div>
 
 <footer>
-Mobile Mechanic Authorisation • Time, Date & Location Recorded Automatically
+SOSREPORT • Mobile Mechanic Record • Time, Date & Location Captured
 </footer>
 
 <script>
@@ -163,16 +156,17 @@ function validate(){
             el.classList.remove("invalid");
         }
     });
+    btn.disabled = !valid;
+    btn.classList.toggle("enabled", valid);
+}
 
-    if(valid){
-        btn.disabled = false;
-        btn.classList.add("enabled");
-        btn.style.cursor = "pointer";
-    } else {
-        btn.disabled = true;
-        btn.classList.remove("enabled");
-        btn.style.cursor = "not-allowed";
-    }
+function generateJobRef(name, reg){
+    const cleanName = name.replace(/\s+/g,'').toUpperCase();
+    const cleanReg = reg.replace(/\s+/g,'').toUpperCase();
+    const namePart = cleanName.substring(0,3);
+    const regPart = cleanReg.substring(cleanReg.length-3);
+    const timePart = Date.now().toString().slice(-6);
+    return `SOSREPORT-${namePart}${regPart}-${timePart}`;
 }
 
 async function authorise(){
@@ -180,6 +174,7 @@ async function authorise(){
     const reg = document.getElementById("reg").value.trim();
     const vin = document.getElementById("vin").value.trim();
 
+    const jobRef = generateJobRef(name, reg);
     const now = new Date().toLocaleString();
     let location = "Unavailable";
 
@@ -199,7 +194,9 @@ async function authorise(){
     const pdf = new jsPDF();
 
     pdf.text(`
-CUSTOMER-INITIATED VEHICLE DIAGNOSTIC & REPAIR AGREEMENT
+SOSREPORT – VEHICLE DIAGNOSTIC & REPAIR AUTHORISATION
+
+Job Reference: ${jobRef}
 
 Customer Name: ${name}
 Vehicle Registration: ${reg}
@@ -210,15 +207,15 @@ Location: ${location}
 Customer confirms:
 • They initiated this process
 • They have authority to authorise work
-• Information provided is accurate
+• Information supplied is accurate
 • Liability is excluded for misinformation
 • Police may be contacted if safety is compromised
 
 Agreement recorded via typed name and confirmation button.
 `,10,10);
 
-    pdf.save(`Authorisation_${reg}_${Date.now()}.pdf`);
-    alert("Agreement recorded and downloaded. Work may now commence.");
+    pdf.save(`${jobRef}.pdf`);
+    alert(`Agreement recorded.\nJob Ref: ${jobRef}\nPDF downloaded.`);
 }
 </script>
 
