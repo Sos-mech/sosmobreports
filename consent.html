@@ -3,221 +3,201 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOSREPORT – Vehicle Diagnostic & Repair Authorisation</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<title>SOS Mechanics – Customer Consent</title>
 
 <style>
 body {
-    font-family: Arial, sans-serif;
-    background: #0e0e0e;
-    color: #fff;
-    margin: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  background: #f6f7f8;
+  color: #111;
 }
+
 header {
-    background: linear-gradient(135deg, #00ff66, #00cc55);
-    color: #000;
-    text-align: center;
-    padding: 15px;
-    font-weight: bold;
+  background: #ffffff;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 2px solid #00e676;
 }
+
+header img {
+  height: 42px;
+}
+
+header h1 {
+  font-size: 1.05em;
+  margin: 0;
+  font-weight: 600;
+}
+
 .container {
-    padding: 15px;
-    max-width: 650px;
-    margin: auto;
+  max-width: 560px;
+  margin: auto;
+  padding: 20px;
 }
-.section {
-    background: #1b1b1b;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 6px;
+
+.card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  margin-bottom: 16px;
 }
-h2 {
-    color: #00ff66;
-    margin-top: 0;
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1em;
+  color: #00b85c;
 }
+
 label {
-    margin-top: 10px;
-    display: block;
-    font-weight: bold;
+  display: block;
+  margin-top: 14px;
+  font-weight: 600;
+  font-size: 0.85em;
 }
+
 input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    background: #000;
-    color: #fff;
-    border: 2px solid #444;
-    border-radius: 4px;
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  font-size: 0.95em;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  background: #fff;
 }
+
 input.invalid {
-    border-color: red;
-    box-shadow: 0 0 6px red;
+  border-color: #e53935;
 }
-.note {
-    font-size: 0.85em;
-    color: #aaa;
-}
+
 button {
-    width: 90%;
-    margin: 20px auto;
-    display: block;
-    padding: 18px;
-    font-size: 17px;
-    font-weight: bold;
-    border-radius: 30px;
-    border: none;
-    background: linear-gradient(135deg, #00ff66, #00cc55);
-    color: #000;
-    cursor: not-allowed;
-    opacity: 0.5;
+  width: 100%;
+  margin-top: 20px;
+  padding: 18px;
+  font-size: 1em;
+  font-weight: 600;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(135deg, #00ff7f, #00e676);
+  color: #000;
+  opacity: 0.5;
 }
+
 button.enabled {
-    cursor: pointer;
-    opacity: 1;
-    box-shadow: 0 0 15px #00ff66;
+  opacity: 1;
 }
-footer {
-    text-align: center;
-    font-size: 0.8em;
-    color: #777;
-    padding-bottom: 20px;
+
+.footer {
+  text-align: center;
+  font-size: 0.75em;
+  color: #777;
+  padding: 24px 10px;
 }
 </style>
 </head>
 
 <body>
 
-<header>SOSREPORT – Customer-Initiated Vehicle Diagnostic & Repair Agreement</header>
+<header>
+  <img src="assets/logo.png" alt="SOS Mechanics">
+  <h1>Customer Consent & Authorisation</h1>
+</header>
 
 <div class="container">
 
-<div class="section">
-<h2>Customer Initiation</h2>
-<p>This process begins only because the customer has requested diagnostic or repair work.  
-No recommendations or actions occur without customer initiation and approval.</p>
-</div>
+  <div class="card">
+    <h2>Customer-Initiated Request</h2>
+    <p>
+      The diagnostic or repair work on this vehicle has been <strong>requested by the customer</strong>.  
+      No actions or recommendations are taken without the customer’s explicit instruction.
+    </p>
+  </div>
 
-<div class="section">
-<h2>Vehicle & Authority</h2>
-<label>Vehicle Registration</label>
-<input id="reg" required>
+  <div class="card">
+    <h2>Liability & Authority</h2>
+    <p>
+      The customer confirms they have the legal authority to authorise work on this vehicle.  
+      All information provided is accurate.  
+      SOS Mechanics is not liable for misinformation or undisclosed facts.  
+      Police may be contacted immediately if safety or conduct issues arise.
+    </p>
+  </div>
 
-<label>VIN</label>
-<input id="vin" required>
+  <div class="card">
+    <h2>Customer Details</h2>
+    <label>Full Name (type to consent)</label>
+    <input type="text" id="custName" placeholder="Your full name">
+  </div>
 
-<p class="note">Customer confirms legal authority. Vehicles under finance or third-party ownership require prior permission.</p>
-</div>
-
-<div class="section">
-<h2>Accuracy & Liability</h2>
-<p>All information supplied must be accurate.  
-All liability is excluded for faults, delays, or costs caused by misinformation or withheld facts.</p>
-</div>
-
-<div class="section">
-<h2>Safety & Conduct</h2>
-<p>Any physical interference, threat, or aggressive behaviour results in immediate cessation of work.  
-Police may be contacted without further notice.</p>
-</div>
-
-<div class="section">
-<h2>Customer Authorisation</h2>
-<label>Customer Full Name (typed)</label>
-<input id="name" required>
-<p class="note">Typing your name and pressing AGREE constitutes legal authorisation.</p>
-</div>
-
-<button id="agreeBtn" onclick="authorise()" disabled>
-AGREE & AUTHORISE WORK
-</button>
+  <button id="agreeBtn" disabled>AGREE & AUTHORISE WORK</button>
 
 </div>
 
-<footer>
-SOSREPORT • Mobile Mechanic Record • Time, Date & Location Captured
-</footer>
+<div class="footer">
+  SOS Mechanics · Mobile Mechanic Consent Record · Date, Time & Location captured
+</div>
 
 <script>
-const fields = ["name","reg","vin"];
-const btn = document.getElementById("agreeBtn");
+const nameInput = document.getElementById("custName");
+const agreeBtn = document.getElementById("agreeBtn");
 
-fields.forEach(id=>{
-    document.getElementById(id).addEventListener("input", validate);
+nameInput.addEventListener("input", () => {
+  if(nameInput.value.trim().length > 0){
+    agreeBtn.disabled = false;
+    agreeBtn.classList.add("enabled");
+  } else {
+    agreeBtn.disabled = true;
+    agreeBtn.classList.remove("enabled");
+  }
 });
 
-function validate(){
-    let valid = true;
-    fields.forEach(id=>{
-        const el = document.getElementById(id);
-        if(!el.value.trim()){
-            el.classList.add("invalid");
-            valid = false;
-        } else {
-            el.classList.remove("invalid");
-        }
-    });
-    btn.disabled = !valid;
-    btn.classList.toggle("enabled", valid);
-}
+agreeBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  const now = new Date().toLocaleString();
+  let location = "Unavailable";
 
-function generateJobRef(name, reg){
-    const cleanName = name.replace(/\s+/g,'').toUpperCase();
-    const cleanReg = reg.replace(/\s+/g,'').toUpperCase();
-    const namePart = cleanName.substring(0,3);
-    const regPart = cleanReg.substring(cleanReg.length-3);
-    const timePart = Date.now().toString().slice(-6);
-    return `SOSREPORT-${namePart}${regPart}-${timePart}`;
-}
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        location = `Lat ${pos.coords.latitude.toFixed(6)}, Lon ${pos.coords.longitude.toFixed(6)}`;
+        savePDF(name, now, location);
+      },
+      () => savePDF(name, now, location)
+    );
+  } else {
+    savePDF(name, now, location);
+  }
+});
 
-async function authorise(){
-    const name = document.getElementById("name").value.trim();
-    const reg = document.getElementById("reg").value.trim();
-    const vin = document.getElementById("vin").value.trim();
+function savePDF(name, now, location){
+  const { jsPDF } = window.jspdf || {};
+  if(!jsPDF){
+    alert("jsPDF library required to save PDF");
+    return;
+  }
+  const pdf = new jsPDF();
+  const jobRef = `SOSCONSENT-${name.replace(/\s+/g,'').toUpperCase()}-${Date.now().toString().slice(-6)}`;
 
-    const jobRef = generateJobRef(name, reg);
-    const now = new Date().toLocaleString();
-    let location = "Unavailable";
-
-    if(navigator.geolocation){
-        await new Promise(res=>{
-            navigator.geolocation.getCurrentPosition(
-                pos=>{
-                    location = `Lat ${pos.coords.latitude.toFixed(6)}, Lon ${pos.coords.longitude.toFixed(6)}`;
-                    res();
-                },
-                ()=>res()
-            );
-        });
-    }
-
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-
-    pdf.text(`
-SOSREPORT – VEHICLE DIAGNOSTIC & REPAIR AUTHORISATION
+  pdf.text(`
+SOS MECHANICS – CUSTOMER CONSENT & AUTHORISATION
 
 Job Reference: ${jobRef}
-
 Customer Name: ${name}
-Vehicle Registration: ${reg}
-VIN: ${vin}
 Date & Time: ${now}
 Location: ${location}
 
-Customer confirms:
-• They initiated this process
-• They have authority to authorise work
-• Information supplied is accurate
-• Liability is excluded for misinformation
-• Police may be contacted if safety is compromised
+The customer has requested diagnostic/repair work and authorises SOS Mechanics to proceed.
+All liability excluded for misinformation. Police may be contacted for conduct issues.
+`, 10, 10);
 
-Agreement recorded via typed name and confirmation button.
-`,10,10);
-
-    pdf.save(`${jobRef}.pdf`);
-    alert(`Agreement recorded.\nJob Ref: ${jobRef}\nPDF downloaded.`);
+  pdf.save(`${jobRef}.pdf`);
+  alert(`Consent recorded.\nJob Ref: ${jobRef}\nPDF downloaded.`);
 }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </body>
 </html>
