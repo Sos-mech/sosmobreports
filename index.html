@@ -3,61 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOS Mechanics Mobile</title>
-<link rel="stylesheet" href="style.css">
-<script defer src="menu.js"></script>
+<title>SOS Mechanics – Control Panel</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0b0b;
+  color: #fff;
+}
+
+header {
+  background: #000;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 2px solid #00ff66;
+}
+
+header img {
+  height: 40px;
+}
+
+header h1 {
+  font-size: 1.1em;
+  margin: 0;
+  color: #00ff66;
+}
+
+.panel {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.tile {
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #00ff66, #00cc55);
+  color: #000;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(0,255,102,0.4);
+}
+
+.tile.secondary {
+  background: #1b1b1b;
+  color: #00ff66;
+  box-shadow: none;
+  border: 1px solid #00ff66;
+}
+
+.tile.small {
+  font-size: 0.95em;
+  padding: 15px;
+}
+
+.footer {
+  text-align: center;
+  font-size: 0.8em;
+  color: #777;
+  padding: 20px;
+}
+</style>
 </head>
+
 <body>
 
 <header>
-  <div class="logo"><img src="assets/logo.png" alt="SOS Mechanics Logo"></div>
-  <div class="hamburger" onclick="toggleMenu()">☰</div>
-  <nav id="menu">
-    <a href="index.html" class="current">Home</a>
-    <a href="#services">Services</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-    <a href="consent.html"><button class="home-button">Consent</button></a>
-      <a href="sos-report.html"><button class="home-button">Get Report</button></a>
-        <a href="sos-report.html"><button class="home-button">Get Report</button></a>
-  </nav>
+  <img src="assets/logo.png" alt="SOS Mechanics">
+  <h1>SOS Mechanics – Control Panel</h1>
 </header>
 
-<main>
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="container">
-      <h1>Emergency Mobile Car Repairs</h1>
-      <p>Fast, professional, and fully mobile — we bring the garage to your location. Emergency repairs only, no towing.</p>
-      <a href="sos-report.html" class="cta-button">Create Report</a>
-    </div>
-  </section>
+<main class="panel">
 
-  <!-- Services Section -->
-  <section id="services" class="container">
-    <h2>Our Services</h2>
-    <ul>
-      <li>Breakdown & roadside repairs</li>
-      <li>Battery replacement & jump starts</li>
-      <li>Tyre changes & puncture repair</li>
-      <li>Minor engine diagnostics & repairs</li>
-      <li>Electrical troubleshooting</li>
-    </ul>
-  </section>
+  <!-- PRIMARY ACTIONS -->
+  <a href="consent.html" class="tile">
+    1️⃣ Customer Consent & Authorisation
+  </a>
 
-  <!-- About Section -->
-  <section id="about" class="container">
-    <h2>About SOS Mechanics</h2>
-    <p>Professional mobile mechanics with years of experience. Fully equipped and ready to fix your car on-site. Trusted by hundreds of customers in the local area.</p>
-  </section>
+  <a href="sos-report.html" class="tile">
+    2️⃣ Create SOSREPORT (Diagnostics / Repairs)
+  </a>
 
-  <!-- Contact Section -->
-  <section id="contact" class="container">
-    <h2>Contact Us</h2>
-    <p>Call directly to request a mobile repair or diagnostic report: <strong>01234 567890</strong></p>
-    <p>Email: <strong>info@sosmechanics.co.uk</strong></p>
-  </section>
+  <!-- SECONDARY ACTIONS -->
+  <a href="photos.html" class="tile secondary small">
+    📸 Capture Vehicle Evidence
+  </a>
+
+  <a href="history.html" class="tile secondary small">
+    📂 Previous Reports / Records
+  </a>
+
+  <a href="contact.html" class="tile secondary small">
+    📞 Contact / Emergency Call
+  </a>
+
 </main>
+
+<div class="footer">
+  Mobile Mechanic Control Panel • Built for On-Site Use
+</div>
 
 </body>
 </html>
