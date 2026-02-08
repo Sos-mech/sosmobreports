@@ -2,267 +2,203 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- 🚀 AGGRESSIVE SEO STRATEGY -->
+    <!-- 🚀 AGGRESSIVE SEO -->
     <title>Mobile Mechanic Medway | £50 Diag & Fixed Labour | SOS Mechanics</title>
-    <meta name="description" content="Medway's #1 Labour-Only Mobile Mechanic. £50 Call-out & Diag. Professional car repairs at £50/hr labour. You supply the parts, we fit them at home or work. Serving Chatham, Gillingham, Rochester.">
-    <meta name="keywords" content="mobile mechanic medway, mobile car repairs kent, roadside diagnostics medway, fit my own car parts mechanic, chatham mobile mechanic, gillingham car service">
-    <link rel="canonical" href="https://sosmechanics.co.uk" />
-
-    <!-- LOCAL SEO SIGNALS -->
-    <meta name="geo.region" content="GB-KEN">
-    <meta name="geo.placename" content="Medway">
-    <meta name="geo.position" content="51.388;-0.539">
-    <meta name="ICBM" content="51.388, -0.539">
-
-    <!-- OPEN GRAPH (Social Media Performance) -->
-    <meta property="og:title" content="SOS Mechanics | Mobile Mechanic Medway">
-    <meta property="og:description" content="Professional car repairs delivered to your door. £50 Diag Call-out. Fixed Price Labour.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://sosmechanics.co.uk">
-
-    <!-- 🤖 SCHEMA.ORG (Google Rich Results) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "AutoRepair",
-      "name": "SOS Mechanics",
-      "description": "Labour-only mobile mechanic specializing in diagnostics and on-site car repairs in Medway and Kent.",
-      "url": "https://sosmechanics.co.uk",
-      "telephone": "07405937104",
-      "priceRange": "£50-£250",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Medway",
-        "addressRegion": "Kent",
-        "addressCountry": "GB"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 51.388,
-        "longitude": -0.539
-      },
-      "areaServed": ["Medway", "Gillingham", "Chatham", "Rochester", "Rainham", "Sittingbourne", "Maidstone"],
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        "opens": "08:00",
-        "closes": "20:00"
-      }
-    }
-    </script>
-
+    <meta name="description" content="Medway's #1 Labour-Only Mobile Mechanic. £50 Call-out & Diag. Professional car repairs at £50/hr labour. You supply the parts, we fit them. Serving Chatham, Gillingham, Rochester.">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        :root { --primary: #7a00ff; --whatsapp: #25D366; --bg: #f6f7fb; --white: #ffffff; --warn: #ff9800; }
-        * { box-sizing: border-box; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; color: #111; line-height: 1.5; }
+        :root { --primary: #7a00ff; --whatsapp: #25D366; --bg: #f6f7fb; --white: #ffffff; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; color: #111; overflow-x: hidden; }
         
-        .top-bar { background: #111; color: white; text-align: center; padding: 10px; font-size: 12px; font-weight: bold; position: sticky; top: 0; z-index: 1000; }
-        .container { max-width: 900px; margin: auto; padding: 20px; }
+        .top-bar { background: #111; color: white; text-align: center; padding: 12px; font-size: 12px; font-weight: bold; position: relative; z-index: 10; }
+        .container { max-width: 600px; margin: auto; padding: 15px; }
         
-        header { text-align: center; margin-bottom: 20px; }
-        h1 { font-size: 28px; color: var(--primary); margin: 0; }
-        .subtext { color: #555; font-size: 14px; margin-top: 5px; }
+        h1 { text-align: center; font-size: 26px; color: var(--primary); margin: 10px 0 5px; }
+        .subtext { text-align: center; color: #666; font-size: 14px; margin-bottom: 20px; }
 
-        /* 2-Phase Process */
-        .process { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .step { background: #fff; padding: 15px; border-radius: 12px; border: 1px solid #ddd; font-size: 13px; text-align: center; }
-        .step i { color: var(--primary); font-size: 22px; margin-bottom: 5px; }
-
-        /* Looping Carousel */
-        .cards { display: flex; gap: 16px; overflow-x: auto; padding: 10px 5px 25px; scroll-snap-type: x mandatory; scrollbar-width: none; }
-        .cards::-webkit-scrollbar { display: none; }
-        .card {
-            min-width: 260px; background: var(--white); border-radius: 20px; padding: 20px;
-            scroll-snap-align: center; box-shadow: 0 4px 15px rgba(0,0,0,.06);
-            border: 2px solid transparent; text-align: center; transition: 0.3s;
+        /* Service Selection Area */
+        .section-title { font-size: 18px; font-weight: 800; margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+        
+        .cards-container { 
+            display: flex; gap: 12px; overflow-x: auto; padding: 10px 5px 20px; 
+            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
         }
-        .card.selected { border-color: var(--primary); background: #f4eeff; transform: translateY(-5px); }
-        .price { font-size: 32px; font-weight: 800; color: var(--primary); margin: 5px 0; }
-        .tag { font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 10px; background: #eee; display: inline-block; margin-bottom: 8px; text-transform: uppercase; }
+        .cards-container::-webkit-scrollbar { display: none; }
+        
+        .card {
+            min-width: 240px; background: var(--white); border-radius: 18px; padding: 20px;
+            scroll-snap-align: start; box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 2px solid transparent; transition: 0.2s; position: relative;
+        }
+        .card.selected { border-color: var(--primary); background: #f9f5ff; }
+        
+        .price-tag { font-size: 32px; font-weight: 800; color: var(--primary); margin: 8px 0; }
+        .phase-label { font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 6px; background: #eee; display: inline-block; }
 
-        form { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,.05); }
-        input, select, button { width: 100%; padding: 14px; margin-top: 12px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; }
-        button { background: var(--primary); color: var(--white); border: none; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        button:active { transform: scale(0.98); }
+        /* Booking Form */
+        .booking-box { background: var(--white); padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-top: 10px; }
+        input, select, .btn-main { width: 100%; padding: 14px; margin-top: 12px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; outline: none; }
+        
+        .btn-main { background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 20px; }
+        .btn-select { background: #eee; color: #333; border: none; padding: 10px; border-radius: 10px; font-weight: 600; width: 100%; cursor: pointer; }
+        .card.selected .btn-select { background: var(--primary); color: white; }
 
-        /* SEO Content Section */
-        .seo-footer { margin-top: 40px; font-size: 13px; color: #777; border-top: 1px solid #ddd; padding-top: 20px; }
-
-        #choiceModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .choice-box { background: white; padding: 30px; width: 100%; max-width: 400px; border-radius: 24px; text-align: center; }
-        .wa-btn { background: var(--whatsapp); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        /* Modal */
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: white; padding: 25px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; }
+        .summary-list { text-align: left; font-size: 14px; background: #f8f8f8; padding: 15px; border-radius: 12px; margin: 15px 0; line-height: 1.8; }
+        .btn-wa { background: var(--whatsapp); color: white; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; }
     </style>
 </head>
 <body>
 
-<div class="top-bar">LABOUR-ONLY MOBILE MECHANIC: MEDWAY & KENT</div>
+<div class="top-bar">🛠️ MEDWAY MOBILE MECHANIC | LABOUR-ONLY</div>
 
 <div class="container">
-    <header>
-        <h1>SOS Mechanics</h1>
-        <p class="subtext">Professional On-site Diagnostics & Repairs</p>
-    </header>
+    <h1>SOS Mechanics</h1>
+    <p class="subtext">You supply the parts. We provide the professional tools & labour.</p>
 
-    <div class="process">
-        <div class="step">
-            <i class="fas fa-search"></i><br>
-            <strong>1. Diagnostics</strong><br>
-            £50 call-out to identify fault.
-        </div>
-        <div class="step">
-            <i class="fas fa-tools"></i><br>
-            <strong>2. Repair Visit</strong><br>
-            Fixed labour fits (You provide parts).
-        </div>
-    </div>
+    <div class="section-title">1. Select Service</div>
+    <div class="cards-container" id="servicesGrid"></div>
 
-    <h2>1. Select Your Service</h2>
-    <div class="cards" id="services"></div>
-
-    <form id="bookingForm">
-        <h2>2. Booking Details</h2>
+    <div class="booking-box">
+        <div class="section-title">2. Booking Details</div>
         <div style="display: flex; gap: 10px;">
-            <input id="date" type="date" required aria-label="Booking Date">
-            <select id="time" required aria-label="Booking Time"></select>
+            <input id="date" type="date" required onchange="renderServices()">
+            <select id="time" required></select>
         </div>
 
-        <input required id="userName" placeholder="Full Name">
-        <input required id="userPhone" type="tel" placeholder="Mobile Number">
-        <input required id="userVehicle" placeholder="Vehicle Reg / Make & Model">
-        <input id="location" placeholder="GPS Link (Optional)" readonly>
-        <button type="button" onclick="getLocation()" style="background:#f0f0f0; color:#333; font-size:12px; border: 1px dashed #ccc;">
-            📍 Tap to Share GPS Location
+        <input id="name" placeholder="Full Name" required>
+        <input id="phone" type="tel" placeholder="Mobile Number" required>
+        <input id="vehicle" placeholder="Vehicle Reg / Model" required>
+        
+        <button type="button" onclick="getLocation()" style="background:none; border:none; color:var(--primary); font-size:12px; margin-top:10px; cursor:pointer;">
+            📍 Tap to include GPS Location for faster arrival
         </button>
+        <input id="gps" type="hidden">
 
-        <button type="submit" style="margin-top: 20px; font-size: 18px;">Confirm Booking</button>
-    </form>
-
-    <article class="seo-footer">
-        <h3>Why choose SOS Mechanics Medway?</h3>
-        <p>If you are looking for a <strong>mobile mechanic in Gillingham, Chatham, Rochester or Rainham</strong>, we provide a cost-effective alternative to main dealers. Our <strong>labour-only</strong> model means you pay for the expertise, not the parts markup. From roadside diagnostics to driveway brake fitting, we cover all major car repairs across Kent.</p>
-    </article>
+        <button class="btn-main" onclick="openSummary()">Confirm Booking Selections</button>
+    </div>
 </div>
 
-<div id="choiceModal">
-    <div class="choice-box">
-        <h3 style="margin-bottom:10px;">Booking Summary</h3>
-        <div id="fullSummary" style="text-align: left; font-size: 14px; background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 15px; line-height: 1.6; border: 1px solid #eee;">
-        </div>
-        
-        <button class="wa-btn" onclick="handleBooking('whatsapp')">
-            <i class="fab fa-whatsapp"></i> Send via WhatsApp
+<div id="modal">
+    <div class="modal-content">
+        <h3>Confirm Your Request</h3>
+        <div id="summary" class="summary-list"></div>
+        <button class="btn-main btn-wa" onclick="sendWhatsApp()">
+            <i class="fab fa-whatsapp"></i> Send to Mechanic
         </button>
-        <button style="background: #333;" onclick="handleBooking('form')">
-            Submit Email Request
-        </button>
-        <p style="font-size: 11px; color: #999; margin-top: 10px;">Parts must be supplied by the customer.</p>
+        <button onclick="closeModal()" style="background:none; border:none; color:#999; margin-top:15px; cursor:pointer;">Go Back</button>
     </div>
 </div>
 
 <script>
-const myNumber = "447405937104";
+const MY_PHONE = "447405937104";
 
 const services = [
-    { name: "Initial Diag & Call-out", hrs: 1, type: "DIAG" },
-    { name: "Front Brake Pads Fit", hrs: 1.5, type: "FIX" },
-    { name: "Rear Brake Pads Fit", hrs: 1.5, type: "FIX" },
-    { name: "Alternator Fitment", hrs: 2.5, type: "FIX" },
-    { name: "Starter Motor Fitment", hrs: 2.0, type: "FIX" },
-    { name: "Full Service (Labour)", hrs: 2.5, type: "FIX" },
-    { name: "Battery Fitting", hrs: 1.0, type: "FIX" },
-    { name: "Brake Discs & Pads", hrs: 3.0, type: "FIX" },
-    { name: "Suspension Spring Fit", hrs: 2.0, type: "FIX" },
-    { name: "Aux Belt Fitment", hrs: 1.0, type: "FIX" },
-    { name: "Water Pump Fitment", hrs: 3.5, type: "FIX" },
-    { name: "Oil & Filter Change", hrs: 1.0, type: "FIX" },
-    { name: "Interim Service", hrs: 1.5, type: "FIX" },
-    { name: "Pre-MOT Inspection", hrs: 1.0, type: "DIAG" },
-    { name: "Other Repair", hrs: 1.5, type: "FIX" }
+    { name: "Diagnostic & Call-out", hrs: 1, type: "DIAG" },
+    { name: "Front Brake Pads", hrs: 1.5, type: "REPAIR" },
+    { name: "Rear Brake Pads", hrs: 1.5, type: "REPAIR" },
+    { name: "Alternator Fitment", hrs: 2.5, type: "REPAIR" },
+    { name: "Full Service", hrs: 2.5, type: "REPAIR" },
+    { name: "Starter Motor", hrs: 2.0, type: "REPAIR" },
+    { name: "Brake Discs & Pads", hrs: 3.0, type: "REPAIR" }
 ];
 
-let selectedService = null;
-const dateInput = document.getElementById("date");
-const timeSelect = document.getElementById("time");
+let selectedIdx = null;
 
-dateInput.min = new Date().toISOString().split("T")[0];
-dateInput.value = dateInput.min;
+// Setup Date & Time
+const dInput = document.getElementById('date');
+dInput.min = new Date().toISOString().split("T")[0];
+dInput.value = dInput.min;
 
-for(let h=8; h<=20; h++) {
-    let opt = document.createElement("option");
-    opt.value = h; opt.text = h + ":00";
-    timeSelect.appendChild(opt);
+const tSelect = document.getElementById('time');
+for(let i=8; i<=19; i++) {
+    let opt = document.createElement('option');
+    opt.value = i+":00"; opt.text = i+":00";
+    tSelect.appendChild(opt);
 }
 
-function calcPrice(s) {
-    let price = s.hrs * 50;
-    const d = new Date(dateInput.value);
-    if(d.getDay() === 0 || d.getDay() === 6) price *= 1.2;
-    return price.toFixed(2);
-}
+function renderServices() {
+    const grid = document.getElementById('servicesGrid');
+    grid.innerHTML = '';
+    
+    // Check for Weekend (Sat=6, Sun=0)
+    const isWeekend = [0, 6].includes(new Date(dInput.value).getDay());
 
-function render() {
-    const container = document.getElementById("services");
-    container.innerHTML = "";
-    services.forEach((s, index) => {
-        const price = calcPrice(s);
-        const card = document.createElement("div");
-        card.className = `card ${selectedService?.name === s.name ? 'selected' : ''}`;
+    services.forEach((s, i) => {
+        let price = s.hrs * 50;
+        if(isWeekend) price *= 1.2;
+
+        const card = document.createElement('div');
+        card.className = `card ${selectedIdx === i ? 'selected' : ''}`;
+        card.onclick = () => { selectedIdx = i; renderServices(); };
         card.innerHTML = `
-            <div class="tag">${s.type === 'DIAG' ? 'Phase 1: Diag' : 'Phase 2: Repair'}</div>
-            <h3>${s.name}</h3>
-            <div class="price">£${price}</div>
-            <button type="button" onclick="select(${index})">${selectedService?.name === s.name ? 'Selected' : 'Select'}</button>
+            <span class="phase-label">${s.type}</span>
+            <div style="font-weight:700; margin-top:5px; height:40px;">${s.name}</div>
+            <div class="price-tag">£${price.toFixed(2)}</div>
+            <button class="btn-select">${selectedIdx === i ? 'SELECTED' : 'SELECT'}</button>
         `;
-        container.appendChild(card);
+        grid.appendChild(card);
     });
 }
-
-function select(index) { selectedService = services[index]; render(); }
 
 function getLocation() {
-    navigator.geolocation.getCurrentPosition(p => {
-        document.getElementById("location").value = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-    });
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(p => {
+            document.getElementById('gps').value = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+            alert("Location attached!");
+        });
+    }
 }
 
-document.getElementById("bookingForm").onsubmit = function(e) {
-    e.preventDefault();
-    if(!selectedService) return alert("Please select a service above.");
+function openSummary() {
+    if(selectedIdx === null) return alert("Please select a service first!");
+    if(!document.getElementById('name').value) return alert("Please enter your name.");
     
-    const summaryDiv = document.getElementById("fullSummary");
-    summaryDiv.innerHTML = `
-        <strong>Service:</strong> ${selectedService.name}<br>
-        <strong>Labour Quote:</strong> £${calcPrice(selectedService)}<br>
-        <strong>Date:</strong> ${dateInput.value}<br>
-        <strong>Time:</strong> ${timeSelect.value}:00<br>
-        <strong>Customer:</strong> ${document.getElementById("userName").value}<br>
-        <strong>Vehicle:</strong> ${document.getElementById("userVehicle").value}
+    const s = services[selectedIdx];
+    const isWeekend = [0, 6].includes(new Date(dInput.value).getDay());
+    const finalPrice = (s.hrs * 50 * (isWeekend ? 1.2 : 1)).toFixed(2);
+
+    document.getElementById('summary').innerHTML = `
+        <strong>Job:</strong> ${s.name}<br>
+        <strong>Labour:</strong> £${finalPrice}<br>
+        <strong>Date:</strong> ${dInput.value} @ ${tSelect.value}<br>
+        <strong>Vehicle:</strong> ${document.getElementById('vehicle').value}<br>
+        <strong>Customer:</strong> ${document.getElementById('name').value}
     `;
+    document.getElementById('modal').style.display = 'flex';
+}
+
+function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+function sendWhatsApp() {
+    const s = services[selectedIdx];
+    const isWeekend = [0, 6].includes(new Date(dInput.value).getDay());
+    const finalPrice = (s.hrs * 50 * (isWeekend ? 1.2 : 1)).toFixed(2);
     
-    document.getElementById("choiceModal").style.display = "flex";
-};
+    const text = `*NEW BOOKING: SOS MECHANICS*%0A%0A` +
+                 `*Service:* ${s.name}%0A` +
+                 `*Labour Quote:* £${finalPrice}%0A` +
+                 `--------------------------%0A` +
+                 `*Date:* ${dInput.value}%0A` +
+                 `*Time:* ${tSelect.value}%0A` +
+                 `--------------------------%0A` +
+                 `*Customer:* ${document.getElementById('name').value}%0A` +
+                 `*Phone:* ${document.getElementById('phone').value}%0A` +
+                 `*Vehicle:* ${document.getElementById('vehicle').value}%0A` +
+                 `*Location:* ${document.getElementById('gps').value || 'Not provided'}`;
 
-function handleBooking(type) {
-    const name = document.getElementById("userName").value;
-    const phone = document.getElementById("userPhone").value;
-    const vehicle = document.getElementById("userVehicle").value;
-    const date = dateInput.value;
-    const time = timeSelect.value + ":00";
-    const loc = document.getElementById("location").value || "No GPS link attached";
-    const price = calcPrice(selectedService);
-    const typeNote = selectedService.type === 'DIAG' ? "PHASE 1: DIAGNOSTICS" : "PHASE 2: LABOUR-ONLY REPAIR";
+    window.location.href = `https://wa.me/${MY_PHONE}?text=${text}`;
+}
 
-    const waText = `*NEW BOOKING - SOS MECHANICS*%0A%0A` +
-                   `*Job Type:* ${typeNote}%0A` +
-                   `*Service:* ${selectedService.name}%0A` +
-                   `*Labour Quote:* £${price}%0A` +
-                   `----------------------------%0A` +
-                   `*Date:* ${date}%0A` +
-                   `*Time:* ${time}%0A` +
-                   `----------------------------%0A` +
-                   `*Name:* ${name}%0A` +
-                   `*Phone:* ${phone}%0A` +
-                   `*Vehicle:* ${vehicle}%0A` +
+renderServices();
+</script>
+
+</body>
+</html>
