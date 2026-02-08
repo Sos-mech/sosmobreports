@@ -3,86 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOS Mechanics | Medway Mobile Mechanic</title>
+    
+    <!-- PRIMARY SEO TAGS -->
+    <title>Mobile Mechanic Medway | Emergency Car Repairs & Service | SOS Mechanics</title>
+    <meta name="description" content="Affordable Mobile Mechanic in Medway. Professional car repairs at home or work. Brake pads, batteries, diagnostics & full servicing from £50/hr. Book online or WhatsApp now!">
+    <meta name="keywords" content="mobile mechanic medway, car repairs medway, mobile car service kent, roadside assistance medway, brake pads replacement medway, mobile diagnostic check">
+    <link rel="canonical" href="https://sosmechanics.co.uk" />
+
+    <!-- LOCAL SEO AGGRESSION -->
+    <meta name="geo.region" content="GB-KEN">
+    <meta name="geo.placename" content="Medway">
+    <meta name="geo.position" content="51.388;-0.539">
+    <meta name="ICBM" content="51.388, -0.539">
+
+    <!-- OPEN GRAPH (Social Media SEO) -->
+    <meta property="og:title" content="SOS Mechanics | Mobile Mechanic Medway">
+    <meta property="og:description" content="Expert car repairs delivered to your door. Transparent pricing: £50/hr + £50 call-out.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sosmechanics.co.uk">
+    <!-- <meta property="og:image" content="link-to-your-logo.jpg"> -->
+
+    <!-- SCHEMA.ORG (Structured Data for Google Rankings) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AutoRepair",
+      "name": "SOS Mechanics",
+      "image": "https://sosmechanics.co.uk/logo.png",
+      "@id": "https://sosmechanics.co.uk",
+      "url": "https://sosmechanics.co.uk",
+      "telephone": "07405937104",
+      "priceRange": "££",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Medway",
+        "addressRegion": "Kent",
+        "addressCountry": "GB"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.388,
+        "longitude": -0.539
+      },
+      "servesCateringEstablishment": "https://en.wikipedia.org/wiki/Medway",
+      "areaServed": ["Medway", "Gillingham", "Chatham", "Rochester", "Rainham", "Maidstone", "Sittingbourne"],
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "opens": "08:00",
+        "closes": "20:00"
+      }
+    }
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #7a00ff; --whatsapp: #25D366; --bg: #f6f7fb; --white: #ffffff; }
         * { box-sizing: border-box; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; color: #111; overflow-x: hidden; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; color: #111; line-height: 1.4; }
         .container { max-width: 900px; margin: auto; padding: 20px; }
         
-        h1, h2 { text-align: center; margin-bottom: 5px; }
-        .subtext { text-align: center; color: #555; margin-bottom: 25px; font-size: 14px; }
+        /* Heading SEO Hierarchy */
+        h1 { text-align: center; font-size: 28px; margin-bottom: 5px; color: var(--primary); }
+        .subtext { text-align: center; color: #555; margin-bottom: 25px; font-size: 15px; }
 
-        /* Infinite-feeling horizontal scroll */
-        .cards { 
-            display: flex; 
-            gap: 16px; 
-            overflow-x: auto; 
-            padding: 10px 5px 25px; 
-            scroll-snap-type: x mandatory; 
-            scrollbar-width: none; /* Hide scrollbar Firefox */
-        }
-        .cards::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome/Safari */
-
+        .cards { display: flex; gap: 16px; overflow-x: auto; padding: 10px 5px 25px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+        .cards::-webkit-scrollbar { display: none; }
         .card {
-            min-width: 240px; background: var(--white); border-radius: 18px; padding: 20px;
+            min-width: 250px; background: var(--white); border-radius: 18px; padding: 20px;
             scroll-snap-align: center; box-shadow: 0 4px 15px rgba(0,0,0,.06);
             border: 2px solid transparent; text-align: center; transition: 0.3s;
         }
-        .card.selected { border-color: var(--primary); background: #f4eeff; transform: scale(1.02); }
-        .price { font-size: 24px; font-weight: 800; color: var(--primary); margin: 8px 0; }
-        .hours { font-size: 12px; color: #777; font-weight: 600; text-transform: uppercase; }
+        .card.selected { border-color: var(--primary); background: #f4eeff; }
+        .price { font-size: 26px; font-weight: 800; color: var(--primary); margin: 8px 0; }
+        .hours { font-size: 11px; color: #888; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
         
         form { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,.05); }
         input, select, button { width: 100%; padding: 14px; margin-top: 12px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; }
-        button { background: var(--primary); color: var(--white); border: none; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        button:active { transform: scale(0.98); }
+        button { background: var(--primary); color: var(--white); border: none; font-weight: 700; cursor: pointer; }
 
-        .gps-btn { background: #f0f0f0; color: #333; font-size: 14px; border: 1px dashed #bbb; }
-        
-        /* Modal */
         #choiceModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
         .choice-box { background: white; padding: 30px; width: 100%; max-width: 400px; border-radius: 24px; text-align: center; }
         .wa-btn { background: var(--whatsapp); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        
+        /* SEO Content Section */
+        .seo-content { margin-top: 40px; font-size: 13px; color: #777; line-height: 1.6; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>SOS Mechanics</h1>
-    <p class="subtext">£50/hr Labour + £50 Call-out. Medway & Surrounding.</p>
+    <header>
+        <h1>Mobile Mechanic Medway & Kent</h1>
+        <p class="subtext">Professional Car Service & Emergency Repairs at Your Door. <br><strong>£50/hr Labour + £50 Call-out Fee</strong></p>
+    </header>
 
-    <h2>1. Booking Slot</h2>
-    <div style="display: flex; gap: 10px;">
-        <input id="date" type="date">
-        <select id="time"></select>
-    </div>
-
-    <h2 style="margin-top:25px;">2. Most Requested Services</h2>
-    <p style="text-align: center; font-size: 12px; color: #999; margin-top: -10px;">(Swipe left/right to browse)</p>
-    <div class="cards" id="services"></div>
+    <section>
+        <h2 style="font-size: 20px; text-align: center;">1. Choose Your Service</h2>
+        <div class="cards" id="services"></div>
+    </section>
 
     <form id="bookingForm" action="https://formspree.io/f/xaqdykza" method="POST">
+        <h2 style="font-size: 20px; margin-bottom: 0;">2. Booking Details</h2>
+        <div style="display: flex; gap: 10px;">
+            <input id="date" type="date" aria-label="Select Date">
+            <select id="time" aria-label="Select Time"></select>
+        </div>
+
         <input type="hidden" name="Service" id="serviceField">
         <input type="hidden" name="Price" id="priceField">
         
-        <input required id="userName" name="Name" placeholder="Full Name">
+        <input required id="userName" name="Name" placeholder="Your Full Name">
         <input required id="userPhone" name="Phone" type="tel" placeholder="Mobile Number">
-        <input required id="userVehicle" name="Vehicle" placeholder="Vehicle Make & Model">
+        <input required id="userVehicle" name="Vehicle" placeholder="Vehicle Reg or Make/Model">
+        
         <input id="location" name="Location" placeholder="GPS Link (Optional)" readonly>
-        <button type="button" class="gps-btn" onclick="getLocation()">📍 Tap to Share GPS Location</button>
+        <button type="button" onclick="getLocation()" style="background:#f0f0f0; color:#333; font-size:13px; border: 1px dashed #ccc;">
+            📍 Use My Current GPS Location
+        </button>
 
-        <button type="submit" style="margin-top: 25px;">Confirm Booking</button>
+        <button type="submit" style="margin-top: 25px; font-size: 18px;">Check Availability & Price</button>
     </form>
+
+    <!-- Aggressive SEO Text Footer -->
+    <article class="seo-content">
+        <h3>Reliable Roadside & Home Mechanics in Medway</h3>
+        <p>Providing mobile car repairs across <strong>Chatham, Gillingham, Rochester, Rainham, and Maidstone</strong>. 
+        Whether you need a brake pad replacement, a diagnostic check, or a car battery fitted at home, SOS Mechanics 
+        brings the garage to you. Avoid expensive towing fees and garage wait times.</p>
+    </article>
 </div>
 
+<!-- Choice Modal -->
 <div id="choiceModal">
     <div class="choice-box">
         <h3>Booking Summary</h3>
-        <p id="summaryText" style="font-weight: bold; color: var(--primary);"></p>
-        <button class="wa-btn" onclick="handleBooking('whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp Booking (Fastest)</button>
+        <p id="summaryText" style="font-weight: bold; color: var(--primary); font-size: 18px;"></p>
+        <button class="wa-btn" onclick="handleBooking('whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp Booking (Preferred)</button>
         <button style="background: #333;" onclick="handleBooking('form')">Submit Email Request</button>
+        <p style="font-size: 11px; color: #999; margin-top: 15px;">A mechanic will confirm your slot within 30 mins.</p>
     </div>
 </div>
 
@@ -91,7 +150,6 @@ const myNumber = "447405937104";
 const HOURLY_RATE = 50;
 const CALLOUT_FEE = 50;
 
-// Top 15 Most Requested Services + Custom
 const services = [
     { name: "Front Brake Pads", hrs: 1.5 },
     { name: "Rear Brake Pads", hrs: 1.5 },
@@ -104,11 +162,11 @@ const services = [
     { name: "Water Pump", hrs: 3.5 },
     { name: "Brake Discs & Pads", hrs: 2.5 },
     { name: "Oil & Filter Change", hrs: 1.0 },
-    { name: "Suspension Coil Spring", hrs: 1.5 },
-    { name: "Drive Belt / Aux Belt", hrs: 1.0 },
-    { name: "Spark Plug Refresh", hrs: 1.2 },
-    { name: "Pre-MOT Inspection", hrs: 1.5 },
-    { name: "Other Repair", hrs: 1.0 }
+    { name: "Suspension Spring", hrs: 1.5 },
+    { name: "Drive Belt", hrs: 1.0 },
+    { name: "Spark Plugs", hrs: 1.2 },
+    { name: "Pre-MOT Check", hrs: 1.5 },
+    { name: "General Repair", hrs: 1.0 }
 ];
 
 let selectedService = null;
@@ -140,14 +198,11 @@ function render() {
         const price = calcTotal(s.hrs);
         const card = document.createElement("div");
         card.className = `card ${selectedService?.name === s.name ? 'selected' : ''}`;
-        card.id = `svc-${index}`;
         card.innerHTML = `
             <div class="hours">${s.hrs} HR Est.</div>
             <h3>${s.name}</h3>
             <div class="price">£${price}</div>
-            <button type="button" onclick="select(${index})">
-                ${selectedService?.name === s.name ? 'Selected' : 'Select'}
-            </button>
+            <button type="button" onclick="select(${index})">Select</button>
         `;
         container.appendChild(card);
         if(selectedService?.name === s.name) {
@@ -157,10 +212,7 @@ function render() {
     });
 }
 
-function select(index) {
-    selectedService = services[index];
-    render();
-}
+function select(index) { selectedService = services[index]; render(); }
 
 function getLocation() {
     navigator.geolocation.getCurrentPosition(p => {
@@ -182,9 +234,9 @@ function handleBooking(type) {
     const price = document.getElementById("priceField").value;
     const date = dateInput.value;
     const time = timeSelect.value + ":00";
-    const loc = document.getElementById("location").value || "No GPS provided";
+    const loc = document.getElementById("location").value || "No GPS";
 
-    const msg = `Hi SOS Mechanics! %0A%0A*New Booking Request*%0A*Name:* ${name}%0A*Vehicle:* ${vehicle}%0A*Service:* ${svc}%0A*Price:* ${price}%0A*Date:* ${date} at ${time}%0A*Location:* ${loc}`;
+    const msg = `Hi SOS Mechanics!%0A%0A*New Booking*%0A*Name:* ${name}%0A*Vehicle:* ${vehicle}%0A*Service:* ${svc}%0A*Price:* ${price}%0A*Date:* ${date} at ${time}%0A*Location:* ${loc}`;
 
     if(type === 'whatsapp') {
         window.open(`https://wa.me/${myNumber}?text=${msg}`, '_blank');
