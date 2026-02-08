@@ -5,39 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SOS Mechanics | Mobile Mechanic Medway | Labour-Only Service</title>
     
-    <!-- 🚀 SEO & GEO -->
-    <meta name="description" content="Medway's Labour-Only Mobile Mechanic. £50 Call-out. Professional car & van repairs in Chatham, Gillingham, Rochester.">
+    <!-- 🚀 MASTER SEO & GEO -->
+    <meta name="description" content="Medway's #1 Labour-Only Mobile Mechanic. £50 Call-out. Professional car & van repairs in Chatham, Gillingham, Rochester.">
     <meta name="geo.region" content="GB-KEN"><meta name="geo.placename" content="Medway">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"AutoRepair","name":"SOS Mechanics","telephone":"07405937104","address":{"@type":"PostalAddress","addressLocality":"Medway","addressRegion":"Kent","addressCountry":"GB"},"priceRange":"£50-£350"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"AutoRepair","name":"SOS Mechanics","telephone":"07405937104","address":{"@type":"PostalAddress","addressLocality":"Medway","addressRegion":"Kent","addressCountry":"GB"},"priceRange":"£50-£300"}</script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #7a00ff; --whatsapp: #25D366; --bg: #f6f7fb; --text: #111; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: system-ui, sans-serif; background: var(--bg); margin: 0; color: var(--text); }
-        .hero { width: 100%; height: 180px; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc_icon/gen_image/image_generation.png~tplv-noop.image?x-expires=2071216890&x-signature=ndYYq%2FIqQhrfrru7bVMkIVWMjBg%3D') center/cover; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
-        .container { max-width: 500px; margin: auto; padding: 15px; }
         
-        /* Focus styles for ARIA */
+        /* Focus styles for ARIA Compliance */
         :focus { outline: 3px solid var(--primary); outline-offset: 2px; }
 
-        .carousel { display: flex; gap: 12px; overflow-x: auto; padding: 10px 5px 25px; scroll-snap-type: x mandatory; }
-        .card { min-width: 200px; background: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 2px solid transparent; scroll-snap-align: center; cursor: pointer; text-align: center; transition: 0.2s; }
-        .card.selected { border-color: var(--primary); background: #f4eeff; }
-        .price { font-size: 28px; font-weight: 800; color: var(--primary); margin: 10px 0; }
+        .hero { 
+            width: 100%; height: 200px; 
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc_icon/gen_image/image_generation.png~tplv-noop.image?x-expires=2071216890&x-signature=ndYYq%2FIqQhrfrru7bVMkIVWMjBg%3D') center/cover; 
+            display: flex; align-items: center; justify-content: center; color: white; text-align: center; 
+        }
+
+        .container { max-width: 500px; margin: auto; padding: 15px; }
         
-        .form-box { background: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .section-header { font-weight: 800; font-size: 18px; margin: 20px 0 10px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .carousel { display: flex; gap: 12px; overflow-x: auto; padding: 10px 5px 25px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+        .carousel::-webkit-scrollbar { display: none; }
+        
+        .card { 
+            min-width: 220px; background: #fff; padding: 20px; border-radius: 20px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 2px solid transparent; 
+            scroll-snap-align: center; cursor: pointer; text-align: center; transition: 0.2s; 
+        }
+        .card.selected { border-color: var(--primary); background: #f4eeff; transform: translateY(-3px); }
+        .price { font-size: 28px; font-weight: 800; color: var(--primary); margin: 10px 0; }
+
+        .form-box { background: #fff; padding: 25px; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .field { margin-bottom: 15px; }
-        label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 5px; color: #555; text-transform: uppercase; }
-        input, select, .btn { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #ccc; font-size: 16px; }
-        .btn { background: var(--primary); color: #fff; border: none; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        label { display: block; font-size: 11px; font-weight: 800; margin-bottom: 5px; color: #666; text-transform: uppercase; }
+        input, select, .btn { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; outline: none; }
+        
+        .btn { background: var(--primary); color: #fff; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 18px; }
         .btn:hover { background: #6200cc; }
         
-        .surcharge-note { display: none; background: #fff3cd; padding: 10px; border-radius: 8px; font-size: 13px; margin-top: 10px; border: 1px solid #ffeeba; color: #856404; font-weight: 600; }
-        
-        /* Modal Accessibility */
-        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-box { background: #fff; padding: 25px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; }
+        .surcharge-note { display: none; background: #fff3cd; padding: 10px; border-radius: 10px; font-size: 13px; margin-top: 10px; border: 1px solid #ffeeba; color: #856404; font-weight: 600; }
+
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-box { background: #fff; padding: 30px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; }
+        .summary-box { text-align: left; background: #f9f9f9; padding: 15px; border-radius: 15px; margin: 15px 0; font-size: 14px; line-height: 1.6; border: 1px solid #eee; }
     </style>
 </head>
 <body>
@@ -48,35 +63,34 @@
 
 <main class="container">
     <section aria-labelledby="service-heading">
-        <h2 id="service-heading" style="font-size:18px;">1. Select Service (One Only)</h2>
-        <div class="carousel" id="carousel" role="radiogroup" aria-label="Available services"></div>
+        <h2 id="service-heading" class="section-header">1. Select Job (One Max)</h2>
+        <div class="carousel" id="carousel" role="radiogroup" aria-label="Repair services"></div>
     </section>
 
     <section class="form-box" aria-labelledby="details-heading">
-        <h2 id="details-heading" style="font-size:18px; margin-top:0;">2. Your Booking Details</h2>
+        <h2 id="details-heading" class="section-header" style="margin-top:0;">2. Booking Details</h2>
         
         <div class="field">
             <label for="name">Full Name</label>
-            <input id="name" type="text" autocomplete="name" required>
+            <input id="name" type="text" placeholder="John Doe" required>
         </div>
 
         <div class="field">
             <label for="tel">Mobile Number</label>
-            <input id="tel" type="tel" autocomplete="tel" required>
+            <input id="tel" type="tel" placeholder="07405 000000" required>
         </div>
 
         <div style="display: flex; gap: 10px;">
             <div class="field" style="flex:1;">
                 <label for="reg">Vehicle Reg</label>
-                <input id="reg" type="text" style="text-transform:uppercase;">
+                <input id="reg" type="text" placeholder="RE66 ABC" style="text-transform:uppercase;">
             </div>
             <div class="field" style="flex:2;">
                 <label for="vehicle">Make & Model</label>
-                <input id="vehicle" type="text" placeholder="e.g. BMW 3 Series" oninput="checkSurcharges()" required>
+                <input id="vehicle" type="text" placeholder="e.g. BMW 320d" oninput="checkSurcharges()" required>
             </div>
         </div>
         
-        <!-- Live region for Screen Readers to announce fee updates -->
         <div id="feeStatus" aria-live="polite">
             <div id="premiumNote" class="surcharge-note">✨ Premium Brand Fee (£20) added.</div>
             <div id="vanNote" class="surcharge-note">🚐 Van/LWB Surcharge (£15) added.</div>
@@ -88,38 +102,36 @@
                 <input type="date" id="date" onchange="renderCards()">
             </div>
             <div class="field" style="flex:1;">
-                <label for="time">Preferred Time</label>
+                <label for="time">Time Slot</label>
                 <select id="time"></select>
             </div>
         </div>
 
-        <button type="button" class="btn" style="background:#eee; color:#333; font-size:13px;" onclick="getGPS()" aria-label="Attach current location">
-            📍 Attach GPS Location
+        <button type="button" class="btn" style="background:#eee; color:#333; font-size:12px; padding:10px;" onclick="getGPS()">
+            📍 Include GPS Location for faster arrival
         </button>
         <input type="hidden" id="gps">
 
-        <button class="btn" onclick="openSummary()" style="margin-top:20px;">
-            Confirm & Book via WhatsApp
-        </button>
+        <button class="btn" onclick="openSummary()" style="margin-top:20px;">Confirm & Book via WhatsApp</button>
     </section>
 </main>
 
 <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-box">
-        <h2 id="modal-title" style="margin-top:0;">Booking Summary</h2>
-        <div id="summary" style="text-align:left; background:#f9f9f9; padding:15px; border-radius:12px; margin:15px 0; font-size:14px; line-height:1.6;"></div>
-        <button class="btn" style="background:var(--whatsapp)" onclick="sendWA()" aria-label="Send booking to mechanic via WhatsApp">
+        <h2 id="modal-title" style="margin:0;">Job Summary</h2>
+        <div id="summary" class="summary-box"></div>
+        <button class="btn" style="background:var(--whatsapp)" onclick="sendWA()">
             <i class="fab fa-whatsapp"></i> Send to Mechanic
         </button>
-        <button onclick="document.getElementById('modal').style.display='none'" style="background:none; border:none; color:#999; margin-top:15px; cursor:pointer; text-decoration:underline;">Close & Edit</button>
+        <button onclick="document.getElementById('modal').style.display='none'" style="background:none; border:none; color:#999; margin-top:15px; cursor:pointer; text-decoration:underline;">Go Back & Edit</button>
     </div>
 </div>
 
 <script>
 const MY_PHONE = "447405937104";
 const services = [
-    {n:"Diagnostics", h:1}, {n:"Front Pads", h:1.5}, {n:"Rear Pads", h:1.5}, 
-    {n:"Discs & Pads", h:3}, {n:"Alternator", h:2.5}, {n:"Starter Motor", h:2}, {n:"Full Service", h:2.5}
+    {n:"Fault Diagnostics", h:1}, {n:"Front Brake Pads", h:1.5}, {n:"Rear Brake Pads", h:1.5}, 
+    {n:"Brake Discs & Pads", h:3}, {n:"Alternator Fitment", h:2.5}, {n:"Starter Motor", h:2}, {n:"Full Service (Labour)", h:2.5}
 ];
 let selectedIdx = null;
 
@@ -151,27 +163,27 @@ function renderCards() {
         let p = (s.h * 50 * (isWknd ? 1.2 : 1)) + (isPrem ? 20 : 0) + (isVan ? 15 : 0);
         const card = document.createElement('div');
         card.className = `card ${selectedIdx === i ? 'selected' : ''}`;
-        card.tabIndex = 0; // Make focusable
+        card.tabIndex = 0; 
         card.setAttribute('role', 'radio');
         card.setAttribute('aria-checked', selectedIdx === i);
         card.onclick = () => { selectedIdx = i; renderCards(); };
-        card.onkeypress = (e) => { if(e.key === 'Enter' || e.key === ' ') { selectedIdx = i; renderCards(); } };
+        card.onkeypress = (e) => { if(e.key==='Enter'||e.key===' ') { selectedIdx = i; renderCards(); } };
         
         card.innerHTML = `
-            <div style="font-weight:700">${s.n}</div>
-            <div class="price" aria-label="Price: £${p.toFixed(2)}">£${p.toFixed(2)}</div>
-            <small>${selectedIdx===i?'✓ Selected':'Tap to Select'}</small>
+            <div style="font-weight:700; height:40px;">${s.n}</div>
+            <div class="price">£${p.toFixed(2)}</div>
+            <small style="font-weight:bold; color:${selectedIdx===i?'var(--primary)':'#999'}">${selectedIdx===i?'✓ SELECTED':'SELECT'}</small>
         `;
         list.appendChild(card);
     });
 }
 
-function getGPS() { navigator.geolocation.getCurrentPosition(p => { document.getElementById('gps').value=`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`; alert("Location attached!"); }); }
+function getGPS() { navigator.geolocation.getCurrentPosition(p => { document.getElementById('gps').value=`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`; alert("Location attached!"); }, () => alert("Enable GPS to share location.")); }
 
 function openSummary() {
-    if(selectedIdx===null) return alert("Please select a service!");
+    if(selectedIdx===null) return alert("Select a service first!");
     const name=document.getElementById('name').value, veh=document.getElementById('vehicle').value;
-    if(!name || !veh) return alert("Name and Vehicle are required!");
+    if(!name || !veh) return alert("Full Name and Vehicle are required.");
 
     const s=services[selectedIdx];
     const isWknd = [0,6].includes(new Date(dateIn.value).getDay());
@@ -181,18 +193,36 @@ function openSummary() {
 
     document.getElementById('summary').innerHTML = `
         <strong>Service:</strong> ${s.n}<br>
-        <strong>Total Quote:</strong> £${p.toFixed(2)}<br>
-        <strong>Vehicle:</strong> ${veh}<br>
+        <strong>Quote:</strong> £${p.toFixed(2)} (Labour Only)<br>
+        <strong>Vehicle:</strong> ${veh} (${document.getElementById('reg').value.toUpperCase()})<br>
         <strong>Customer:</strong> ${name}<br>
-        <strong>Appointment:</strong> ${dateIn.value} at ${timeIn.value}
+        <strong>When:</strong> ${dateIn.value} @ ${timeIn.value}
     `;
     document.getElementById('modal').style.display='flex';
 }
 
 function sendWA() {
-    const sum = document.getElementById('summary').innerText;
-    const txt = encodeURIComponent(`*NEW SOS BOOKING REQUEST*%0A${sum.replace(/\n/g, '%0A')}%0AContact: ${document.getElementById('tel').value}%0AGPS: ${document.getElementById('gps').value || 'Not shared'}`);
-    window.location.href = `https://wa.me/${MY_PHONE}?text=${txt}`;
+    const name = document.getElementById('name').value;
+    const tel = document.getElementById('tel').value;
+    const reg = document.getElementById('reg').value.toUpperCase();
+    const veh = document.getElementById('vehicle').value;
+    const gps = document.getElementById('gps').value;
+    const service = services[selectedIdx].n;
+    const priceText = document.getElementById('summary').innerText.split('Quote: ')[1].split('Vehicle:')[0].trim();
+
+    let msg = `*🔧 NEW SOS BOOKING REQUEST*%0A`;
+    msg += `---------------------------%0A`;
+    msg += `*Service:* ${service}%0A`;
+    msg += `*Labour Quote:* ${priceText}%0A`;
+    msg += `*Date/Time:* ${dateIn.value} @ ${timeIn.value}%0A`;
+    msg += `---------------------------%0A`;
+    msg += `*CUSTOMER DETAILS*%0A`;
+    msg += `*Name:* ${name}%0A`;
+    msg += `*Phone:* ${tel}%0A`;
+    msg += `*Vehicle:* ${veh} [${reg || 'N/A'}]%0A`;
+    msg += `%0A*📍 LOCATION:*%0A${gps || 'Not shared'}`;
+
+    window.location.href = `https://wa.me/${MY_PHONE}?text=${msg}`;
 }
 renderCards();
 </script>
