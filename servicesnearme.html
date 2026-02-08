@@ -3,29 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOS Click | Premium Mobile Mechanic</title>
+    <title>SOS Click | Premium Local Mobile Mechanic</title>
     <style>
         :root { --bg: #0f0021; --purp: #240046; --neon: #00f2ff; --pink: #ff00ff; --white: #fff; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--white); margin: 0; padding-bottom: 120px; }
+        
         .ticker { background: #000; color: var(--pink); padding: 12px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--pink); font-size: 0.9rem; }
+        
         header { padding: 80px 20px; text-align: center; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1486006920555-c77dcf18193b?auto=format&fit=crop&q=80&w=1000') center/cover; }
         .hero-title { font-size: 3.5rem; margin: 0; font-weight: 900; letter-spacing: -2px; }
+
         .content { max-width: 1100px; margin: auto; padding: 20px; }
+        
+        /* TRUST BAR */
         .trust-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 40px; }
         .trust-bar span { display: block; color: var(--neon); font-size: 1.8rem; font-weight: bold; }
+
+        /* COMPARISON TABLE */
         .comp-table { width: 100%; border-collapse: collapse; margin: 30px 0; background: rgba(255,255,255,0.03); border-radius: 10px; overflow: hidden; }
         .comp-table th, .comp-table td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .comp-table th { background: var(--purp); color: var(--neon); }
+        .check { color: #25D366; font-weight: bold; }
+
         .section-title { color: var(--neon); border-left: 5px solid var(--pink); padding-left: 15px; margin: 50px 0 20px; font-size: 1.8rem; }
+        
+        /* SWIPE CARDS */
         .swipe-container { display: flex; overflow-x: auto; gap: 20px; padding: 10px 0; scrollbar-width: none; }
         .card { flex: 0 0 280px; background: var(--purp); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; }
-        .card:hover { border-color: var(--neon); transform: translateY(-5px); }
         .price { font-size: 2rem; font-weight: bold; color: var(--neon); margin: 15px 0; }
-        .add-btn { width: 100%; padding: 12px; border-radius: 30px; border: 2px solid var(--pink); background: none; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .add-btn { width: 100%; padding: 12px; border-radius: 30px; border: 2px solid var(--pink); background: none; color: white; font-weight: bold; cursor: pointer; }
         .add-btn.added { background: var(--pink); box-shadow: 0 0 15px var(--pink); }
+
+        /* BASKET & MODAL */
         .basket { position: fixed; bottom: 0; width: 100%; background: #000; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-top: 3px solid var(--pink); box-sizing: border-box; z-index: 999; }
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: var(--purp); padding: 30px; border-radius: 20px; width: 100%; max-width: 450px; border: 1px solid var(--neon); position: relative; }
+        .modal-content { background: var(--purp); padding: 30px; border-radius: 20px; width: 100%; max-width: 450px; border: 1px solid var(--neon); }
         input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid var(--neon); background: #000; color: white; box-sizing: border-box; }
     </style>
 </head>
@@ -47,15 +59,15 @@
         <div><span>Local</span>Medway</div>
     </div>
 
-    <h2>Why Choose SOS Click?</h2>
-    <p>We skip the recovery trucks and the expensive garage overheads. We bring the tools, the tech, and the parts directly to your door.</p>
+    <h2>Why Local Drivers Choose SOS Click?</h2>
+    <p>Traditional garages want you to pay for a tow truck and wait days. We specialize in residential repairs. We stay in the Medway area, meaning we get to you faster and charge you less.</p>
     
     <table class="comp-table">
         <thead><tr><th>Feature</th><th>Traditional Garage</th><th>SOS Click</th></tr></thead>
         <tbody>
-            <tr><td>Wait Time</td><td>3-5 Days</td><td>Same Day</td></tr>
-            <tr><td>Convenience</td><td>You Tow It</td><td>We Come To You</td></tr>
-            <tr><td>Pricing</td><td>Hidden Fees</td><td>Fixed Quotes</td></tr>
+            <tr><td>Wait Time</td><td>3-5 Days</td><td class="check">Same Day</td></tr>
+            <tr><td>Convenience</td><td>You Tow It</td><td class="check">We Come To You</td></tr>
+            <tr><td>Pricing</td><td>Hidden Fees</td><td class="check">Fixed Quotes</td></tr>
         </tbody>
     </table>
 
@@ -67,29 +79,33 @@
 
     <div class="section-title">3. Essential Add-ons</div>
     <div class="swipe-container" id="cat-add"></div>
+
+    <div style="margin-top: 50px;">
+        <h2>Our "Driveway-First" Philosophy</h2>
+        <p>80% of vehicle breakdowns can be fixed without a garage. From flat batteries to seized brakes, our mobile vans are "Shops on Wheels" equipped with dealer-level diagnostics.</p>
+    </div>
 </div>
 
 <div class="basket">
-    <div>Total Estimate: <span id="total" style="font-size:1.8rem; font-weight:bold; color:var(--neon);">£0</span></div>
-    <button onclick="showModal()" style="background:var(--pink); color:white; border:none; padding:15px 35px; border-radius:30px; font-weight:bold; cursor:pointer; box-shadow: 0 0 15px var(--pink);">CONFIRM PLAN</button>
+    <div>Total: <span id="total" style="font-size:1.8rem; font-weight:bold; color:var(--neon);">£0</span></div>
+    <button onclick="showModal()" style="background:var(--pink); color:white; border:none; padding:15px 35px; border-radius:30px; font-weight:bold; cursor:pointer;">CONFIRM PLAN</button>
 </div>
 
 <div class="modal" id="bookModal">
     <div class="modal-content">
-        <h3 style="margin:0; color:var(--neon);">Booking Details</h3>
+        <h3 style="margin:0; color:var(--neon);">Final Confirmation</h3>
         <p id="summary" style="font-size:0.9rem; background:rgba(0,0,0,0.3); padding:10px; border-radius:10px; margin:15px 0; border:1px dashed var(--pink);"></p>
         <input type="text" id="name" placeholder="Your Full Name" required>
         <input type="text" id="reg" placeholder="Vehicle Registration" required>
         <input type="text" id="addr" placeholder="Address & Postcode" required>
-        <textarea id="issue" placeholder="Briefly describe the vehicle issue..." rows="3"></textarea>
-        <button onclick="sendWA()" style="width:100%; background:#25D366; color:white; border:none; padding:15px; border-radius:10px; font-weight:bold; font-size:1.1rem; cursor:pointer; margin-top:10px;">SEND TO WHATSAPP ➔</button>
+        <textarea id="issue" placeholder="Describe the problem..." rows="3"></textarea>
+        <button onclick="sendWA()" style="width:100%; background:#25D366; color:white; border:none; padding:15px; border-radius:10px; font-weight:bold; font-size:1.1rem; cursor:pointer;">SEND TO WHATSAPP ➔</button>
         <button onclick="hideModal()" style="width:100%; background:none; color:gray; border:none; margin-top:15px; cursor:pointer;">Cancel</button>
     </div>
 </div>
 
 <script>
     const data = [
-        // EMERGENCY
         {n:"Diagnostic Scan", p:45, d:"Full ECU fault reset & report", c:"emer"},
         {n:"Home Start", p:65, d:"Jumpstart & battery health test", c:"emer"},
         {n:"Flat Tyre Rescue", p:55, d:"On-site spare wheel installation", c:"emer"},
@@ -100,8 +116,6 @@
         {n:"Alternator Check", d:"Charging system analysis", p:35, c:"emer"},
         {n:"Master Diag Pro", d:"1hr advanced troubleshooting", p:70, c:"emer"},
         {n:"Battery Install", d:"Fitting + ECU registration", p:35, c:"emer"},
-        
-        // MAINTENANCE
         {n:"Pre-MOT Inspection", p:55, d:"25-point visual safety check", c:"maint"},
         {n:"Full Oil Service", p:115, d:"Premium Oil + Filter change", c:"maint"},
         {n:"Brake Pad Fitting", p:85, d:"Front axle pad installation", c:"maint"},
@@ -112,12 +126,10 @@
         {n:"Suspension Check", p:40, d:"Check links, bushes & struts", c:"maint"},
         {n:"Brake Fluid Test", p:20, d:"Moisture & boiling point check", c:"maint"},
         {n:"Drive Belt Fit", p:45, d:"Serpentine belt installation", c:"maint"},
-        
-        // ADD-ONS
         {n:"Bosch Wipers", p:32, d:"Premium front pair fitted", c:"add"},
         {n:"5L Screenwash", p:12, d:"All-season concentrate fill", c:"add"},
         {n:"Air Con Sanitizer", p:18, d:"Bacterial & odor removal", c:"add"},
-        {n:"Fuel MPG Booster", p:22, d:"Redex/Premium injector cleaner", c:"add"},
+        {n:"Fuel MPG Booster", p:22, d:"Injector cleaner additive", c:"add"},
         {n:"AdBlue Refill", p:28, d:"10L Premium Urea solution", c:"add"},
         {n:"Bulb Fitting", p:15, d:"Single exterior bulb install", c:"add"},
         {n:"DPF Regen", p:65, d:"Software forced soot cleaning", c:"add"},
@@ -127,7 +139,7 @@
         {n:"History Report", p:20, d:"Full VIN/Recall/HPI check", c:"add"},
         {n:"Plate Fitting", p:20, d:"Secure fit for pair of plates", c:"add"},
         {n:"Antifreeze Flush", p:75, d:"Coolant drain & refill", c:"add"},
-        {n:"StopLeak Fluid", p:25, d:"Radiator minor leak seal", p:25, c:"add"},
+        {n:"StopLeak Fluid", p:25, d:"Radiator minor leak seal", c:"add"},
         {n:"Cabin Air Filter", p:35, d:"Pollen filter installation", c:"add"},
         {n:"Locking Nut Rem.", p:40, d:"Seized wheel nut removal", c:"add"},
         {n:"AdBlue Reset", p:30, d:"Clear dash warning message", c:"add"},
@@ -137,7 +149,7 @@
     ];
 
     let basket = [];
-    let total = 0;
+    let totalVal = 0;
 
     function build() {
         data.forEach((item, i) => {
@@ -145,9 +157,9 @@
             if(container) {
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.innerHTML = `<div><h4>${item.n}</h4><p>${item.d}</p></div>
+                card.innerHTML = `<div><h4>${item.n}</h4><p style="font-size:0.8rem">${item.d}</p></div>
                                   <div><div class="price">£${item.p}</div>
-                                  <button class="add-btn" onclick="toggle(${i}, this)">Add to Plan</button></div>`;
+                                  <button class="add-btn" onclick="toggle(${i}, this)">Add</button></div>`;
                 container.appendChild(card);
             }
         });
@@ -156,18 +168,18 @@
     function toggle(i, btn) {
         const item = data[i];
         if(btn.classList.contains('added')) {
-            total -= item.p; basket = basket.filter(x => x !== item.n);
-            btn.classList.remove('added'); btn.innerText = "Add to Plan";
+            totalVal -= item.p; basket = basket.filter(x => x !== item.n);
+            btn.classList.remove('added'); btn.innerText = "Add";
         } else {
-            total += item.p; basket.push(item.n);
+            totalVal += item.p; basket.push(item.n);
             btn.classList.add('added'); btn.innerText = "✓ Added";
         }
-        document.getElementById('total').innerText = '£' + total;
+        document.getElementById('total').innerText = '£' + totalVal;
     }
 
     function showModal() {
-        if(basket.length === 0) return alert("Please select a service.");
-        document.getElementById('summary').innerHTML = `<b>Selected:</b> ${basket.join(", ")}<br><b>Total:</b> £${total}`;
+        if(basket.length === 0) return alert("Select a service.");
+        document.getElementById('summary').innerHTML = `<b>Selected:</b> ${basket.join(", ")}<br><b>Total:</b> £${totalVal}`;
         document.getElementById('bookModal').style.display = 'flex';
     }
 
@@ -178,9 +190,8 @@
         const reg = document.getElementById('reg').value;
         const addr = document.getElementById('addr').value;
         const issue = document.getElementById('issue').value;
-        if(!name || !reg || !addr) return alert("Please fill in all details.");
-        
-        const msg = `🚨 *NEW SOS BOOKING*\n\n*Name:* ${name}\n*Reg:* ${reg}\n*Address:* ${addr}\n\n*Plan:* ${basket.join(", ")}\n*Total:* £${total}\n\n*Issue:* ${issue}`;
+        if(!name || !reg || !addr) return alert("Fill in required fields.");
+        const msg = `🚨 *SOS BOOKING*\n\n*Name:* ${name}\n*Reg:* ${reg}\n*Address:* ${addr}\n\n*Services:* ${basket.join(", ")}\n*Total:* £${totalVal}\n*Details:* ${issue}`;
         window.open(`https://wa.me/447XXXXXXXXX?text=${encodeURIComponent(msg)}`);
     }
 
