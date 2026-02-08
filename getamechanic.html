@@ -112,16 +112,55 @@ const callOut=50;
 const weekendPercent=0.2;
 const oohPercent=0.35;
 const baseOptions=[
-  {name:"Front Brake Pads",base:30},
-  {name:"Rear Brake Pads",base:30},
-  {name:"Coolant leak test",base:25},
-  {name:"Front Brake Replacement",base:80},
-  {name:"Rear Brake Replacement",base:80},
-  {name:"Battery Replacement",base:40},
-  {name:"Oil & Filter",base:30},
-  {name:"Full Service",base:55},
-  {name:"Suspension Job",base:100},
-  {name:"Diagnostics",base:30}
+  // --- GENERAL & MAINTENANCE ---
+  {name: "Diagnostic / Call-Out Fee", base: 85},
+  {name: "Interim Service", base: 90},
+  {name: "Full Service", base: 160},
+  {name: "Major Service (Vans)", base: 220},
+  {name: "Oil & Filter Change", base: 70},
+  {name: "Pre-MOT Inspection", base: 60},
+  {name: "Battery Replacement & Coding", base: 75},
+
+  // --- BRAKES & SUSPENSION ---
+  {name: "Front Brake Pads", base: 80},
+  {name: "Rear Brake Pads", base: 80},
+  {name: "Front Brake Pads & Discs", base: 140},
+  {name: "Rear Brake Pads & Discs", base: 140},
+  {name: "Brake Fluid Flush", base: 65},
+  {name: "Suspension Arm (Per Side)", base: 110},
+  {name: "Coil Spring (Per Side)", base: 100},
+  {name: "Wheel Bearing Replacement", base: 130},
+
+  // --- ENGINE SPECIFIC ---
+  {name: "Timing Belt (Cambelt) Replacement", base: 350},
+  {name: "Timing Belt & Water Pump", base: 450},
+  {name: "Water Pump Replacement (Stand-alone)", base: 180},
+  {name: "Head Gasket Repair", base: 650},
+  {name: "Turbocharger Replacement", base: 400},
+  {name: "Drive Belt / Aux Belt Replacement", base: 75},
+  {name: "Engine Carbon Clean", base: 90},
+  {name: "Alternator / Starter Motor", base: 130},
+
+  // --- GEARBOX & DRIVETRAIN ---
+  {name: "Clutch Replacement (Manual)", base: 450},
+  {name: "Dual Mass Flywheel & Clutch Kit", base: 550},
+  {name: "Automatic Transmission Service", base: 200},
+  {name: "Driveshaft / CV Joint Replacement", base: 130},
+  {name: "Gearbox Oil Change", base: 85},
+
+  // --- DIESEL & EMISSIONS (BIG MONEY VANS) ---
+  {name: "DPF Forced Regeneration", base: 95},
+  {name: "AdBlue System Reset", base: 85},
+  {name: "Diesel Injector Extraction (Per Injector)", base: 120},
+  {name: "Seized Injector Removal (Specialist Tools)", base: 150},
+  {name: "Broken Glow Plug Extraction", base: 140},
+
+  // --- SPECIALIST MOBILE SERVICES ---
+  {name: "Fuel Drain (Wrong Fuel Recovery)", base: 180},
+  {name: "Air Con Regas (R134a Gas)", base: 80},
+  {name: "Air Con Regas (R1234yf New Gas)", base: 140},
+  {name: "Pre-Purchase Vehicle Inspection", base: 120},
+  {name: "Emergency Non-Starter Diagnostic", base: 110}
 ];
 
 // Elements
