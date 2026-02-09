@@ -1,0 +1,38 @@
+<div id="dashboard">
+    <h2>SOS CLICK - WORK ORDERS</h2>
+    <div id="orderList">Loading orders...</div>
+</div>
+
+<script>
+    async function loadOrders() {
+        const { data } = await supabase.from('sos_orders').select('*').order('created_at', { ascending: false });
+        let html = '';
+        
+        data.forEach(order => {
+            html += `
+            <div style="border:1px solid #neon; padding:15px; margin:10px; background:#240046; border-radius:10px;">
+                <p><b>Status:</b> ${order.status} | <b>Tech:</b> ${order.assigned_to}</p>
+                <p><b>Customer:</b> ${order.customer_info.name} (${order.customer_info.reg})</p>
+                <p><b>Job:</b> ${order.services}</p>
+                
+                <!-- ADMIN/MECHANIC ACTIONS -->
+                <button onclick="assign('${order.id}', 'Dave')">Assign Dave</button>
+                <button onclick="updateStatus('${order.id}', 'Done')" style="background:green">Mark Done</button>
+            </div>`;
+        });
+        document.getElementById('orderList').innerHTML = html;
+    }
+
+    async function assign(id, tech) {
+        await supabase.from('sos_orders').update({ assigned_to: tech, status: 'Assigned' }).eq('id', id);
+        loadOrders();
+    }
+
+    async function updateStatus(id, stat) {
+        await supabase.from('sos_orders').update({ status: stat }).eq('id', id);
+        loadOrders();
+    }
+
+    setInterval(loadOrders, 5000); // Refresh every 5 seconds
+    loadOrders();
+</script>
