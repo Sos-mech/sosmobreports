@@ -3,7 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOS Mechanics | Priority 2026</title>
+    
+    <!-- SEO & Metadata -->
+    <title>SOS Mechanics | 24/7 Mobile Mechanic Medway & Kent</title>
+    <meta name="description" content="Emergency 24/7 mobile mechanic service. Instant booking for clutch replacement, diagnostics, and repairs in Medway and surrounding Kent areas.">
+    <meta name="keywords" content="mobile mechanic, emergency car repair, medway mechanic, 24 hour mechanic kent">
+    <link rel="canonical" href="https://yourdomain.com">
+
+    <!-- Open Graph (Social SEO) -->
+    <meta property="og:title" content="SOS Mechanics | Priority Dispatch">
+    <meta property="og:description" content="Rapid response mobile vehicle repairs. Book your deployment now.">
+    <meta property="og:type" content="website">
+
+    <!-- JSON-LD Structured Data (Google Business SEO) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "SOS Mechanics",
+      "description": "24/7 Mobile Mechanic and Emergency Vehicle Repair",
+      "areaServed": "Medway, Kent",
+      "openingHours": "Mo-Su 00:00-23:59",
+      "priceRange": "££"
+    }
+    </script>
     
     <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,17 +39,16 @@
         [x-cloak] { display: none !important; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #06040d; color: #fff; }
         .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .ticket { background: white; color: #06040d; border-radius: 3rem; overflow: hidden; width: 100%; max-width: 700px; }
+        .ticket { background: white; color: #06040d; border-radius: 3rem; overflow: hidden; width: 100%; max-width: 650px; }
         .booking-ref-red { color: #dc2626; font-family: 'JetBrains Mono', monospace; line-height: 1; }
         .tiny-legal { font-size: 7px; line-height: 1.2; letter-spacing: 0.05em; color: rgba(0,0,0,0.5); font-weight: 700; }
-        
-        @media print { .no-print { display: none !important; } body { background: white; } }
+        @media print { .no-print { display: none !important; } }
     </style>
 </head>
 
 <body x-data="{ 
-    confirmed: false, showAll: false, locating: false,
-    name: '', reg: '', address: 'PENDING GPS...', bookingRef: '', cart: [],
+    confirmed: false, locating: false,
+    name: '', reg: '', address: 'Waiting for GPS...', bookingRef: '', cart: [],
     
     services: {
         'Mechanical': { 'Clutch Replacement': 895, 'Cambelt & Water Pump': 450, 'Brake Pads & Discs': 260, 'Suspension Coil': 185 },
@@ -36,7 +58,6 @@
 
     async getLocation() {
         this.locating = true;
-        if (!navigator.geolocation) return alert('GPS Not Supported');
         navigator.geolocation.getCurrentPosition(async (pos) => {
             try {
                 const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`);
@@ -44,7 +65,7 @@
                 this.address = data.display_name.split(',').slice(0, 4).join(',');
                 this.locating = false;
             } catch (e) { this.address = 'Medway, Kent'; this.locating = false; }
-        }, () => { alert('Location denied.'); this.locating = false; });
+        }, () => { this.locating = false; });
     },
 
     generateTicket() {
@@ -54,14 +75,12 @@
 
     downloadPDF() {
         const element = document.getElementById('ticket-content');
-        const opt = {
-            margin: 0,
-            filename: `SOS_${this.reg || 'Booking'}_${this.bookingRef}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
+        html2pdf().set({
+            margin: 0.2,
+            filename: `SOS_Booking_${this.bookingRef}.pdf`,
+            html2canvas: { scale: 3 },
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
+        }).from(element).save();
     },
 
     getTotal() {
@@ -70,34 +89,33 @@
     }
 }" x-cloak>
 
-    <div class="max-w-4xl mx-auto p-6 min-h-screen flex flex-col">
+    <main class="max-w-4xl mx-auto p-6 min-h-screen flex flex-col" role="main">
         <header class="flex justify-between items-center py-8 no-print">
-            <div class="text-2xl font-black italic">SOS<span class="text-red-500">.</span></div>
-            <button @click="getLocation()" class="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10">
-                <div :class="locating && 'animate-spin'" class="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]"></div>
-                <span class="text-[10px] font-bold uppercase tracking-widest" x-text="locating ? 'Locating...' : 'Set Deployment'"></span>
+            <h1 class="text-2xl font-black italic">SOS<span class="text-red-500">.</span></h1>
+            <button @click="getLocation()" 
+                    :aria-busy="locating"
+                    class="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:bg-white/10 transition">
+                <div :class="locating && 'animate-spin'" class="w-2 h-2 rounded-full bg-red-500"></div>
+                <span class="text-[10px] font-bold uppercase tracking-widest" x-text="locating ? 'GPS Active...' : 'Set Dispatch Location'"></span>
             </button>
         </header>
 
-        <!-- Input View -->
-        <div x-show="!confirmed" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input x-model="name" placeholder="Passenger Name" class="glass p-6 rounded-2xl outline-none border border-white/5 focus:border-red-500/50">
-                <input x-model="reg" placeholder="VEHICLE REG" class="glass p-6 rounded-2xl outline-none border border-white/5 text-center font-black uppercase tracking-widest focus:border-red-500/50">
+        <!-- Booking Form -->
+        <section x-show="!confirmed" aria-labelledby="form-title">
+            <h2 id="form-title" class="sr-only">Vehicle and Service Selection</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <input x-model="name" aria-label="Full Name" placeholder="Passenger Name" class="glass p-6 rounded-2xl outline-none">
+                <input x-model="reg" aria-label="Vehicle Registration" placeholder="VEHICLE REG" class="glass p-6 rounded-2xl text-center font-black uppercase">
             </div>
 
             <div class="glass p-8 rounded-[2.5rem]">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-xs font-black uppercase tracking-widest text-white/30">Service Manifest</h2>
-                    <button @click="showAll = !showAll" class="text-[10px] font-bold text-red-500 underline" x-text="showAll ? 'Show Featured' : 'View Full List'"></button>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3" role="group" aria-label="Service List">
                     <template x-for="(items, category) in services">
                         <template x-for="(price, item) in items">
-                            <button x-show="showAll || category === 'Mechanical'"
-                                @click="cart.includes(item) ? cart = cart.filter(i => i!==item) : cart.push(item)"
+                            <button @click="cart.includes(item) ? cart = cart.filter(i => i!==item) : cart.push(item)"
+                                :aria-pressed="cart.includes(item)"
                                 :class="cart.includes(item) ? 'bg-red-600 border-red-400' : 'bg-white/5 border-white/10'"
-                                class="flex justify-between p-5 rounded-2xl border text-sm font-bold transition-all">
+                                class="flex justify-between p-5 rounded-2xl border text-sm font-bold">
                                 <span x-text="item"></span>
                                 <span class="font-mono opacity-40" x-text="'£'+price"></span>
                             </button>
@@ -105,69 +123,57 @@
                     </template>
                 </div>
                 <button @click="generateTicket()" :disabled="!name || !reg || cart.length === 0" 
-                        class="w-full mt-10 bg-red-600 py-6 rounded-[2rem] font-black uppercase tracking-widest shadow-2xl disabled:opacity-10">
-                    Confirm Deployment
+                        class="w-full mt-10 bg-red-600 py-6 rounded-[2rem] font-black uppercase tracking-widest">
+                    Confirm Priority Booking
                 </button>
             </div>
-        </div>
+        </section>
 
-        <!-- Ticket View (The part that becomes PDF) -->
-        <div x-show="confirmed" x-transition class="flex-grow flex flex-col items-center justify-center pb-12">
+        <!-- PDF Ticket Section -->
+        <section x-show="confirmed" aria-labelledby="ticket-status" class="flex-grow flex flex-col items-center justify-center">
+            <h2 id="ticket-status" class="sr-only">Booking Confirmation Ticket</h2>
             
-            <div id="ticket-content" class="ticket shadow-[0_50px_100px_-20px_rgba(0,0,0,0.9)]">
+            <div id="ticket-content" class="ticket" role="region" aria-label="Digital Service Ticket">
                 <div class="bg-black text-white p-10">
-                    <p class="text-red-500 text-[9px] font-black tracking-[0.5em] uppercase mb-2">Priority Mobile Unit</p>
-                    <h2 class="text-5xl font-black italic tracking-tighter uppercase leading-tight">Job Manifest</h2>
+                    <p class="text-red-500 text-[10px] font-black tracking-widest uppercase">Priority Dispatch</p>
+                    <p class="text-5xl font-black italic uppercase">Service Manifest</p>
                 </div>
 
                 <div class="p-10">
-                    <!-- BOOKING REFERENCE: Clearly above deployment point -->
-                    <div class="mb-8 border-b-2 border-red-50 pb-6">
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-2">Booking Reference</p>
-                        <p class="text-6xl font-black booking-ref-red tracking-tighter uppercase" x-text="bookingRef"></p>
+                    <div class="mb-10 border-b-2 border-red-50 pb-8">
+                        <p class="text-[10px] font-black text-gray-400 uppercase mb-2">Booking Reference</p>
+                        <p class="text-7xl font-black booking-ref-red uppercase" x-text="bookingRef"></p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-10 mb-8">
-                        <div>
-                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Deployment Point</p>
-                            <p class="font-extrabold text-sm text-gray-800 uppercase leading-tight" x-text="address"></p>
+                    <div class="grid grid-cols-2 gap-10 mb-10">
+                        <div aria-live="polite">
+                            <p class="text-[9px] font-black text-gray-400 uppercase mb-1">Deployment Point</p>
+                            <p class="font-extrabold text-sm text-gray-800 uppercase" x-text="address"></p>
                         </div>
                         <div class="text-right">
-                            <p class="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-1">Registration</p>
-                            <p class="font-black text-xl text-gray-900 uppercase" x-text="reg"></p>
+                            <p class="text-[8px] font-black text-gray-400 uppercase mb-1">Registration</p>
+                            <p class="font-black text-2xl text-gray-900 uppercase" x-text="reg"></p>
                         </div>
                     </div>
 
-                    <div class="space-y-3 mb-8 border-t border-gray-100 pt-6">
-                        <template x-for="item in cart">
-                            <div class="flex justify-between items-center">
-                                <span class="text-[11px] font-bold text-gray-600 uppercase" x-text="item"></span>
-                                <span class="font-mono font-bold text-gray-900" x-text="'£' + (Object.assign({}, ...Object.values(services))[item])"></span>
-                            </div>
-                        </template>
-                    </div>
-
-                    <div class="bg-zinc-50 rounded-3xl p-8 flex justify-between items-end border-l-8 border-red-600">
+                    <div class="bg-zinc-50 rounded-[2rem] p-10 flex justify-between items-end border-l-8 border-red-600">
                         <div>
-                            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Amount Due</p>
-                            <p class="text-[8px] text-gray-400 font-bold uppercase mt-1">24/7 Mobile Labour Rate</p>
+                            <p class="text-[10px] font-black text-gray-400 uppercase">Total Amount</p>
                         </div>
-                        <div class="text-5xl font-black tracking-tighter text-gray-900" x-text="'£' + getTotal()"></div>
+                        <div class="text-6xl font-black text-gray-900" x-text="'£' + getTotal()"></div>
                     </div>
 
-                    <!-- Tiny Legal at Very Bottom -->
-                    <div class="mt-10 tiny-legal uppercase px-4 italic opacity-70 text-center">
-                        Terms & Conditions: This quote is for **LABOUR ONLY** and does not include the cost of specialized parts, oils, or fluids. All work is subject to on-site inspection. Reference must be presented to the technician. SOS Mechanics 2026 Rapid Response Deployment.
-                    </div>
+                    <footer class="mt-12 tiny-legal uppercase italic opacity-60 text-center">
+                        This quotation is for **LABOUR ONLY**. Parts and fluids are additional. SOS Mechanics 2026.
+                    </footer>
                 </div>
             </div>
 
-            <!-- Action Buttons (Hidden from PDF via id targeting) -->
-            <div class="mt-8 flex gap-4 w-full max-w-2xl no-print">
-                <button @click="downloadPDF()" class="flex-1 bg-white text-black font-black py-5 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-gray-200">Save PDF</button>
-                <button @click="confirmed = false" class="flex-1 border border-white/20 text-white/40 font-bold py-5 rounded-2xl text-[10px] uppercase tracking-widest">Modify</button>
+            <div class="mt-8 flex gap-4 w-full max-w-[650px] no-print">
+                <button @click="downloadPDF()" class="flex-1 bg-white text-black font-black py-5 rounded-2xl text-[10px] uppercase">Download PDF</button>
+                <button @click="confirmed = false" class="flex-1 border border-white/20 text-white/40 font-bold py-5 rounded-2xl text-[10px] uppercase">Edit</button>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 </body>
 </html>
