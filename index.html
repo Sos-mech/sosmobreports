@@ -3,43 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Mechanics | Dispatch 2026</title>
     
-    <!-- SEO -->
-    <title>SOS Mechanics | 24/7 Mobile Mechanic Medway & Kent</title>
-    <meta name="description" content="Emergency 24/7 mobile mechanic service in Medway and Kent. Booking for clutch replacement, diagnostics, and repairs.">
-
-    <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     
     <style>
         [x-cloak] { display: none !important; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #06040d; color: #fff; margin: 0; padding: 0; }
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #06040d; color: #fff; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         
-        /* Fixed Ticket Styling for PDF Clarity */
-        #ticket-content { 
-            background: white; 
-            color: #06040d; 
-            border-radius: 2rem; 
-            overflow: hidden; 
-            width: 680px; /* Standard width for A4 sharp capture */
+        /* TARGET PDF STYLING - LOCKED DIMENSIONS */
+        #ticket-wrapper {
+            background: white;
+            color: #000;
+            width: 700px; /* Locked width for PDF consistency */
+            border-radius: 2rem;
+            overflow: hidden;
             margin: 0 auto;
         }
+
+        .pdf-header { background: #000; color: #fff; padding: 40px; }
+        .pdf-body { padding: 40px; background: #fff; }
+        .ref-red { color: #dc2626; font-family: 'JetBrains Mono', monospace; font-size: 60px; font-weight: 800; margin: 0; line-height: 1; }
+        .label-grey { color: #9ca3af; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .data-black { color: #000; font-size: 16px; font-weight: 800; text-transform: uppercase; }
         
-        .booking-ref-red { color: #dc2626; font-family: 'JetBrains Mono', monospace; line-height: 1; }
-        .tiny-legal { font-size: 8px; line-height: 1.2; letter-spacing: 0.02em; color: rgba(0,0,0,0.6); font-weight: 700; }
-        
+        .total-box { 
+            background: #f9fafb; 
+            padding: 30px; 
+            border-left: 10px solid #dc2626; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-radius: 1rem;
+        }
+
+        .tiny-legal-bottom {
+            font-size: 8px;
+            text-align: center;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-top: 40px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
 
 <body x-data="{ 
     confirmed: false, locating: false,
-    name: '', reg: '', address: 'Detecting...', bookingRef: '', cart: [],
+    name: '', reg: '', address: 'Detecting Location...', bookingRef: '', cart: [],
     
     services: {
         'Mechanical': { 'Clutch Replacement': 895, 'Cambelt & Water Pump': 450, 'Brake Pads & Discs': 260, 'Suspension Coil': 185 },
@@ -55,32 +73,25 @@
                 const data = await res.json();
                 this.address = data.display_name.split(',').slice(0, 4).join(',');
                 this.locating = false;
-            } catch (e) { this.address = 'Medway, Kent'; this.locating = false; }
+            } catch (e) { this.address = 'Medway, Kent Area'; this.locating = false; }
         }, () => { this.locating = false; });
     },
 
-    generateTicket() {
+    generateBooking() {
         this.bookingRef = 'SOS-' + Math.random().toString(36).substr(2, 7).toUpperCase();
         this.confirmed = true;
     },
 
-    downloadPDF() {
-        const element = document.getElementById('ticket-content');
+    download() {
+        const element = document.getElementById('ticket-wrapper');
         const opt = {
             margin: 0,
-            filename: `SOS_${this.reg}_${this.bookingRef}.pdf`,
+            filename: `SOS_Booking_${this.bookingRef}.pdf`,
             image: { type: 'jpeg', quality: 1 },
-            html2canvas: { 
-                scale: 2, 
-                useCORS: true, 
-                letterRendering: true,
-                scrollY: 0
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            html2canvas: { scale: 2, useCORS: true, logging: false },
+            jsPDF: { unit: 'px', format: [700, 950], orientation: 'portrait' }
         };
-        
-        // This ensures it fits to exactly one page
-        html2pdf().from(element).set(opt).save();
+        html2pdf().set(opt).from(element).save();
     },
 
     getTotal() {
@@ -89,93 +100,96 @@
     }
 }" x-cloak>
 
-    <div class="max-w-4xl mx-auto p-6 min-h-screen flex flex-col">
+    <div class="max-w-4xl mx-auto p-6 min-h-screen">
         <!-- Header -->
-        <header class="flex justify-between items-center py-8 no-print">
-            <h1 class="text-2xl font-black italic">SOS<span class="text-red-500">.</span></h1>
-            <button @click="getLocation()" class="glass px-4 py-2 rounded-full border border-white/10 text-[10px] font-bold uppercase tracking-widest">
-                <span x-text="locating ? 'Scanning GPS...' : 'Set Dispatch Location'"></span>
+        <header class="flex justify-between items-center py-10 no-print">
+            <h1 class="text-3xl font-black italic tracking-tighter">SOS<span class="text-red-600">.</span></h1>
+            <button @click="getLocation()" class="glass px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 transition">
+                <span x-text="locating ? 'GPS ACTIVE...' : 'Set Deployment Point'"></span>
             </button>
         </header>
 
-        <!-- Input Form -->
+        <!-- UI Phase 1: Input -->
         <div x-show="!confirmed" class="space-y-6 no-print">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input x-model="name" placeholder="Name" class="glass p-6 rounded-2xl outline-none" aria-label="Name">
-                <input x-model="reg" placeholder="VEHICLE REG" class="glass p-6 rounded-2xl text-center font-black uppercase" aria-label="Registration">
+                <input x-model="name" placeholder="Passenger Name" class="glass p-6 rounded-3xl outline-none text-white placeholder:text-white/20">
+                <input x-model="reg" placeholder="VEHICLE REG" class="glass p-6 rounded-3xl outline-none text-center font-black uppercase tracking-widest text-white placeholder:text-white/20">
             </div>
-            <div class="glass p-8 rounded-[2.5rem]">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
-                    <template x-for="(items, category) in services">
+            <div class="glass p-10 rounded-[3rem]">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <template x-for="(items, cat) in services">
                         <template x-for="(price, item) in items">
                             <button @click="cart.includes(item) ? cart = cart.filter(i => i!==item) : cart.push(item)"
-                                :class="cart.includes(item) ? 'bg-red-600' : 'bg-white/5'"
-                                class="flex justify-between p-5 rounded-xl border border-white/5 text-sm font-bold">
+                                :class="cart.includes(item) ? 'bg-red-600 border-red-500' : 'bg-white/5 border-white/10'"
+                                class="flex justify-between p-5 rounded-2xl border text-sm font-bold transition-all">
                                 <span x-text="item"></span>
-                                <span class="opacity-40" x-text="'£'+price"></span>
+                                <span class="opacity-30" x-text="'£'+price"></span>
                             </button>
                         </template>
                     </template>
                 </div>
-                <button @click="generateTicket()" :disabled="!reg || cart.length === 0" class="w-full bg-red-600 py-6 rounded-2xl font-black uppercase tracking-widest">Generate Booking</button>
+                <button @click="generateBooking()" :disabled="!reg || cart.length === 0" class="w-full mt-10 bg-red-600 py-7 rounded-[2.5rem] font-black uppercase tracking-widest shadow-2xl disabled:opacity-20 hover:brightness-110">Confirm Dispatch</button>
             </div>
         </div>
 
-        <!-- Ticket / PDF Section -->
+        <!-- UI Phase 2: Ticket -->
         <div x-show="confirmed" x-transition class="flex flex-col items-center">
             
-            <!-- This container is exactly what is printed -->
-            <div id="ticket-content">
-                <div style="background: #000; color: #fff; padding: 40px;">
-                    <p style="color: #ef4444; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;">Mobile Unit Dispatch 2026</p>
-                    <h2 style="font-size: 48px; font-weight: 900; font-style: italic; text-transform: uppercase; margin: 0;">Job Manifest</h2>
+            <div id="ticket-wrapper">
+                <div class="pdf-header">
+                    <p style="color: #dc2626; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px;">Priority Rapid Response 2026</p>
+                    <h2 style="font-size: 50px; font-weight: 800; font-style: italic; text-transform: uppercase; margin: 0; line-height: 0.9;">Job Manifest</h2>
                 </div>
 
-                <div style="padding: 40px; background: #fff;">
-                    <!-- BOOKING REF in Red above Address -->
-                    <div style="margin-bottom: 30px; border-bottom: 2px solid #f3f4f6; padding-bottom: 20px;">
-                        <p style="font-size: 10px; font-weight: 900; color: #9ca3af; text-transform: uppercase; letter-spacing: 2px;">Booking Reference</p>
-                        <p class="booking-ref-red" style="font-size: 64px; font-weight: 900; text-transform: uppercase; margin: 0;" x-text="bookingRef"></p>
+                <div class="pdf-body">
+                    <!-- RED BOOKING REFERENCE -->
+                    <div style="margin-bottom: 40px; border-bottom: 2px solid #f3f4f6; padding-bottom: 30px;">
+                        <p class="label-grey">Booking Reference</p>
+                        <p class="ref-red" x-text="bookingRef"></p>
                     </div>
 
+                    <!-- DEPLOYMENT INFO -->
                     <div style="display: flex; justify-content: space-between; margin-bottom: 40px;">
-                        <div style="width: 60%;">
-                            <p style="font-size: 9px; font-weight: 900; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px;">Deployment Point</p>
-                            <p style="font-size: 14px; font-weight: 800; color: #1f2937; text-transform: uppercase;" x-text="address"></p>
+                        <div style="width: 65%;">
+                            <p class="label-grey">Deployment Point</p>
+                            <p class="data-black" x-text="address"></p>
                         </div>
                         <div style="text-align: right;">
-                            <p style="font-size: 9px; font-weight: 900; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px;">Registration</p>
-                            <p style="font-size: 24px; font-weight: 900; color: #000;" x-text="reg"></p>
+                            <p class="label-grey">Registration</p>
+                            <p class="data-black" style="font-size: 30px;" x-text="reg"></p>
                         </div>
                     </div>
 
-                    <!-- Items -->
-                    <div style="margin-bottom: 40px; border-top: 1px solid #f3f4f6; padding-top: 20px;">
+                    <!-- SERVICE LIST -->
+                    <div style="border-top: 1px solid #f3f4f6; padding-top: 30px; margin-bottom: 40px;">
                         <template x-for="item in cart">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                <span style="font-size: 12px; font-weight: 700; color: #4b5563; text-transform: uppercase;" x-text="item"></span>
-                                <span style="font-size: 12px; font-weight: 900; color: #000;" x-text="'£' + (Object.assign({}, ...Object.values(services))[item])"></span>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                                <span style="font-size: 13px; font-weight: 700; color: #4b5563; text-transform: uppercase;" x-text="item"></span>
+                                <span style="font-size: 13px; font-weight: 800; color: #000;" x-text="'£' + (Object.assign({}, ...Object.values(services))[item])"></span>
                             </div>
                         </template>
                     </div>
 
-                    <!-- Total Box -->
-                    <div style="background: #f9fafb; padding: 30px; border-left: 8px solid #dc2626; border-radius: 1rem; display: flex; justify-content: space-between; align-items: flex-end;">
-                        <p style="font-size: 10px; font-weight: 900; color: #9ca3af; text-transform: uppercase; margin: 0;">Amount Payable</p>
-                        <p style="font-size: 56px; font-weight: 900; color: #000; margin: 0; line-height: 1;" x-text="'£' + getTotal()"></p>
+                    <!-- TOTAL BOX -->
+                    <div class="total-box">
+                        <div>
+                            <p class="label-grey" style="margin: 0;">Amount Payable</p>
+                            <p style="font-size: 9px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">SOS Mobile Labour Rate</p>
+                        </div>
+                        <div style="font-size: 60px; font-weight: 800; color: #000; line-height: 1;" x-text="'£'+getTotal()"></div>
                     </div>
 
-                    <!-- Tiny Legal Microscopic -->
-                    <div class="tiny-legal" style="margin-top: 50px; text-align: center; text-transform: uppercase; font-style: italic;">
-                        This quotation is for **LABOUR ONLY**. It does not include parts, specialized fluids, or environmental fees. Reference must be shown to the responding technician. SOS Mechanics 2026 Rapid Dispatch.
+                    <!-- TINY LEGAL -->
+                    <div class="tiny-legal-bottom">
+                        This document is a formal quotation for **LABOUR ONLY**. It does not include the cost of parts, specialized fluids, storage, or environmental levies. All bookings are subject to on-site inspection. SOS Mechanics 2026.
                     </div>
                 </div>
             </div>
 
-            <!-- UI Control Buttons -->
-            <div class="mt-8 flex gap-4 w-full max-w-[680px] no-print">
-                <button @click="downloadPDF()" class="flex-1 bg-white text-black font-black py-5 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-gray-200 transition">Save PDF</button>
-                <button @click="confirmed = false" class="flex-1 border border-white/20 text-white/40 font-bold py-5 rounded-2xl text-[10px] uppercase tracking-widest">Modify</button>
+            <!-- Action Buttons -->
+            <div class="mt-10 flex gap-4 w-full max-w-[700px] no-print">
+                <button @click="download()" class="flex-1 bg-white text-black font-black py-6 rounded-3xl text-xs uppercase tracking-widest hover:brightness-90 transition">Save / Download PDF</button>
+                <button @click="confirmed = false" class="flex-1 border border-white/20 text-white/40 font-bold py-6 rounded-3xl text-xs uppercase tracking-widest">Back</button>
             </div>
         </div>
     </div>
