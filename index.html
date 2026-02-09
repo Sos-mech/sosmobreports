@@ -3,30 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOS Mechanics | Medway Priority 2026</title>
-    
+    <title>SOS Mechanics | Priority 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         [x-cloak] { display: none !important; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #080511; color: #fff; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .ticket { background: white; color: #080511; border-radius: 2.5rem; position: relative; }
-        .premium-btn { background: linear-gradient(135deg, #9333ea 0%, #c026d3 100%); transition: all 0.3s ease; }
-        
-        /* Pulse for location button */
-        .pulse-geo { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-        @media print { .no-print { display: none !important; } }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #06040d; color: #fff; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .ticket { background: white; color: #06040d; border-radius: 3rem; position: relative; }
+        .premium-gradient { background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%); }
+        .tiny-legal { font-size: 7px; line-height: 1.2; letter-spacing: 0.05em; color: rgba(0,0,0,0.4); }
+        @media print { .no-print { display: none !important; } body { background: white; } }
     </style>
 </head>
 
 <body x-data="{ 
-    step: 1, confirmed: false, showAll: false, locating: false,
-    name: '', reg: '', postcode: '', cart: [],
+    confirmed: false, showAll: false, locating: false,
+    name: '', reg: '', address: 'Detecting Location...', postcode: '', cart: [],
     
     services: {
         'Mechanical': { 'Clutch Replacement': 895, 'Cambelt & Water Pump': 450, 'Brake Pads & Discs': 260, 'Suspension Coil': 185 },
@@ -34,119 +28,137 @@
         'Diagnostics': { 'Full Diagnostic': 65, 'Battery Swap': 110, 'Electrical Fault': 85, 'DPF Cleaning': 150 }
     },
 
-    getLocation() {
+    async getLocation() {
         this.locating = true;
-        if (!navigator.geolocation) { alert('Geolocation not supported'); this.locating = false; return; }
+        if (!navigator.geolocation) return alert('GPS Not Supported');
         
-        navigator.geolocation.getCurrentPosition(pos => {
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`)
-                .then(res => res.json())
-                .then(data => {
-                    this.postcode = data.address.postcode || 'ME1 1AA';
-                    this.locating = false;
-                }).catch(() => { this.postcode = 'ME1'; this.locating = false; });
-        }, () => { alert('Permission denied'); this.locating = false; });
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`);
+                const data = await res.json();
+                // Reverse geocoding the full address string
+                this.address = data.display_name.split(',').slice(0, 3).join(',');
+                this.postcode = data.address.postcode || 'ME1';
+                this.locating = false;
+            } catch (e) { 
+                this.address = 'Medway, Kent'; 
+                this.locating = false; 
+            }
+        }, () => { alert('Permission Denied'); this.locating = false; });
     },
 
     getTotal() {
-        let total = 0;
         const all = Object.assign({}, ...Object.values(this.services));
-        this.cart.forEach(item => total += all[item]);
-        return total;
+        return this.cart.reduce((sum, item) => sum + all[item], 0);
     }
 }" x-cloak>
 
-    <nav class="max-w-5xl mx-auto px-6 py-8 flex justify-between items-center no-print">
-        <div class="text-2xl font-black italic tracking-tighter">SOS<span class="text-purple-500">.</span></div>
-        <div class="text-[10px] font-bold text-white/30 tracking-[0.3em] uppercase">Priority Deployment</div>
-    </nav>
+    <div class="max-w-4xl mx-auto p-6 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="flex justify-between items-center py-8 no-print">
+            <div class="text-2xl font-black italic tracking-tighter">SOS<span class="text-pink-500">.</span></div>
+            <button @click="getLocation()" class="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:bg-white/10 transition">
+                <div :class="locating && 'animate-spin'" class="w-2 h-2 rounded-full bg-pink-500"></div>
+                <span class="text-[10px] font-bold uppercase tracking-widest" x-text="locating ? 'Searching...' : 'Auto-Locate'"></span>
+            </button>
+        </header>
 
-    <main class="max-w-4xl mx-auto p-6">
-        
-        <!-- Booking View -->
+        <!-- UI: Input Phase -->
         <div x-show="!confirmed" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <input x-model="name" placeholder="Driver Name" class="glass p-5 rounded-2xl outline-none focus:border-purple-500">
-                <input x-model="reg" placeholder="VEHICLE REG" class="glass p-5 rounded-2xl outline-none focus:border-purple-500 text-center font-black uppercase tracking-widest">
-                
-                <!-- Location Field with Button -->
-                <div class="relative">
-                    <input x-model="postcode" placeholder="Postcode" class="glass p-5 pr-14 rounded-2xl w-full outline-none focus:border-purple-500 uppercase">
-                    <button @click="getLocation()" class="absolute right-4 top-1/2 -translate-y-1/2 p-2 hover:bg-white/10 rounded-xl transition" :class="locating && 'pulse-geo'">
-                        <svg x-show="!locating" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <svg x-show="locating" class="animate-spin h-5 w-5 text-purple-500" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    </button>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input x-model="name" placeholder="Passenger Name" class="glass p-6 rounded-[1.5rem] outline-none focus:border-pink-500/50">
+                <input x-model="reg" placeholder="VEHICLE REG" class="glass p-6 rounded-[1.5rem] outline-none focus:border-pink-500/50 text-center font-black uppercase tracking-[0.3em]">
             </div>
 
-            <div class="glass rounded-[2.5rem] p-8 md:p-12">
-                <div class="flex justify-between items-center mb-10">
-                    <h2 class="text-xl font-extrabold uppercase italic tracking-tighter">Service Selection</h2>
-                    <button @click="showAll = !showAll" class="text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 border border-white/10 rounded-full hover:bg-white/5" x-text="showAll ? 'View Featured' : 'View Full List'"></button>
+            <div class="glass p-8 rounded-[2.5rem]">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-xs font-black uppercase tracking-[0.4em] text-white/30">Service Manifest</h2>
+                    <button @click="showAll = !showAll" class="text-[10px] font-bold text-pink-500 underline" x-text="showAll ? 'Show Featured' : 'View 12+ Services'"></button>
                 </div>
 
-                <div class="space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <template x-for="(items, category) in services">
-                        <div x-show="showAll || category === 'Mechanical'">
-                            <p class="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-4" x-text="category"></p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <template x-for="(price, item) in items">
-                                    <button @click="cart.includes(item) ? cart = cart.filter(i => i!==item) : cart.push(item)"
-                                            :class="cart.includes(item) ? 'bg-purple-600 border-purple-400' : 'bg-white/5 border-white/10'"
-                                            class="flex justify-between p-4 rounded-xl border text-sm font-bold transition-all">
-                                        <span x-text="item"></span>
-                                        <span class="opacity-50" x-text="'£'+price"></span>
-                                    </button>
-                                </template>
-                            </div>
-                        </div>
+                        <template x-for="(price, item) in items">
+                            <button x-show="showAll || category === 'Mechanical'"
+                                @click="cart.includes(item) ? cart = cart.filter(i => i!==item) : cart.push(item)"
+                                :class="cart.includes(item) ? 'bg-pink-600 border-pink-400' : 'bg-white/5 border-white/10'"
+                                class="flex justify-between p-5 rounded-2xl border text-sm font-bold transition-all hover:scale-[1.02]">
+                                <span x-text="item"></span>
+                                <span class="font-mono opacity-40" x-text="'£'+price"></span>
+                            </button>
+                        </template>
                     </template>
                 </div>
 
                 <button @click="confirmed = true" :disabled="!name || !reg || cart.length === 0" 
-                        class="w-full mt-12 premium-btn py-6 rounded-2xl font-black tracking-[0.2em] uppercase shadow-2xl disabled:opacity-20">
-                    Generate My Ticket
+                        class="w-full mt-10 premium-gradient py-6 rounded-[2rem] font-black uppercase tracking-[0.3em] shadow-2xl disabled:opacity-10 transition-all hover:brightness-110">
+                    Confirm Deployment
                 </button>
             </div>
         </div>
 
-        <!-- Summary View -->
-        <div x-show="confirmed" x-transition class="pb-20">
-            <div class="ticket shadow-[0_40px_80px_-15px_rgba(0,0,0,0.9)] overflow-hidden">
-                <div class="bg-black text-white p-12 relative overflow-hidden">
-                    <h2 class="text-6xl font-black italic tracking-tighter uppercase leading-none">Job<br><span class="text-purple-500">Receipt</span></h2>
-                    <div class="mt-8 flex gap-8 border-t border-white/10 pt-8">
-                        <div><p class="text-[8px] font-bold text-white/40 uppercase">Reg</p><p class="font-black text-xl" x-text="reg"></p></div>
-                        <div><p class="text-[8px] font-bold text-white/40 uppercase">Zone</p><p class="font-black text-xl uppercase" x-text="postcode"></p></div>
+        <!-- UI: Ticket Phase -->
+        <div x-show="confirmed" x-transition class="flex-grow flex items-center justify-center pb-12">
+            <div class="ticket w-full max-w-2xl shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)]">
+                <!-- Top Notch -->
+                <div class="bg-black text-white p-12 relative rounded-t-[3rem]">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-pink-500 text-[9px] font-black tracking-[0.5em] uppercase mb-2">Priority Mobile Unit</p>
+                            <h2 class="text-5xl font-black italic tracking-tighter uppercase">Job Summary</h2>
+                        </div>
+                        <div class="text-right font-mono text-xs opacity-40" x-text="'REF:' + Math.random().toString(36).substr(2,6).toUpperCase()"></div>
                     </div>
                 </div>
 
-                <div class="p-12">
-                    <div class="space-y-4 mb-12">
+                <div class="p-10 md:p-14">
+                    <!-- Geocoded Address Info -->
+                    <div class="grid grid-cols-2 gap-8 border-b border-gray-100 pb-10 mb-10">
+                        <div class="space-y-1">
+                            <p class="text-[8px] font-black text-gray-400 uppercase tracking-widest">Deployment Point</p>
+                            <p class="font-bold text-sm leading-tight text-gray-700" x-text="address"></p>
+                        </div>
+                        <div class="space-y-1 text-right">
+                            <p class="text-[8px] font-black text-gray-400 uppercase tracking-widest">Registration</p>
+                            <p class="font-black text-xl text-pink-600" x-text="reg"></p>
+                        </div>
+                    </div>
+
+                    <!-- Items -->
+                    <div class="space-y-4 mb-10">
                         <template x-for="item in cart">
-                            <div class="flex justify-between font-bold text-gray-800 uppercase text-xs">
-                                <span x-text="item"></span>
-                                <span class="font-mono" x-text="'£' + (Object.assign({}, ...Object.values(services))[item])"></span>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-gray-500 uppercase" x-text="item"></span>
+                                <div class="flex-grow border-b border-dotted mx-4 opacity-10"></div>
+                                <span class="font-mono font-bold" x-text="'£' + (Object.assign({}, ...Object.values(services))[item])"></span>
                             </div>
                         </template>
                     </div>
 
-                    <div class="bg-gray-50 rounded-3xl p-8 flex justify-between items-center">
-                        <div><p class="text-[9px] font-black text-gray-400 uppercase">Total Estimate</p><p class="text-xs text-gray-400 italic">SOS Mobile Support 2026</p></div>
-                        <div class="text-5xl font-black text-purple-600 tracking-tighter" x-text="'£' + getTotal()"></div>
+                    <!-- Total -->
+                    <div class="bg-gray-50 rounded-3xl p-8 flex justify-between items-end">
+                        <div>
+                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Total to Pay</p>
+                            <p class="text-[8px] text-gray-400">Includes 2026 Medway call-out fee</p>
+                        </div>
+                        <div class="text-5xl font-black tracking-tighter text-gray-900" x-text="'£' + getTotal()"></div>
                     </div>
 
-                    <div class="mt-12 flex gap-4 no-print">
-                        <button onclick="window.print()" class="flex-1 bg-black text-white font-black py-5 rounded-2xl text-[10px] uppercase tracking-widest">Print Receipt</button>
-                        <button @click="confirmed = false" class="flex-1 border border-gray-200 text-gray-400 font-black py-5 rounded-2xl text-[10px] uppercase tracking-widest">Back</button>
+                    <!-- Legal & Actions -->
+                    <div class="mt-12 text-center space-y-8">
+                        <div class="no-print flex gap-4">
+                            <button onclick="window.print()" class="flex-1 bg-black text-white font-black py-5 rounded-2xl text-[10px] uppercase tracking-widest">Save PDF</button>
+                            <button @click="confirmed = false" class="flex-1 border border-gray-200 text-gray-400 font-bold py-5 rounded-2xl text-[10px] uppercase tracking-widest">Back</button>
+                        </div>
+                        
+                        <!-- Tiny Letters -->
+                        <div class="tiny-legal uppercase text-center px-4">
+                            This quote is for **LABOUR ONLY** and does not include the cost of specialized parts, fluids, or disposal fees unless explicitly stated. All work is subject to on-site inspection. SOS Mechanics reserve the right to adjust final costs based on vehicle condition. No hidden fees.
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
-
+    </div>
 </body>
 </html>
