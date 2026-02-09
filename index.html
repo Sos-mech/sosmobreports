@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO: Medway/Kent Hyper-Local Optimization -->
-    <title>SOS Mechanics | #1 Emergency Mobile Mechanic Medway Kent | 2026 Rates</title>
-    <meta name="description" content="Leading mobile mechanic in Medway, Kent. 24/7 emergency car repairs in Gillingham, Chatham, Rochester & Rainham. Book 2026 mobile servicing at your door.">
+    <title>SOS Mechanics | Medway Mobile Booking 2026</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -21,7 +18,14 @@
         .glass-input:focus { border-color: #9333ea; box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.3); outline: none; }
         @keyframes pulse-purple { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         .locating { animation: pulse-purple 1.5s infinite; }
-        @media print { .no-print { display: none; } body { background: white; color: black; } }
+        
+        /* Ensures buttons don't show on the actual printed paper */
+        @media print { 
+            .no-print { display: none !important; } 
+            body { background: white !important; color: black !important; }
+            .shadow-2xl { box-shadow: none !important; }
+            .rounded-\[2\.5rem\] { border-radius: 0 !important; }
+        }
     </style>
 </head>
 
@@ -65,6 +69,16 @@
     addToCart(item) { if (!this.cart.includes(item)) this.cart.push(item); },
     removeItem(item) { this.cart = this.cart.filter(i => i !== item); },
     
+    resetBooking() {
+        this.step = 1;
+        this.confirmed = false;
+        this.cart = [];
+        this.name = '';
+        this.reg = '';
+        this.postcode = '';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
     async getLocation() {
         if (!navigator.geolocation) return;
         this.isLocating = true;
@@ -103,14 +117,12 @@
         <div x-show="!confirmed" class="flex flex-col lg:flex-row gap-8 lg:gap-12">
             <div class="flex-1 space-y-10">
                 
-                <!-- STEP 1 -->
                 <section x-show="step === 1" class="airline-card rounded-3xl p-8">
                     <h1 class="text-3xl font-extrabold mb-6 italic">Passenger Check-in</h1>
                     <input type="text" x-model="name" placeholder="Full Name" class="glass-input w-full p-5 rounded-2xl text-xl font-semibold mb-6">
                     <button @click="if(name) step = 2" class="w-full bg-purple-600 py-5 rounded-2xl font-black tracking-widest">CONTINUE</button>
                 </section>
 
-                <!-- STEP 2 -->
                 <section x-show="step === 2" class="airline-card rounded-3xl p-8">
                     <h2 class="text-3xl font-extrabold mb-6 italic">Vehicle Manifest</h2>
                     <input type="text" x-model="reg" placeholder="ENTER REG" class="glass-input w-full text-center text-3xl font-black py-6 rounded-2xl uppercase mb-6 tracking-widest">
@@ -121,7 +133,6 @@
                     </div>
                 </section>
 
-                <!-- STEP 3: CATEGORIZED SERVICES -->
                 <section x-show="step === 3" class="space-y-10">
                     <div>
                         <h2 class="text-xs font-black text-purple-400 uppercase tracking-[0.3em] mb-4">Class I: Major Operations</h2>
@@ -151,18 +162,16 @@
                         <h2 class="text-xs font-black text-gray-600 uppercase tracking-[0.3em] mb-4">Class III: Minor Jobs</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <template x-for="(price, item) in minorJobs">
-                                <button @click="addToCart(item)" class="airline-card p-3 rounded-lg flex justify-between items-center text-xs opacity-70 hover:opacity-100">
+                                <button @click="addToCart(item)" class="airline-card p-3 rounded-lg flex justify-between items-center text-xs">
                                     <span x-text="item"></span>
                                     <span class="font-bold" x-text="'£' + price"></span>
                                 </button>
                             </template>
                         </div>
                     </div>
-                    <button @click="step = 2" class="text-gray-500 font-bold text-[10px] uppercase">← Change Vehicle Details</button>
                 </section>
             </div>
 
-            <!-- SIDEBAR -->
             <aside class="w-full lg:w-96">
                 <div class="bg-white text-[#0c0819] rounded-3xl overflow-hidden shadow-2xl p-8 sticky top-28">
                     <p class="text-[10px] font-black uppercase text-gray-400 mb-6">Live Itinerary</p>
@@ -184,9 +193,11 @@
             </aside>
         </div>
 
-        <!-- FINAL TICKET SUMMARY -->
+        <!-- FINAL TICKET SUMMARY (FULL) -->
         <div x-show="confirmed" x-transition class="max-w-3xl mx-auto pb-12">
             <div class="bg-white text-[#0c0819] rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
+                
+                <!-- Ticket Header -->
                 <div class="bg-purple-600 p-8 md:p-12 text-white flex flex-col md:flex-row justify-between items-start gap-8 md:gap-0">
                     <div>
                         <h1 class="text-3xl md:text-5xl font-black tracking-tighter mb-2 uppercase italic">Deployment Active</h1>
@@ -201,6 +212,7 @@
                 </div>
 
                 <div class="p-8 md:p-12 space-y-10">
+                    <!-- Passenger/Vehicle/Zone Info -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pb-10 border-b border-gray-100">
                         <div class="bg-gray-50 p-5 rounded-2xl">
                             <p class="text-[9px] font-bold text-gray-400 uppercase mb-1">Passenger</p>
@@ -216,8 +228,9 @@
                         </div>
                     </div>
 
+                    <!-- Service Manifest Breakdown -->
                     <div>
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">Manifest Details</p>
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">Deployment Manifest</p>
                         <div class="space-y-4">
                             <template x-for="item in cart">
                                 <div class="flex justify-between items-center text-sm md:text-base border-b border-gray-50 pb-3">
@@ -225,6 +238,7 @@
                                     <span class="font-mono font-bold text-purple-600" x-text="'£' + getAllServices()[item]"></span>
                                 </div>
                             </template>
+                            
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center pt-8 border-t-2 border-black mt-6 gap-4">
                                 <span class="font-black text-2xl italic uppercase block">Total Charge Paid</span>
                                 <span class="text-4xl md:text-5xl font-black text-purple-600" x-text="'£' + getTotal()"></span>
@@ -232,10 +246,8 @@
                         </div>
                     </div>
 
+                    <!-- Metadata -->
                     <div class="bg-[#f8f9ff] rounded-[2rem] p-6 flex flex-col md:flex-row justify-between items-center gap-6 border border-purple-100">
                         <div>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Issued At</p>
-                            <p class="text-xs font-bold" x-text="timestamp"></p>
-                        </div>
-                        <p class="text-xs font-black text-green-600 flex items-center gap-2">
-                            <span class="relative flex h-2 w-2
+                            <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Timestamp</p>
+                            <p class="text-xs font-bold" x-text="timestamp"></p
