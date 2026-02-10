@@ -3,256 +3,255 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOS Mechanics | Mobile Mechanic Services & Prices Medway</title>
-<meta name="description" content="SOS Mechanics Medway: Transparent mobile mechanic pricing. Engine diagnostics, brakes, batteries, suspension, and emergency repairs. 24/7 roadside assistance.">
-<link rel="canonical" href="https://sosmechanics.co.uk/services">
-<meta name="robots" content="index, follow">
+<title>SOS MECHANICS | Mobile Mechanic Medway Services</title>
+<meta name="description" content="SOS Mechanics: 24/7 mobile mechanic Medway. Roadside repairs, diagnostics, battery replacement.">
+<link rel="canonical" href="https://sosmechanics.co.uk/">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-
-<!-- Local Business Structured Data -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "AutoRepair",
-  "name": "SOS Mechanics Medway",
-  "image": "https://sosmechanics.co.uk/logo.png",
-  "@id": "https://sosmechanics.co.uk",
-  "url": "https://sosmechanics.co.uk",
-  "telephone": "+447405937104",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Mobile Service",
-    "addressLocality": "Medway",
-    "addressRegion": "Kent",
-    "addressCountry": "GB"
-  },
-  "geo": { "@type": "GeoCoordinates", "latitude": 51.3799, "longitude": -0.5005 },
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-    "opens": "00:00",
-    "closes": "23:59"
-  },
-  "areaServed": ["Rochester","Chatham","Gillingham","Strood","Rainham","Sittingbourne"],
-  "priceRange": "££"
-}
-</script>
-
 <style>
-:root { --neon:#CCFF00; }
-body { background:#06040d; color:#fff; font-family:'Plus Jakarta Sans',sans-serif; overflow-x:hidden; }
-.neon-lime { color:var(--neon); text-shadow:0 0 10px rgba(204,255,0,0.5); }
-.glass { background:rgba(255,255,255,.03); backdrop-filter:blur(15px); border:1px solid rgba(255,255,255,.1); }
-a { text-decoration:none; }
-a:hover { color:#CCFF00; }
+:root { --neon:#CCFF00;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040d;color:#fff;overflow-x:hidden;scroll-behavior:smooth;}
+.neon-lime{color:var(--neon); text-shadow:0 0 20px rgba(204,255,0,0.4);}
+.glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,0.1);}
+.scanline{position:fixed;top:0;left:0;width:100%;height:5px;background:rgba(204,255,0,0.05);animation:scanline 8s linear infinite;pointer-events:none;z-index:100;}
+@keyframes scanline{0%{transform:translateY(-100%);}100%{transform:translateY(1000%);}}
+#cart-slide{position:fixed;right:-100%;top:0;width:350px;height:100%;background:#06040d;box-shadow:-5px 0 30px rgba(0,0,0,0.5);z-index:200;transition:right 0.3s;}
+#cart-slide.open{right:0;}
+.vehicle-overlay{position:fixed;top:0;left:0;width:100%;height:100%;border:4px dashed var(--neon);pointer-events:none;z-index:500;box-sizing:border-box;}
+::-webkit-scrollbar{width:0;}
 </style>
 </head>
-<body class="p-6 lg:p-20">
+<body>
 
-<!-- STICKY SLIDE-DOWN NAV -->
-<div class="fixed top-4 right-4 z-[1000]">
-  <button id="menu-btn" class="w-12 h-12 flex flex-col justify-between items-center p-2 bg-black/30 backdrop-blur-md border border-white/10 rounded-full shadow-lg">
-    <span class="block w-6 h-0.5 bg-[#CCFF00] transition-all"></span>
-    <span class="block w-6 h-0.5 bg-[#CCFF00] transition-all"></span>
-    <span class="block w-6 h-0.5 bg-[#CCFF00] transition-all"></span>
-  </button>
+<div class="scanline"></div>
 
-  <div id="slide-menu" class="absolute top-16 right-0 w-48 bg-black/80 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden transform -translate-y-96 transition-transform duration-300">
-    <a href="https://sosmechanics.co.uk" class="block py-4 px-6 neon-lime font-black uppercase text-sm border-b border-white/10">Home</a>
-    <a href="tel:+447405937104" class="block py-4 px-6 text-black bg-[#CCFF00] font-black uppercase text-sm border-b border-white/10">Call Now</a>
-    <a href="https://wa.me/07405937104" class="block py-4 px-6 text-black bg-[#CCFF00] font-black uppercase text-sm">WhatsApp</a>
+<!-- Sticky Slide-down Nav -->
+<nav class="fixed top-0 w-full z-[1000] bg-black/80 backdrop-blur-md hidden" id="slideNav">
+  <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+    <div class="text-xl font-black italic uppercase tracking-tighter">SOS<span class="neon-lime">MECHANICS</span></div>
+    <div class="flex gap-4">
+      <a href="index.html" class="uppercase text-sm font-bold hover:underline">Home</a>
+      <a href="#services" class="uppercase text-sm font-bold hover:underline">Services</a>
+      <button id="cart-btn" class="uppercase text-sm font-bold neon-lime">Cart</button>
+    </div>
   </div>
-</div>
+</nav>
 
-<div class="h-20 lg:h-24"></div>
-
-<header class="text-center mb-20">
-  <h1 class="text-5xl lg:text-7xl font-black uppercase mb-4">Mobile Mechanic Services & Prices</h1>
-  <p class="text-white/40 text-sm lg:text-lg max-w-3xl mx-auto">
-    SOS Mechanics Medway offers transparent pricing for roadside and mobile repairs. Call or WhatsApp <a href="tel:+447405937104" class="neon-lime">07405 937104</a> for immediate dispatch.
-  </p>
+<!-- Hero -->
+<header class="min-h-screen flex flex-col items-center justify-center text-center p-6">
+  <h1 class="text-6xl lg:text-[7rem] font-black uppercase italic leading-[0.85] mb-8 tracking-tighter">Roadside <span class="neon-lime">Evolution</span></h1>
+  <p class="text-white/40 text-xl max-w-2xl mb-8">Medway's leading emergency response mechanics. Rapid roadside repair, diagnostics, and recovery across Rochester, Chatham, and Gillingham.</p>
+  <div class="flex gap-6">
+    <a href="https://wa.me/07405937104" class="bg-[#CCFF00] text-black px-10 py-4 rounded-2xl font-black uppercase tracking-wider hover:scale-105 transition-shadow">Book Dispatch</a>
+    <a href="#services" class="glass px-10 py-4 rounded-2xl font-black uppercase tracking-wider hover:bg-white/10 transition-all border border-white/10">Services</a>
+  </div>
 </header>
 
-<section class="grid lg:grid-cols-2 gap-12">
+<!-- Services Section -->
+<section id="services" class="max-w-7xl mx-auto px-6 py-12 grid lg:grid-cols-3 gap-6">
 
-  <!-- 1. Diagnostics -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Diagnostics & Fault Finding</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Basic OBD scan – £40</li>
-      <li>Advanced diagnostics – £60</li>
-      <li>Engine management light – £60</li>
-      <li>Electrical fault tracing – £80</li>
-      <li>Pre-purchase inspection – £99</li>
-      <li>Battery drain test – £80</li>
-    </ul>
-  </div>
+<!-- Group Template: 12 Groups -->
 
-  <!-- 2. Brakes -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Brakes & Safety Systems</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Front brake pads – £70</li>
-      <li>Rear brake pads – £70</li>
-      <li>Front discs & pads – £140</li>
-      <li>Rear discs & pads – £140</li>
-      <li>Brake fluid change – £60</li>
-      <li>Brake inspection/report – £35</li>
-    </ul>
-  </div>
+<!-- 1. Diagnostics -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Diagnostics</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>ECU Scan</span><button class="service-btn add-btn" data-name="ECU Scan" data-price="50">+</button></li>
+    <li class="flex justify-between items-center"><span>Engine Diagnostics</span><button class="service-btn add-btn" data-name="Engine Diagnostics" data-price="70">+</button></li>
+    <li class="flex justify-between items-center"><span>Electrical Repair</span><button class="service-btn add-btn" data-name="Electrical Repair" data-price="65">+</button></li>
+    <li class="flex justify-between items-center"><span>ABS/Airbag Scan</span><button class="service-btn add-btn" data-name="ABS/Airbag Scan" data-price="60">+</button></li>
+    <li class="flex justify-between items-center"><span>Dealer Coding</span><button class="service-btn add-btn" data-name="Dealer Coding" data-price="80">+</button></li>
+    <li class="flex justify-between items-center"><span>Check Engine Light Reset</span><button class="service-btn add-btn" data-name="Check Engine Light Reset" data-price="40">+</button></li>
+  </ul>
+</div>
 
-  <!-- 3. Suspension -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Suspension & Steering</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Anti-roll bar link – £50</li>
-      <li>Lower control arm – £90</li>
-      <li>Track rod end – £60</li>
-      <li>Wheel bearing – £120</li>
-      <li>Shock absorber pair – £140</li>
-      <li>Suspension knock diagnosis – £60</li>
-    </ul>
-  </div>
+<!-- 2. Brakes -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Brakes</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>Brake Pad Replacement</span><button class="service-btn add-btn" data-name="Brake Pad Replacement" data-price="80">+</button></li>
+    <li class="flex justify-between items-center"><span>Disc Replacement</span><button class="service-btn add-btn" data-name="Disc Replacement" data-price="100">+</button></li>
+    <li class="flex justify-between items-center"><span>Brake Fluid Flush</span><button class="service-btn add-btn" data-name="Brake Fluid Flush" data-price="40">+</button></li>
+    <li class="flex justify-between items-center"><span>Caliper Service</span><button class="service-btn add-btn" data-name="Caliper Service" data-price="60">+</button></li>
+    <li class="flex justify-between items-center"><span>Handbrake Adjustment</span><button class="service-btn add-btn" data-name="Handbrake Adjustment" data-price="35">+</button></li>
+  </ul>
+</div>
 
-  <!-- 4. Engine Servicing -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Engine Servicing</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Interim service – £90</li>
-      <li>Full service – £140</li>
-      <li>Major service – £190</li>
-      <li>Oil & filter change – £70</li>
-      <li>Air filter replacement – £30</li>
-      <li>Cabin/pollen filter – £30</li>
-    </ul>
-  </div>
+<!-- 3. Suspension -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Suspension</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>Shock Absorber Replacement</span><button class="service-btn add-btn" data-name="Shock Absorber Replacement" data-price="90">+</button></li>
+    <li class="flex justify-between items-center"><span>Coil Spring Replacement</span><button class="service-btn add-btn" data-name="Coil Spring Replacement" data-price="85">+</button></li>
+    <li class="flex justify-between items-center"><span>Control Arm Replacement</span><button class="service-btn add-btn" data-name="Control Arm Replacement" data-price="100">+</button></li>
+    <li class="flex justify-between items-center"><span>Anti-Roll Bar Bush</span><button class="service-btn add-btn" data-name="Anti-Roll Bar Bush" data-price="60">+</button></li>
+    <li class="flex justify-between items-center"><span>Strut Mount Replacement</span><button class="service-btn add-btn" data-name="Strut Mount Replacement" data-price="70">+</button></li>
+  </ul>
+</div>
 
-  <!-- 5. Batteries & Electrical -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Batteries & Electrical</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>12V battery replacement – £80</li>
-      <li>High-performance AGM battery – £120</li>
-      <li>Alternator replacement – £150</li>
-      <li>Starter motor replacement – £150</li>
-      <li>Battery health check – £30</li>
-    </ul>
-  </div>
+<!-- 4. Engine & Drivetrain -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Engine & Drivetrain</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>Timing Belt Replacement</span><button class="service-btn add-btn" data-name="Timing Belt Replacement" data-price="150">+</button></li>
+    <li class="flex justify-between items-center"><span>Water Pump</span><button class="service-btn add-btn" data-name="Water Pump" data-price="90">+</button></li>
+    <li class="flex justify-between items-center"><span>Oil Change</span><button class="service-btn add-btn" data-name="Oil Change" data-price="35">+</button></li>
+    <li class="flex justify-between items-center"><span>Spark Plug Replacement</span><button class="service-btn add-btn" data-name="Spark Plug Replacement" data-price="50">+</button></li>
+    <li class="flex justify-between items-center"><span>Engine Mounts</span><button class="service-btn add-btn" data-name="Engine Mounts" data-price="80">+</button></li>
+    <li class="flex justify-between items-center"><span>Gearbox Fluid Change</span><button class="service-btn add-btn" data-name="Gearbox Fluid Change" data-price="60">+</button></li>
+  </ul>
+</div>
 
-  <!-- 6. Cooling & Belts -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Cooling & Belts</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Timing belt replacement – £200</li>
-      <li>Aux belt replacement – £50</li>
-      <li>Coolant flush & refill – £60</li>
-      <li>Water pump replacement – £120</li>
-      <li>Thermostat replacement – £80</li>
-    </ul>
-  </div>
+<!-- 5. Battery & Power -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Battery & Power</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>Battery Replacement</span><button class="service-btn add-btn" data-name="Battery Replacement" data-price="65">+</button></li>
+    <li class="flex justify-between items-center"><span>Alternator Replacement</span><button class="service-btn add-btn" data-name="Alternator Replacement" data-price="120">+</button></li>
+    <li class="flex justify-between items-center"><span>Starter Motor</span><button class="service-btn add-btn" data-name="Starter Motor" data-price="100">+</button></li>
+    <li class="flex justify-between items-center"><span>Jump Start</span><button class="service-btn add-btn" data-name="Jump Start" data-price="30">+</button></li>
+    <li class="flex justify-between items-center"><span>AGM Battery Fit</span><button class="service-btn add-btn" data-name="AGM Battery Fit" data-price="80">+</button></li>
+  </ul>
+</div>
 
-  <!-- 7. Exhaust & Emissions -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Exhaust & Emissions</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Muffler replacement – £90</li>
-      <li>Exhaust pipe repair – £80</li>
-      <li>Emission test – £50</li>
-      <li>DPF cleaning/replacement – £250</li>
-      <li>O2 sensor replacement – £80</li>
-    </ul>
-  </div>
+<!-- 6. Cooling & Climate -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Cooling & Climate</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>Radiator Flush</span><button class="service-btn add-btn" data-name="Radiator Flush" data-price="60">+</button></li>
+    <li class="flex justify-between items-center"><span>Coolant Replacement</span><button class="service-btn add-btn" data-name="Coolant Replacement" data-price="35">+</button></li>
+    <li class="flex justify-between items-center"><span>Thermostat Replacement</span><button class="service-btn add-btn" data-name="Thermostat Replacement" data-price="50">+</button></li>
+    <li class="flex justify-between items-center"><span>Heater Matrix</span><button class="service-btn add-btn" data-name="Heater Matrix" data-price="70">+</button></li>
+    <li class="flex justify-between items-center"><span>A/C Refill</span><button class="service-btn add-btn" data-name="A/C Refill" data-price="65">+</button></li>
+  </ul>
+</div>
 
-  <!-- 8. Tyres & Wheels -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Tyres & Wheels</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Tyre fitting per wheel – £25</li>
-      <li>Wheel alignment – £80</li>
-      <li>Wheel balancing – £30</li>
-      <li>Puncture repair – £15</li>
-      <li>Alloy wheel repair – £60</li>
-    </ul>
-  </div>
+<!-- 7. Exhaust & Emissions -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Exhaust & Emissions</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>Exhaust Repair</span><button class="service-btn add-btn" data-name="Exhaust Repair" data-price="70">+</button></li>
+    <li class="flex justify-between items-center"><span>Catalytic Converter</span><button class="service-btn add-btn" data-name="Catalytic Converter" data-price="200">+</button></li>
+    <li class="flex justify-between items-center"><span>DPF Cleaning</span><button class="service-btn add-btn" data-name="DPF Cleaning" data-price="150">+</button></li>
+    <li class="flex justify-between items-center"><span>Oxygen Sensor</span><button class="service-btn add-btn" data-name="Oxygen Sensor" data-price="60">+</button></li>
+    <li class="flex justify-between items-center"><span>Silencer Replacement</span><button class="service-btn add-btn" data-name="Silencer Replacement" data-price="80">+</button></li>
+  </ul>
+</div>
 
-  <!-- 9. Clutch & Transmission -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Clutch & Transmission</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Clutch replacement – £250</li>
-      <li>Gearbox oil change – £70</li>
-      <li>Transmission flush – £120</li>
-      <li>Drive shaft replacement – £150</li>
-      <li>Linkage adjustment – £50</li>
-    </ul>
-  </div>
+<!-- 8. Wheels & Tyres -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Wheels & Tyres</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>Tyre Fitting</span><button class="service-btn add-btn" data-name="Tyre Fitting" data-price="25">+</button></li>
+    <li class="flex justify-between items-center"><span>Tyre Balancing</span><button class="service-btn add-btn" data-name="Tyre Balancing" data-price="20">+</button></li>
+    <li class="flex justify-between items-center"><span>Wheel Alignment</span><button class="service-btn add-btn" data-name="Wheel Alignment" data-price="60">+</button></li>
+    <li class="flex justify-between items-center"><span>Puncture Repair</span><button class="service-btn add-btn" data-name="Puncture Repair" data-price="15">+</button></li>
+    <li class="flex justify-between items-center"><span>Alloy Refurbishment</span><button class="service-btn add-btn" data-name="Alloy Refurbishment" data-price="80">+</button></li>
+  </ul>
+</div>
 
-  <!-- 10. Roadside & Recovery -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Roadside & Recovery</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>On-site jump start – £50</li>
-      <li>Roadside breakdown – £80</li>
-      <li>Fuel delivery – £60</li>
-      <li>Tyre change roadside – £70</li>
-      <li>Vehicle recovery Medway – £120</li>
-    </ul>
-  </div>
+<!-- 9. Electrical -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Electrical</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>Light Bulb Replacement</span><button class="service-btn add-btn" data-name="Light Bulb Replacement" data-price="10">+</button></li>
+    <li class="flex justify-between items-center"><span>Fuse Replacement</span><button class="service-btn add-btn" data-name="Fuse Replacement" data-price="5">+</button></li>
+    <li class="flex justify-between items-center"><span>Wiring Repair</span><button class="service-btn add-btn" data-name="Wiring Repair" data-price="60">+</button></li>
+    <li class="flex justify-between items-center"><span>Window Motor</span><button class="service-btn add-btn" data-name="Window Motor" data-price="75">+</button></li>
+    <li class="flex justify-between items-center"><span>Central Lock Repair</span><button class="service-btn add-btn" data-name="Central Lock Repair" data-price="50">+</button></li>
+  </ul>
+</div>
 
-  <!-- 11. Lights & Indicators -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Lights & Indicators</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Headlight bulb replacement – £30</li>
-      <li>LED upgrade – £50</li>
-      <li>Indicator/bulb replacement – £25</li>
-      <li>Fog light repair – £40</li>
-      <li>Light wiring diagnostics – £60</li>
-    </ul>
-  </div>
+<!-- 10. Roadside Recovery -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Roadside Recovery</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>Winch Recovery</span><button class="service-btn add-btn" data-name="Winch Recovery" data-price="100">+</button></li>
+    <li class="flex justify-between items-center"><span>Flatbed Tow</span><button class="service-btn add-btn" data-name="Flatbed Tow" data-price="150">+</button></li>
+    <li class="flex justify-between items-center"><span>Off-Road Recovery</span><button class="service-btn add-btn" data-name="Off-Road Recovery" data-price="120">+</button></li>
+    <li class="flex justify-between items-center"><span>On-Site Start</span><button class="service-btn add-btn" data-name="On-Site Start" data-price="40">+</button></li>
+    <li class="flex justify-between items-center"><span>Lockout Service</span><button class="service-btn add-btn" data-name="Lockout Service" data-price="35">+</button></li>
+  </ul>
+</div>
 
-  <!-- 12. Misc & Accessories -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Miscellaneous & Accessories</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Windscreen wiper replacement – £20</li>
-      <li>Air conditioning service – £80</li>
-      <li>Interior detailing – £70</li>
-      <li>Battery terminal cleaning – £15</li>
-      <li>Tyre pressure monitoring – £25</li>
-    </ul>
-  </div>
+<!-- 11. Clutch & Transmission -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Clutch & Transmission</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>Clutch Replacement</span><button class="service-btn add-btn" data-name="Clutch Replacement" data-price="180">+</button></li>
+    <li class="flex justify-between items-center"><span>Clutch Bleed</span><button class="service-btn add-btn" data-name="Clutch Bleed" data-price="50">+</button></li>
+    <li class="flex justify-between items-center"><span>Gear Linkage Adjustment</span><button class="service-btn add-btn" data-name="Gear Linkage Adjustment" data-price="70">+</button></li>
+    <li class="flex justify-between items-center"><span>Transmission Mounts</span><button class="service-btn add-btn" data-name="Transmission Mounts" data-price="90">+</button></li>
+    <li class="flex justify-between items-center"><span>DSG/Automatic Service</span><button class="service-btn add-btn" data-name="DSG/Automatic Service" data-price="120">+</button></li>
+  </ul>
+</div>
+
+<!-- 12. Miscellaneous -->
+<div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+  <h2 class="text-xl font-black neon-lime mb-4">Miscellaneous</h2>
+  <ul class="space-y-2 text-white/70">
+    <li class="flex justify-between items-center"><span>Windscreen Wiper Replacement</span><button class="service-btn add-btn" data-name="Windscreen Wiper Replacement" data-price="15">+</button></li>
+    <li class="flex justify-between items-center"><span>Headlamp Polishing</span><button class="service-btn add-btn" data-name="Headlamp Polishing" data-price="25">+</button></li>
+    <li class="flex justify-between items-center"><span>Fuel Pump</span><button class="service-btn add-btn" data-name="Fuel Pump" data-price="100">+</button></li>
+    <li class="flex justify-between items-center"><span>Smoke Test</span><button class="service-btn add-btn" data-name="Smoke Test" data-price="60">+</button></li>
+    <li class="flex justify-between items-center"><span>Battery Check</span><button class="service-btn add-btn" data-name="Battery Check" data-price="20">+</button></li>
+    <li class="flex justify-between items-center"><span>Mobile Service Call</span><button class="service-btn add-btn" data-name="Mobile Service Call" data-price="30">+</button></li>
+  </ul>
+</div>
 
 </section>
 
-<footer class="text-center mt-20 text-white/40 text-sm">
-  <p>All prices are labour only unless stated. Parts extra. Call or WhatsApp <a href="tel:+447405937104" class="neon-lime">07405 937104</a> to book or confirm.</p>
-</footer>
+<!-- Cart Slide -->
+<div id="cart-slide">
+  <div class="flex justify-between items-center p-4 border-b border-white/10">
+    <h3 class="font-black neon-lime">Your Selection</h3>
+    <button id="cart-close" class="text-red-500 font-bold text-xl">X</button>
+  </div>
+  <ul id="cart-items" class="p-4 space-y-2"></ul>
+  <div class="p-4 border-t border-white/10 flex justify-between items-center font-bold text-white">
+    <span>Total:</span><span id="cart-total">£0</span>
+  </div>
+</div>
+
+<!-- Vehicle overlay -->
+<div class="vehicle-overlay"></div>
 
 <script>
-const btn = document.getElementById('menu-btn');
-const menu = document.getElementById('slide-menu');
+// Sticky nav
+window.addEventListener('scroll',()=>{document.getElementById('slideNav').classList.toggle('block',window.scrollY>300);});
 
-btn.addEventListener('click', e => {
-  menu.classList.toggle('translate-y-0');
-  menu.classList.toggle('-translate-y-96');
-});
+// Cart slide
+const cartBtn=document.getElementById('cart-btn'),cartSlide=document.getElementById('cart-slide'),cartClose=document.getElementById('cart-close');
+cartBtn.addEventListener('click',()=>cartSlide.classList.add('open'));
+cartClose.addEventListener('click',()=>cartSlide.classList.remove('open'));
 
-// Close menu on click outside or link click
-document.addEventListener('click', e => {
-  if(!btn.contains(e.target) && !menu.contains(e.target)){
-    menu.classList.remove('translate-y-0');
-    menu.classList.add('-translate-y-96');
-  }
-});
-menu.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    menu.classList.remove('translate-y-0');
-    menu.classList.add('-translate-y-96');
+// Cart logic
+let cart=[];
+function updateCart(){ 
+  const list=document.getElementById('cart-items'),totalEl=document.getElementById('cart-total');
+  list.innerHTML=''; let total=0;
+  cart.forEach((item,i)=>{ 
+    const li=document.createElement('li'); li.className='flex justify-between';
+    li.innerHTML=`<span>${item.name} ${item.prestige?'(Prestige)':item.van?'(Van)': ''}</span><button class="text-red-500" data-index="${i}">X</button><span>£${item.price}</span>`;
+    list.appendChild(li); total+=item.price;
+  });
+  totalEl.innerText='£'+total;
+  document.querySelectorAll('#cart-items button').forEach(b=>b.addEventListener('click',e=>{cart.splice(e.target.dataset.index,1);updateCart();}));
+}
+
+// Service buttons
+document.querySelectorAll('.service-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const name=btn.dataset.name,basePrice=parseFloat(btn.dataset.price);
+    // Detect vehicle prestige/van here with placeholder
+    const prestige=false,van=false;
+    let price=basePrice;
+    if(prestige) price*=1.2;
+    if(van) price*=1.15;
+    cart.push({name,price:Math.round(price),prestige,van});
+    updateCart();
   });
 });
 </script>
-
 </body>
 </html>
