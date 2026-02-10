@@ -5,8 +5,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SOS Mechanics | Mobile Mechanic Services & Prices Medway</title>
 <meta name="description" content="SOS Mechanics Medway: Transparent mobile mechanic pricing. Engine diagnostics, brakes, batteries, suspension, and emergency repairs. 24/7 roadside assistance.">
+<link rel="canonical" href="https://sosmechanics.co.uk/services">
+<meta name="robots" content="index, follow">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+
+<!-- Local Business Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "name": "SOS Mechanics Medway",
+  "image": "https://sosmechanics.co.uk/logo.png",
+  "@id": "https://sosmechanics.co.uk",
+  "url": "https://sosmechanics.co.uk",
+  "telephone": "+447405937104",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Mobile Service",
+    "addressLocality": "Medway",
+    "addressRegion": "Kent",
+    "addressCountry": "GB"
+  },
+  "geo": { "@type": "GeoCoordinates", "latitude": 51.3799, "longitude": -0.5005 },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "00:00",
+    "closes": "23:59"
+  },
+  "areaServed": ["Rochester","Chatham","Gillingham","Strood","Rainham","Sittingbourne"],
+  "priceRange": "££"
+}
+</script>
+
 <style>
 :root { --neon:#CCFF00; }
 body { background:#06040d; color:#fff; font-family:'Plus Jakarta Sans',sans-serif; overflow-x:hidden; }
@@ -18,26 +50,21 @@ a:hover { color:#CCFF00; }
 </head>
 <body class="p-6 lg:p-20">
 
-<!-- STICKY NAV -->
-<nav class="fixed top-0 w-full bg-black/30 backdrop-blur-md border-b border-white/10 z-[1000] p-4 lg:p-6 flex justify-between items-center">
-  <!-- Logo / Home Link -->
-  <a href="https://sosmechanics.co.uk" class="text-xl font-black italic uppercase tracking-tight neon-lime hover:underline">
-    SOS<span class="text-white">MECHANICS</span>
-  </a>
+<!-- STICKY SLIDE-DOWN NAV -->
+<div class="fixed top-4 right-4 z-[1000]">
+  <button id="menu-btn" class="w-12 h-12 flex flex-col justify-between items-center p-2 bg-black/30 backdrop-blur-md border border-white/10 rounded-full shadow-lg">
+    <span class="block w-6 h-0.5 bg-[#CCFF00] transition-all"></span>
+    <span class="block w-6 h-0.5 bg-[#CCFF00] transition-all"></span>
+    <span class="block w-6 h-0.5 bg-[#CCFF00] transition-all"></span>
+  </button>
 
-  <!-- Actions -->
-  <div class="flex items-center gap-4">
-    <a href="https://sosmechanics.co.uk" class="text-sm uppercase font-bold neon-lime hover:underline">Home</a>
-    <a href="tel:+447405937104" class="bg-[#CCFF00] text-black px-4 py-2 rounded-xl font-black uppercase text-xs hover:scale-105 transition-all shadow-[0_0_10px_rgba(204,255,0,0.4)]">
-      Call Now
-    </a>
-    <a href="https://wa.me/07405937104" class="bg-[#CCFF00] text-black px-4 py-2 rounded-xl font-black uppercase text-xs hover:scale-105 transition-all shadow-[0_0_10px_rgba(204,255,0,0.4)]">
-      WhatsApp
-    </a>
+  <div id="slide-menu" class="absolute top-16 right-0 w-48 bg-black/80 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden transform -translate-y-96 transition-transform duration-300">
+    <a href="https://sosmechanics.co.uk" class="block py-4 px-6 neon-lime font-black uppercase text-sm border-b border-white/10">Home</a>
+    <a href="tel:+447405937104" class="block py-4 px-6 text-black bg-[#CCFF00] font-black uppercase text-sm border-b border-white/10">Call Now</a>
+    <a href="https://wa.me/07405937104" class="block py-4 px-6 text-black bg-[#CCFF00] font-black uppercase text-sm">WhatsApp</a>
   </div>
-</nav>
+</div>
 
-<!-- Spacer so content isn't hidden behind nav -->
 <div class="h-20 lg:h-24"></div>
 
 <header class="text-center mb-20">
@@ -54,7 +81,7 @@ a:hover { color:#CCFF00; }
     <h2 class="text-xl font-black neon-lime mb-4">Diagnostics & Fault Finding</h2>
     <ul class="space-y-2 text-white/70">
       <li>Basic OBD scan – £40</li>
-      <li>Advanced diagnostics (live data/modules) – £60</li>
+      <li>Advanced diagnostics – £60</li>
       <li>Engine management light – £60</li>
       <li>Electrical fault tracing – £80</li>
       <li>Pre-purchase inspection – £99</li>
@@ -79,11 +106,11 @@ a:hover { color:#CCFF00; }
   <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
     <h2 class="text-xl font-black neon-lime mb-4">Suspension & Steering</h2>
     <ul class="space-y-2 text-white/70">
-      <li>Anti-roll bar link (each side) – £50</li>
+      <li>Anti-roll bar link – £50</li>
       <li>Lower control arm – £90</li>
       <li>Track rod end – £60</li>
-      <li>Wheel bearing (front) – £120</li>
-      <li>Shock absorber (pair) – £140</li>
+      <li>Wheel bearing – £120</li>
+      <li>Shock absorber pair – £140</li>
       <li>Suspension knock diagnosis – £60</li>
     </ul>
   </div>
@@ -101,107 +128,99 @@ a:hover { color:#CCFF00; }
     </ul>
   </div>
 
-  <!-- 5. Ignition -->
+  <!-- 5. Batteries & Electrical -->
   <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Ignition & Engine Running</h2>
+    <h2 class="text-xl font-black neon-lime mb-4">Batteries & Electrical</h2>
     <ul class="space-y-2 text-white/70">
-      <li>Spark plug replacement (4-cyl) – £60</li>
-      <li>Ignition coil (each) – £30</li>
-      <li>Misfire diagnosis – £60</li>
-      <li>Engine hesitation diagnosis – £60</li>
-      <li>Fuel injector testing – £70</li>
-      <li>Throttle body cleaning – £60</li>
-    </ul>
-  </div>
-
-  <!-- 6. Cooling -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Cooling System</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Coolant top-up & pressure test – £40</li>
-      <li>Coolant flush & refill – £80</li>
-      <li>Thermostat replacement – £120</li>
-      <li>Radiator replacement – £150</li>
-      <li>Water pump replacement – £180</li>
-      <li>Overheating diagnosis – £60</li>
-    </ul>
-  </div>
-
-  <!-- 7. Battery & Charging -->
-  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Battery & Charging</h2>
-    <ul class="space-y-2 text-white/70">
-      <li>Battery replacement – £40</li>
+      <li>12V battery replacement – £80</li>
+      <li>High-performance AGM battery – £120</li>
       <li>Alternator replacement – £150</li>
       <li>Starter motor replacement – £150</li>
-      <li>Charging system test – £40</li>
-      <li>Non-start diagnosis – £70</li>
-      <li>Battery coding (BMW/VAG) – £40</li>
+      <li>Battery health check – £30</li>
     </ul>
   </div>
 
-  <!-- 8. Exhaust & Emissions -->
+  <!-- 6. Cooling & Belts -->
+  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+    <h2 class="text-xl font-black neon-lime mb-4">Cooling & Belts</h2>
+    <ul class="space-y-2 text-white/70">
+      <li>Timing belt replacement – £200</li>
+      <li>Aux belt replacement – £50</li>
+      <li>Coolant flush & refill – £60</li>
+      <li>Water pump replacement – £120</li>
+      <li>Thermostat replacement – £80</li>
+    </ul>
+  </div>
+
+  <!-- 7. Exhaust & Emissions -->
   <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
     <h2 class="text-xl font-black neon-lime mb-4">Exhaust & Emissions</h2>
     <ul class="space-y-2 text-white/70">
-      <li>Exhaust inspection – £35</li>
-      <li>Lambda sensor replacement – £80</li>
-      <li>EGR valve diagnosis – £70</li>
-      <li>EGR valve replacement – £180</li>
-      <li>DPF fault diagnosis – £80</li>
-      <li>Emissions light diagnosis – £60</li>
+      <li>Muffler replacement – £90</li>
+      <li>Exhaust pipe repair – £80</li>
+      <li>Emission test – £50</li>
+      <li>DPF cleaning/replacement – £250</li>
+      <li>O2 sensor replacement – £80</li>
     </ul>
   </div>
 
-  <!-- 9. Clutch & Drivetrain -->
+  <!-- 8. Tyres & Wheels -->
   <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Clutch, Gearbox & Drivetrain</h2>
+    <h2 class="text-xl font-black neon-lime mb-4">Tyres & Wheels</h2>
     <ul class="space-y-2 text-white/70">
-      <li>Clutch fault diagnosis – £70</li>
-      <li>Gear linkage adjustment – £60</li>
-      <li>Driveshaft replacement – £150</li>
-      <li>CV boot replacement – £90</li>
+      <li>Tyre fitting per wheel – £25</li>
+      <li>Wheel alignment – £80</li>
+      <li>Wheel balancing – £30</li>
+      <li>Puncture repair – £15</li>
+      <li>Alloy wheel repair – £60</li>
+    </ul>
+  </div>
+
+  <!-- 9. Clutch & Transmission -->
+  <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
+    <h2 class="text-xl font-black neon-lime mb-4">Clutch & Transmission</h2>
+    <ul class="space-y-2 text-white/70">
+      <li>Clutch replacement – £250</li>
       <li>Gearbox oil change – £70</li>
-      <li>Transmission leak diagnosis – £60</li>
+      <li>Transmission flush – £120</li>
+      <li>Drive shaft replacement – £150</li>
+      <li>Linkage adjustment – £50</li>
     </ul>
   </div>
 
-  <!-- 10. Electrical & Lighting -->
+  <!-- 10. Roadside & Recovery -->
   <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Electrical & Lighting</h2>
+    <h2 class="text-xl font-black neon-lime mb-4">Roadside & Recovery</h2>
     <ul class="space-y-2 text-white/70">
-      <li>Headlight bulb replacement – £25</li>
-      <li>Xenon/HID bulb replacement – £40</li>
-      <li>Indicator/brake light fault – £35</li>
-      <li>Window regulator replacement – £120</li>
-      <li>Central locking fault – £60</li>
-      <li>Module coding/resets – £60</li>
+      <li>On-site jump start – £50</li>
+      <li>Roadside breakdown – £80</li>
+      <li>Fuel delivery – £60</li>
+      <li>Tyre change roadside – £70</li>
+      <li>Vehicle recovery Medway – £120</li>
     </ul>
   </div>
 
-  <!-- 11. Tyres & Wheels -->
+  <!-- 11. Lights & Indicators -->
   <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Tyres, Wheels & Road Prep</h2>
+    <h2 class="text-xl font-black neon-lime mb-4">Lights & Indicators</h2>
     <ul class="space-y-2 text-white/70">
-      <li>Wheel change (spare fitted) – £40</li>
-      <li>Tyre inspection & pressure set – £25</li>
-      <li>Locking wheel nut removal – £60</li>
-      <li>Wheel bolt/stud replacement – £40</li>
-      <li>Pre-MOT inspection – £60</li>
-      <li>Safety check report – £35</li>
+      <li>Headlight bulb replacement – £30</li>
+      <li>LED upgrade – £50</li>
+      <li>Indicator/bulb replacement – £25</li>
+      <li>Fog light repair – £40</li>
+      <li>Light wiring diagnostics – £60</li>
     </ul>
   </div>
 
-  <!-- 12. Emergency Call-Out -->
+  <!-- 12. Misc & Accessories -->
   <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
-    <h2 class="text-xl font-black neon-lime mb-4">Emergency & Call-Out</h2>
+    <h2 class="text-xl font-black neon-lime mb-4">Miscellaneous & Accessories</h2>
     <ul class="space-y-2 text-white/70">
-      <li>Breakdown call-out – £60</li>
-      <li>Non-start roadside repair – £80</li>
-      <li>Jump start – £40</li>
-      <li>Minor roadside repairs – from £60</li>
-      <li>Out-of-hours call-out – +£30</li>
-      <li>Weekend service – +20%</li>
+      <li>Windscreen wiper replacement – £20</li>
+      <li>Air conditioning service – £80</li>
+      <li>Interior detailing – £70</li>
+      <li>Battery terminal cleaning – £15</li>
+      <li>Tyre pressure monitoring – £25</li>
     </ul>
   </div>
 
@@ -210,6 +229,30 @@ a:hover { color:#CCFF00; }
 <footer class="text-center mt-20 text-white/40 text-sm">
   <p>All prices are labour only unless stated. Parts extra. Call or WhatsApp <a href="tel:+447405937104" class="neon-lime">07405 937104</a> to book or confirm.</p>
 </footer>
+
+<script>
+const btn = document.getElementById('menu-btn');
+const menu = document.getElementById('slide-menu');
+
+btn.addEventListener('click', e => {
+  menu.classList.toggle('translate-y-0');
+  menu.classList.toggle('-translate-y-96');
+});
+
+// Close menu on click outside or link click
+document.addEventListener('click', e => {
+  if(!btn.contains(e.target) && !menu.contains(e.target)){
+    menu.classList.remove('translate-y-0');
+    menu.classList.add('-translate-y-96');
+  }
+});
+menu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    menu.classList.remove('translate-y-0');
+    menu.classList.add('-translate-y-96');
+  });
+});
+</script>
 
 </body>
 </html>
