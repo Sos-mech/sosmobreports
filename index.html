@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SOS ELITE | NEURAL DISPATCH</title>
+    <title>SOS ELITE | REBUILT ENGINE v6</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -11,88 +11,71 @@
     
     <style>
         [x-cloak] { display: none !important; }
-        html, body { background: #06040d; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        html, body { background: #06040d; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         .neon-lime { color: #CCFF00; text-shadow: 0 0 20px rgba(204, 255, 0, 0.5); }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .active-glow { border: 2px solid #CCFF00 !important; box-shadow: 0 0 30px rgba(204, 255, 0, 0.3) !important; }
         
-        /* THE GHOST PRICE */
         .ghost-price {
-            position: absolute;
-            bottom: 60px;
-            right: -10px;
-            font-size: 130px;
-            font-weight: 900;
-            color: rgba(204, 255, 0, 0.12);
-            line-height: 0.8;
-            z-index: 0;
-            pointer-events: none;
-            font-style: italic;
+            position: absolute; bottom: 60px; right: -10px; font-size: 130px; font-weight: 900;
+            color: rgba(204, 255, 0, 0.15); line-height: 0.8; z-index: 0; pointer-events: none; font-style: italic;
         }
 
-        #ticket-wrapper { background: white; color: #000; width: 100%; max-width: 380px; border-radius: 2.5rem; overflow: hidden; margin: 0 auto; position: relative; box-shadow: 0 40px 100px rgba(0,0,0,0.9); }
+        #ticket-wrapper { background: white; color: #000; width: 100%; border-radius: 2.5rem; overflow: hidden; margin: 0 auto; position: relative; box-shadow: 0 40px 100px rgba(0,0,0,1); }
         .pdf-header { background: #000; color: #fff; padding: 45px 30px; text-align: center; border-bottom: 12px solid #CCFF00; }
         .pdf-body { padding: 40px 30px; background: #fff; position: relative; z-index: 1; }
-        .label-grey { color: #9ca3af; font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
-        .data-black { color: #000; font-size: 14px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; }
         
-        .legal-box { font-size: 7px; color: #6b7280; font-weight: 700; text-transform: uppercase; line-height: 1.4; border-top: 1px solid #eee; padding-top: 15px; margin-top: 20px; }
-
         @keyframes pulse-ring { 0% { transform: scale(0.33); opacity: 1; } 80%, 100% { opacity: 0; } }
-        .gps-pulse { position: relative; width: 12px; height: 12px; background: #CCFF00; border-radius: 50%; }
+        .gps-pulse { position: relative; width: 10px; height: 10px; background: #CCFF00; border-radius: 50%; }
         .gps-pulse::before { content: ''; position: absolute; width: 300%; height: 300%; top: -100%; left: -100%; border: 2px solid #CCFF00; border-radius: 50%; animation: pulse-ring 1.5s infinite; }
     </style>
 </head>
 
 <body x-data="{ 
     confirmed: false, searchQuery: '', activeGroup: null, 
-    name: '', tel: '', reg: '', hp: '', address: 'Locating...',
-    lat: '', lon: '', cart: [], bookingRef: '', stamp: '',
-    isOOH: false, isWeekend: false, oohCharge: 0, weekendMultiplier: 1.0,
+    name: '', tel: '', reg: '', vname: '', 
+    address: 'LOCKING GPS...', lat: '', lon: '', gpsLocked: false,
+    cart: [], bookingRef: '', stamp: '',
+    isOOH: false, oohCharge: 0, weekendMultiplier: 1.0,
 
     groups: [
         { name: 'Braking Systems', icon: '🛑', s: [{n:'Pads & Discs', p:185}, {n:'Caliper Swap', p:120}, {n:'Fluid Service', p:55}] },
-        { name: 'Transmission', icon: '⚙️', s: [{n:'Clutch Kit', p:450}, {n:'Flywheel', p:550}, {n:'Slave Cyl', p:180}] },
         { name: 'Power/Electrics', icon: '⚡', s: [{n:'AGM Battery', p:195}, {n:'Alternator', p:220}, {n:'Starter Motor', p:185}] },
-        { name: 'Routine Service', icon: '📅', s: [{n:'Full Service', p:185}, {n:'Interim', p:95}, {n:'Oil Change', p:65}] },
         { name: 'AI Diagnostics', icon: '💻', s: [{n:'Global Scan', p:65}, {n:'Fault Trace', p:85}, {n:'Sensor Fit', p:75}] },
+        { name: 'Routine Service', icon: '📅', s: [{n:'Full Service', p:185}, {n:'Interim', p:95}, {n:'Oil Change', p:65}] },
         { name: 'Engine Timing', icon: '⏲️', s: [{n:'Cambelt Kit', p:350}, {n:'Water Pump', p:130}, {n:'Aux Belt', p:55}] },
-        { name: 'Chassis/Susp', icon: '🚜', s: [{n:'Coil Spring', p:115}, {n:'Wishbone', p:130}, {n:'Shock Absorber', p:145}] },
-        { name: 'Wheel/Tyre', icon: '🛞', s: [{n:'Puncture Fix', p:45}, {n:'Locking Nut', p:65}, {n:'Spare Fit', p:40}] },
-        { name: 'Fuel Systems', icon: '⛽', s: [{n:'Fuel Filter', p:65}, {n:'Fuel Pump', p:210}, {n:'Leak Repair', p:85}] },
-        { name: 'Cooling Pack', icon: '❄️', s: [{n:'Radiator', p:195}, {n:'Thermostat', p:85}, {n:'Coolant Flush', p:60}] },
-        { name: 'Exhaust/DPF', icon: '💨', s: [{n:'DPF Regen', p:120}, {n:'EGR Clean', p:95}, {n:'O2 Sensor', p:110}] },
-        { name: 'Security/Lock', icon: '🔑', s: [{n:'Lockout Entry', p:85}, {n:'Window Reg', p:140}, {n:'Door Cable', p:75}] }
+        { name: 'Chassis/Susp', icon: '🚜', s: [{n:'Coil Spring', p:115}, {n:'Wishbone', p:130}, {n:'Shock Absorber', p:145}] }
     ],
 
     init() {
-        const now = new Date();
-        if (now.getHours() < 8 || now.getHours() >= 18) { this.isOOH = true; this.oohCharge = 45; }
-        if (now.getDay() === 0 || now.getDay() === 6) { this.isWeekend = true; this.weekendMultiplier = 1.25; }
-        this.getLoc();
+        const h = new Date().getHours();
+        const d = new Date().getDay();
+        if (h < 8 || h >= 18) { this.isOOH = true; this.oohCharge = 45; }
+        if (d === 0 || d === 6) { this.weekendMultiplier = 1.25; }
+        this.getGPS();
     },
 
-    async getLoc() {
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-            this.lat = pos.coords.latitude; this.lon = pos.coords.longitude;
-            try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${this.lat}&lon=${this.lon}&format=json`);
-                const data = await res.json();
-                this.address = data.display_name.split(',').slice(0, 2).join(',');
-            } catch(e) { this.address = 'Medway Dispatch'; }
-        });
+    getGPS() {
+        if (!navigator.geolocation) { this.address = 'GPS NOT SUPPORTED'; return; }
+        navigator.geolocation.getCurrentPosition((pos) => {
+            this.lat = pos.coords.latitude.toFixed(6);
+            this.lon = pos.coords.longitude.toFixed(6);
+            this.gpsLocked = true;
+            this.address = 'GPS SIGNAL SECURE';
+        }, (err) => { this.address = 'ENABLE GPS TO START'; }, { enableHighAccuracy: true });
     },
 
     processAI() {
         let q = this.searchQuery.toLowerCase();
-        const map = {'brake':0,'stop':0,'clutch':1,'gear':1,'battery':2,'start':2,'service':3,'oil':3,'light':4,'dash':4,'belt':5,'timing':5,'spring':6,'susp':6,'tyre':7,'tire':7,'fuel':8,'heat':9,'cool':9,'smoke':10,'lock':11};
+        const map = {'brake':0,'stop':0,'battery':1,'alternator':1,'start':1,'diag':2,'scan':2,'light':2,'service':3,'oil':3,'belt':4,'timing':4,'spring':5,'susp':5};
         this.activeGroup = null;
         Object.keys(map).forEach(k => { if(q.includes(k)) this.activeGroup = map[k]; });
     },
 
     toggle(item) {
-        if(this.cart.find(i => i.n === item.n)) { this.cart = this.cart.filter(i => i.n !== item.n); }
+        let exists = this.cart.find(i => i.n === item.n);
+        if(exists) { this.cart = this.cart.filter(i => i.n !== item.n); }
         else { this.cart.push(item); }
     },
 
@@ -100,53 +83,52 @@
     getTotal() { return this.cart.reduce((s, i) => s + this.calcPrice(i.p), 0) + this.oohCharge; },
 
     finalize() {
-        if(!this.reg || !this.name || this.cart.length === 0) return;
+        if(!this.reg || this.cart.length === 0) { alert('ENTER REG & SELECT JOB'); return; }
         this.bookingRef = 'SOS-' + Math.random().toString(36).substr(2,6).toUpperCase();
-        this.stamp = new Date().toLocaleString('en-GB');
+        this.stamp = new Date().toLocaleString('en-GB').replace(',', ' @');
         this.confirmed = true;
         window.scrollTo(0,0);
     },
 
     sendWhatsApp() {
-        let msg = `*SOS ELITE DISPATCH*%0A*REF:* ${this.bookingRef}%0A*CLIENT:* ${this.name}%0A*REG:* ${this.reg.toUpperCase()}%0A*TOTAL:* £${this.getTotal()}`;
+        let msg = `*🔧 NEW SOS BOOKING REQUEST*%0A---------------------------%0A*Service:* ${this.cart.map(i=>i.n).join(', ')}%0A*Labour:* £${this.getTotal()}.00%0A*Date/Time:* ${this.stamp}%0A---------------------------%0A*CUSTOMER:* ${this.name}%0A*PHONE:* ${this.tel}%0A*VEHICLE:* ${this.vname} [${this.reg.toUpperCase()}]%0A%0A*📍 LOCATION:*%0Ahttps://www.google.com/maps?q=${this.lat},${this.lon}`;
         window.open(`https://wa.me/447405937104?text=${msg}`, '_blank');
     }
 }" x-init="init()" x-cloak>
 
     <div class="max-w-md mx-auto p-5 pb-44">
         
-        <!-- HEADER WITH GPS BUTTON -->
         <header class="flex justify-between items-center py-8">
-            <h1 class="text-4xl font-black italic neon-lime uppercase">SOS ELITE</h1>
-            <div class="flex items-center gap-3 glass px-4 py-2 rounded-full border-[#CCFF00]/20">
-                <span class="text-[8px] font-black uppercase tracking-widest neon-lime" x-text="address"></span>
-                <div class="gps-pulse"></div>
+            <h1 class="text-4xl font-black italic neon-lime uppercase tracking-tighter">SOS ELITE</h1>
+            <div class="flex items-center gap-2 glass px-4 py-2 rounded-full border-[#CCFF00]/40">
+                <span class="text-[7px] font-black uppercase tracking-widest neon-lime" x-text="address"></span>
+                <div class="gps-pulse" x-show="gpsLocked"></div>
             </div>
         </header>
 
-        <!-- INPUT VIEW -->
-        <div x-show="!confirmed" class="space-y-6">
-            <!-- AI SEARCH -->
-            <div class="relative group">
-                <input x-model="searchQuery" @input="processAI()" placeholder="NEURAL ISSUE SEARCH..." class="w-full bg-black border border-white/10 rounded-2xl p-6 text-xs font-black uppercase tracking-widest focus:ring-1 focus:ring-[#CCFF00] outline-none transition-all">
-                <div class="absolute right-6 top-6"><span class="text-[8px] neon-lime font-black">AI ACTIVE</span></div>
-            </div>
+        <!-- STACKED INPUTS -->
+        <div x-show="!confirmed" class="space-y-4">
+            <input x-model="searchQuery" @input="processAI()" placeholder="NEURAL SEARCH (E.G. BRAKES)" class="w-full bg-black border border-white/10 rounded-2xl p-6 text-xs font-black uppercase focus:ring-1 focus:ring-[#CCFF00] outline-none">
 
             <div class="space-y-3">
                 <input x-model="name" placeholder="CLIENT NAME" class="w-full glass p-5 rounded-2xl font-bold uppercase text-xs outline-none">
-                <input x-model="reg" placeholder="VEHICLE REG" class="w-full glass p-5 rounded-2xl text-center font-black uppercase tracking-[0.4em] neon-lime text-2xl border-dashed">
+                <input x-model="tel" placeholder="CONTACT NUMBER" class="w-full glass p-5 rounded-2xl font-bold uppercase text-xs outline-none">
+                <input x-model="vname" placeholder="VEHICLE (E.G. BMW 1 SERIES)" class="w-full glass p-5 rounded-2xl font-bold uppercase text-xs outline-none">
+                <input x-model="reg" placeholder="VEHICLE REG" class="w-full glass p-6 rounded-2xl text-center font-black uppercase tracking-[0.4em] neon-lime text-2xl">
             </div>
             
-            <div class="grid gap-3">
-                <template x-for="(group, index) in groups">
-                    <div class="glass rounded-3xl overflow-hidden transition-all duration-300" :class="activeGroup === index ? 'active-glow' : ''">
-                        <button @click="activeGroup = (activeGroup === index ? null : index)" class="w-full flex justify-between p-6 text-[10px] font-black uppercase tracking-widest">
+            <div class="grid gap-3 pt-4">
+                <template x-for="(group, index) in groups" :key="index">
+                    <div class="glass rounded-3xl overflow-hidden" :class="activeGroup === index ? 'active-glow' : ''">
+                        <button @click="activeGroup = (activeGroup === index ? null : index)" class="w-full flex justify-between p-6 text-[10px] font-black uppercase">
                             <span x-text="group.icon + ' ' + group.name"></span>
                             <span class="neon-lime" x-text="activeGroup === index ? '−' : '+'"></span>
                         </button>
                         <div x-show="activeGroup === index" class="p-4 bg-black/40 grid gap-2">
-                            <template x-for="item in group.s">
-                                <button @click="toggle(item)" :class="cart.find(i => i.n === item.n) ? 'bg-[#CCFF00] text-black shadow-[0_0_15px_rgba(204,255,0,0.4)]' : 'bg-white/5'" class="flex justify-between p-5 rounded-2xl text-[9px] font-black uppercase">
+                            <template x-for="item in group.s" :key="item.n">
+                                <button @click="toggle(item)" 
+                                    :class="cart.find(i => i.n === item.n) ? 'bg-[#CCFF00] text-black' : 'bg-white/5'" 
+                                    class="flex justify-between p-5 rounded-2xl text-[9px] font-black uppercase transition-all">
                                     <span x-text="item.n"></span><span x-text="'£' + calcPrice(item.p)"></span>
                                 </button>
                             </template>
@@ -155,46 +137,59 @@
                 </template>
             </div>
 
-            <button @click="finalize()" :disabled="!reg || !name" class="fixed bottom-6 left-5 right-5 bg-[#CCFF00] text-black py-6 rounded-2xl font-black uppercase tracking-widest shadow-2xl z-50 disabled:opacity-20">Confirm Dispatch Manifest</button>
+            <button @click="finalize()" class="fixed bottom-6 left-5 right-5 bg-[#CCFF00] text-black py-7 rounded-2xl font-black uppercase tracking-widest shadow-2xl z-50">
+                Confirm Booking
+            </button>
         </div>
 
-        <!-- SUMMARY VIEW WITH GHOST UI -->
+        <!-- MANIFEST -->
         <div x-show="confirmed" x-transition class="pt-5 flex flex-col items-center">
             <div id="ticket-wrapper">
                 <div class="pdf-header">
-                    <h2 class="text-3xl font-black italic uppercase italic">Job Manifest</h2>
-                    <p class="text-[9px] font-black text-[#CCFF00] tracking-widest">SOS ELITE SECURE VERIFIED</p>
+                    <h2 class="text-3xl font-black italic uppercase">Job Manifest</h2>
+                    <p class="text-[9px] font-black text-[#CCFF00] tracking-widest">DISPATCH VERIFIED</p>
                 </div>
                 <div class="pdf-body">
                     <div class="ghost-price" x-text="'£'+getTotal()"></div>
                     
-                    <p class="label-grey">Job Reference</p>
-                    <p class="data-black text-red-600 font-mono text-2xl" x-text="bookingRef"></p>
+                    <div class="mb-6">
+                        <p class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Job Reference</p>
+                        <p class="text-2xl font-black text-red-600 font-mono" x-text="bookingRef"></p>
+                    </div>
 
-                    <p class="label-grey">Identity / Registration</p>
-                    <p class="data-black" x-text="name + ' [' + reg.toUpperCase() + ']'"></p>
+                    <div class="mb-6">
+                        <p class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Deployment GPS</p>
+                        <p class="text-[12px] font-black" x-text="lat + ', ' + lon"></p>
+                    </div>
 
-                    <p class="label-grey">Labour Summary</p>
-                    <div class="space-y-2 mb-6">
-                        <template x-for="item in cart">
-                            <div class="flex justify-between font-black text-[11px] uppercase">
+                    <div class="mb-6">
+                        <p class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Client & Vehicle</p>
+                        <p class="text-[14px] font-black" x-text="name"></p>
+                        <p class="text-[14px] font-black" x-text="vname + ' [' + reg.toUpperCase() + ']'"></p>
+                    </div>
+
+                    <div class="border-t border-dashed border-gray-200 pt-6">
+                        <p class="text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-4">Labour Selection</p>
+                        <template x-for="item in cart" :key="item.n">
+                            <div class="flex justify-between font-black text-[12px] uppercase mb-2">
                                 <span x-text="item.n"></span><span x-text="'£'+calcPrice(item.p)"></span>
                             </div>
                         </template>
                         <template x-if="isOOH">
-                            <div class="flex justify-between font-black text-[11px] text-red-600 uppercase border-t pt-2 mt-2">
-                                <span>OOH Emergency Surge</span><span>+£45</span>
+                            <div class="flex justify-between font-black text-[12px] text-red-600 uppercase border-t pt-2 mt-2">
+                                <span>OOH SURGE</span><span>+£45</span>
                             </div>
                         </template>
                     </div>
 
-                    <div class="legal-box">
-                        Labor work liability: SOS Elite holds no liability for pre-existing vehicle faults discovered during labor. All work performed on a "best-effort" basis. Customer digital verification confirms acceptance of these terms and the final labor total shown.
+                    <div class="mt-10 pt-6 border-t border-gray-100 text-[7px] text-gray-400 uppercase font-bold leading-relaxed">
+                        Labor work liability: SOS Elite holds no liability for pre-existing vehicle faults discovered during labor. All work is performed on a "best-effort" basis. Digital verification via WhatsApp confirms acceptance.
                     </div>
                 </div>
             </div>
 
-            <button @click="sendWhatsApp()" class="mt-8 w-full bg-[#CCFF00] text-black py-6 rounded-2xl font-black uppercase tracking-widest shadow-2xl">Send to Dispatch</button>
+            <button @click="sendWhatsApp()" class="mt-8 w-full bg-[#CCFF00] text-black py-6 rounded-2xl font-black uppercase tracking-widest shadow-2xl">Send to Dispatch Engine</button>
+            <button @click="confirmed = false" class="mt-4 text-[10px] font-black uppercase text-white/30 tracking-widest underline">Edit Booking</button>
         </div>
     </div>
 </body>
