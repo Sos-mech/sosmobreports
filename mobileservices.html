@@ -10,13 +10,35 @@
 <style>
 :root { --neon:#CCFF00; }
 body { background:#06040d; color:#fff; font-family:'Plus Jakarta Sans',sans-serif; overflow-x:hidden; }
-.neon-lime { color:var(--neon); }
+.neon-lime { color:var(--neon); text-shadow:0 0 10px rgba(204,255,0,0.5); }
 .glass { background:rgba(255,255,255,.03); backdrop-filter:blur(15px); border:1px solid rgba(255,255,255,.1); }
 a { text-decoration:none; }
 a:hover { color:#CCFF00; }
 </style>
 </head>
 <body class="p-6 lg:p-20">
+
+<!-- STICKY NAV -->
+<nav class="fixed top-0 w-full bg-black/30 backdrop-blur-md border-b border-white/10 z-[1000] p-4 lg:p-6 flex justify-between items-center">
+  <!-- Logo / Home Link -->
+  <a href="https://sosmechanics.co.uk" class="text-xl font-black italic uppercase tracking-tight neon-lime hover:underline">
+    SOS<span class="text-white">MECHANICS</span>
+  </a>
+
+  <!-- Actions -->
+  <div class="flex items-center gap-4">
+    <a href="https://sosmechanics.co.uk" class="text-sm uppercase font-bold neon-lime hover:underline">Home</a>
+    <a href="tel:+447405937104" class="bg-[#CCFF00] text-black px-4 py-2 rounded-xl font-black uppercase text-xs hover:scale-105 transition-all shadow-[0_0_10px_rgba(204,255,0,0.4)]">
+      Call Now
+    </a>
+    <a href="https://wa.me/07405937104" class="bg-[#CCFF00] text-black px-4 py-2 rounded-xl font-black uppercase text-xs hover:scale-105 transition-all shadow-[0_0_10px_rgba(204,255,0,0.4)]">
+      WhatsApp
+    </a>
+  </div>
+</nav>
+
+<!-- Spacer so content isn't hidden behind nav -->
+<div class="h-20 lg:h-24"></div>
 
 <header class="text-center mb-20">
   <h1 class="text-5xl lg:text-7xl font-black uppercase mb-4">Mobile Mechanic Services & Prices</h1>
@@ -26,7 +48,7 @@ a:hover { color:#CCFF00; }
 </header>
 
 <section class="grid lg:grid-cols-2 gap-12">
-  
+
   <!-- 1. Diagnostics -->
   <div class="glass p-8 rounded-xl border-l-4 border-[#CCFF00]">
     <h2 class="text-xl font-black neon-lime mb-4">Diagnostics & Fault Finding</h2>
